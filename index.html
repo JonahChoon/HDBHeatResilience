@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HDB Heat Resilience · Field Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #eceae5;
+      --panel: #f8f6f2;
+      --navy: #1c2b4a;
+      --accent: #c94a1e;
+      --grid: #dedad2;
+      --text: #1a1a1a;
+      --muted: #8a8580;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--bg);
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--navy);
+      color: white;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .logo {
+      background: var(--accent);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 14px;
+      font-weight: 600;
+      flex-grow: 1;
+    }
+
+    .header h1 small {
+      display: block;
+      color: #8fa3cc;
+      font-weight: 400;
+      font-size: 11px;
+    }
+
+    /* STATUS */
+    .status-bar {
+      background: var(--panel);
+      border-bottom: 1px solid var(--grid);
+      padding: 7px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .combo-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 13px;
+      border-radius: 20px;
+      background: #e8ecf5;
+      border: 1px solid #c0cce0;
+      color: var(--navy);
+      transition: all .3s;
+      white-space: nowrap;
+    }
+
+    .combo-tag.active {
+      background: #fff3cd;
+      border-color: #f5a623;
+      color: #7a4a00;
+    }
+
+    .combo-tag.invalid {
+      background: #fde8e8;
+      border-color: #e88;
+      color: #900;
+    }
+
+    .btn-reset {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      background: white;
+      border: 1px solid var(--grid);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      background: #f0ede8;
+    }
+
+    /* WORKSPACE */
+    .workspace {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 110px;
+      flex-shrink: 0;
+      background: var(--panel);
+      border-right: 1px solid var(--grid);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      overflow-x: visible;
+    }
+
+    .sidebar-title {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--grid);
+      text-align: center;
+    }
+
+    .sidebar-select-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-top: 4px;
+    }
+
+    .sidebar-select {
+      width: 100%;
+      font-size: 11px;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid var(--grid);
+      font-family: inherit;
+      background: white;
+    }
+
+    .appliance-slot {
+      width: 90px;
+      height: 76px;
+      border-radius: 10px;
+      border: 1.5px dashed #ccc;
+      background: #f0ede8;
+      flex-shrink: 0;
+    }
+
+    /* APPLIANCE CHIPS */
+    .appliance {
+      width: 90px;
+      height: 76px;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: grab;
+      position: absolute;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+      transition: box-shadow .15s, transform .15s;
+      z-index: 10;
+      padding: 5px;
+      background: white;
+    }
+
+    .appliance:active {
+      cursor: grabbing;
+    }
+
+    .appliance.dragging {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
+      transform: scale(1.05) rotate(1deg);
+      z-index: 9999;
+    }
+
+    .appliance.placed {
+      box-shadow: 0 3px 14px rgba(0, 0, 0, .20);
+    }
+
+    .appliance img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .appliance-name {
+      font-size: 9px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.2;
+      color: #333;
+    }
+
+    #SF {
+      border-color: #f5a623;
+      background: #fff8e7;
+    }
+
+    #CF {
+      border-color: #4a7de8;
+      background: #e8f0ff;
+    }
+
+    #AC {
+      border-color: #22c480;
+      background: #e8faf4;
+    }
+
+    #WEF {
+      border-color: #9b59f5;
+      background: #f3e8ff;
+    }
+
+    /* BLUEPRINT */
+    .blueprint-wrap {
+      flex: 1;
+      position: relative;
+      background: linear-gradient(rgba(160, 155, 145, .15) 1px, transparent 1px), linear-gradient(90deg, rgba(160, 155, 145, .15) 1px, transparent 1px), #f0ede8;
+      background-size: 24px 24px;
+      overflow: hidden;
+    }
+
+    .blueprint-wrap.over-drop {
+      outline: 3px dashed rgba(74, 125, 232, .4);
+      outline-offset: -6px;
+    }
+
+    /* Floorplan images */
+    .fp-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      max-height: 95%;
+      max-width: 95%;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+    }
+
+    .fp-img.active {
+      display: block;
+    }
+
+    /* BOTTOM PANEL */
+    .bottom-panel {
+      background: var(--panel);
+      border-top: 1px solid var(--grid);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .q-block {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .q-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .q-select {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .q-options {
+      display: flex;
+      gap: 4px;
+    }
+
+    .q-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .q-btn:hover {
+      border-color: #a0a8c0;
+      background: #f0f2f8;
+    }
+
+    .q-btn.selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    .divider {
+      width: 1px;
+      height: 32px;
+      background: var(--grid);
+      flex-shrink: 0;
+    }
+
+    .btn-submit {
+      margin-left: auto;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 7px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-submit:hover {
+      background: #a83a10;
+    }
+
+    .btn-submit:disabled {
+      background: #8a8580;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">HDB</div>
+    <h1>Heat Resilience Dashboard <small>Phase 2 · Field Study</small></h1>
+  </div>
+
+  <div class="status-bar">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span
+        style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Active
+        Combination</span>
+      <div class="combo-tag" id="comboDisplay">Baseline — No Appliances Active</div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">↺ Reset All</button>
+  </div>
+
+  <div class="workspace">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-title">Drag to plan</div>
+
+      <span class="sidebar-select-label">Floorplan:</span>
+      <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()">
+        <option value="1 Room">1-Room</option>
+        <option value="2 Room">2-Room</option>
+      </select>
+
+      <div style="height: 10px; border-bottom: 1px solid var(--grid); margin-bottom: 5px;"></div>
+
+      <div class="appliance-slot" id="slot-SF"></div>
+      <div class="appliance-slot" id="slot-CF"></div>
+      <div class="appliance-slot" id="slot-AC"></div>
+      <div class="appliance-slot" id="slot-WEF"></div>
+    </div>
+
+    <div class="blueprint-wrap" id="blueprintWrap">
+      <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
+      <img class="fp-img" id="fp-2rm" src="2 Room.png" alt="2-Room floorplan" />
+    </div>
+  </div>
+
+  <div class="bottom-panel">
+    <!-- QUESTION 1: Unit Number -->
+    <div class="q-block">
+      <span class="q-label">Q1 · Unit Number:</span>
+      <select class="q-select" id="unitNumber">
+        <option value="" disabled selected>Select Unit...</option>
+        <option value="#12-119">#12-119</option>
+        <option value="#13-105">#13-105</option>
+        <option value="#17-127">#17-127</option>
+        <option value="#07-141">#07-141</option>
+        <option value="#07-131">#07-131</option>
+        <option value="#07-137">#07-137</option>
+        <option value="#17-115">#17-115</option>
+        <option value="#15-117">#15-117</option>
+        <option value="#12-107">#12-107</option>
+        <option value="#03-125">#03-125</option>
+        <option value="#07-139">#07-139</option>
+        <option value="#15-125">#15-125</option>
+      </select>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- QUESTION 2: Feel -->
+    <div class="q-block">
+      <span class="q-label">Q2 · Feel:</span>
+      <div class="q-options">
+        <button class="q-btn" data-q="2" data-val="Cooler" onclick="selectQ(this)">❄️ Cooler</button>
+        <button class="q-btn" data-q="2" data-val="Neutral" onclick="selectQ(this)">😐 Neutral</button>
+        <button class="q-btn" data-q="2" data-val="Warmer" onclick="selectQ(this)">🌡️ Warmer</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- QUESTION 3: Comfort -->
+    <div class="q-block">
+      <span class="q-label">Q3 · Comfort:</span>
+      <div class="q-options">
+        <button class="q-btn" data-q="3" data-val="Uncomfortable" onclick="selectQ(this)">🙁 Uncomfortable</button>
+        <button class="q-btn" data-q="3" data-val="Neutral" onclick="selectQ(this)">😐 Neutral</button>
+        <button class="q-btn" data-q="3" data-val="Comfortable" onclick="selectQ(this)">🙂 Comfortable</button>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="handleSubmit()">Submit Response</button>
+  </div>
+
+  <!-- APPLIANCE CHIPS - Uses your local images -->
+  <div class="appliance" id="SF">
+    <img src="SF.png" alt="Stand Fan" />
+    <span class="appliance-name">Stand Fan</span>
+  </div>
+  <div class="appliance" id="CF">
+    <img src="CF.png" alt="Ceiling Fan" />
+    <span class="appliance-name">Ceiling Fan</span>
+  </div>
+  <div class="appliance" id="AC">
+    <img src="AC.png" alt="Air Cooler" />
+    <span class="appliance-name">Air Cooler</span>
+  </div>
+  <div class="appliance" id="WEF">
+    <img src="WEF.png" alt="Window Fan" />
+    <span class="appliance-name">Window Fan</span>
+  </div>
+
+  <script>
+    // ==========================================
+    // PASTE YOUR GOOGLE SCRIPT WEB APP URL HERE:
+    // ==========================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFvC6HFub1o4OWWUA1_fleDInwVxoyBYPOczxK-NSurpPOJZSpHfKkKm4tSGxbx2o7DA/exec";
+    // ==========================================
+
+    const VALID = {
+      'CF': 'Combi 1 · Ceiling Fan only',
+      'SF': 'Combi 2 · Stand Fan only',
+      'AC-CF': 'Combi 3 · Ceiling Fan + Air Cooler',
+      'AC-SF': 'Combi 4 · Stand Fan + Air Cooler',
+      'AC': 'Combi 5 · Air Cooler only (0.75 m)',
+      'AC-SF-WEF': 'Combi 6 · Stand Fan + Air Cooler + Window Fan',
+    };
+    const PARTIAL = new Set(['SF', 'CF', 'AC', 'AC-SF', 'AC-CF']);
+    const IDS = ['SF', 'CF', 'AC', 'WEF'];
+    const placed = { SF: false, CF: false, AC: false, WEF: false };
+    const answers = { q2: null, q3: null };
+    let dragging = null, dragOffX = 0, dragOffY = 0;
+
+    // Setup Drag & Drop
+    IDS.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        dragging = el;
+        const r = el.getBoundingClientRect();
+        dragOffX = e.clientX - r.left;
+        dragOffY = e.clientY - r.top;
+        el.classList.add('dragging');
+        el.style.zIndex = 9999;
+        el.setPointerCapture(e.pointerId);
+      });
+      el.addEventListener('pointermove', e => {
+        if (dragging !== el) return;
+        e.preventDefault();
+        el.style.left = (e.clientX - dragOffX) + 'px';
+        el.style.top = (e.clientY - dragOffY) + 'px';
+        const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
+        const over = e.clientX > wr.left && e.clientX < wr.right && e.clientY > wr.top && e.clientY < wr.bottom;
+        document.getElementById('blueprintWrap').classList.toggle('over-drop', over);
+      });
+      el.addEventListener('pointerup', e => {
+        if (dragging !== el) return;
+        el.classList.remove('dragging');
+        el.style.zIndex = 10;
+        document.getElementById('blueprintWrap').classList.remove('over-drop');
+        const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
+        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) {
+          tryPlace(id);
+        } else {
+          snapBack(id);
+        }
+        dragging = null;
+        updateStatus();
+      });
+    });
+
+    function tryPlace(id) {
+      const next = { ...placed, [id]: true };
+      const key = IDS.filter(k => next[k]).sort().join('-');
+      if (id === 'WEF' && !(placed.SF && placed.AC)) { warn('WEF only valid with Stand Fan + Air Cooler'); snapBack(id); return; }
+      if (id === 'CF' && placed.SF) { warn('Cannot combine Ceiling Fan and Stand Fan'); snapBack(id); return; }
+      if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
+      if (!VALID[key] && !PARTIAL.has(key)) { warn('Not a valid study combination'); snapBack(id); return; }
+      placed[id] = true;
+      document.getElementById(id).classList.add('placed');
+    }
+
+    function snapBack(id) {
+      const slot = document.getElementById('slot-' + id);
+      const sr = slot.getBoundingClientRect();
+      const el = document.getElementById(id);
+      el.style.left = sr.left + 'px';
+      el.style.top = sr.top + 'px';
+      placed[id] = false;
+      el.classList.remove('placed');
+    }
+
+    let warnTimer = null;
+    function warn(msg) {
+      const b = document.getElementById('comboDisplay');
+      b.textContent = '⚠ ' + msg;
+      b.className = 'combo-tag invalid';
+      clearTimeout(warnTimer);
+      warnTimer = setTimeout(updateStatus, 2800);
+    }
+
+    function updateStatus() {
+      const active = IDS.filter(id => placed[id]).sort();
+      const key = active.join('-');
+      const b = document.getElementById('comboDisplay');
+      if (!key) { b.textContent = 'Baseline — No Appliances Active'; b.className = 'combo-tag'; }
+      else if (VALID[key]) { b.textContent = VALID[key]; b.className = 'combo-tag active'; }
+      else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
+    }
+
+    function changeLayout() {
+      const v = document.getElementById('layoutSelector').value;
+      document.getElementById('fp-1rm').classList.toggle('active', v === '1 Room');
+      document.getElementById('fp-2rm').classList.toggle('active', v === '2 Room');
+      resetAll();
+    }
+
+    function resetAll() {
+      IDS.forEach(id => snapBack(id));
+      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
+      document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('unitNumber').value = ""; // Reset dropdown
+      answers.q2 = answers.q3 = null;
+    }
+
+    function selectQ(btn) {
+      const q = btn.dataset.q;
+      document.querySelectorAll(`.q-btn[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      answers['q' + q] = btn.dataset.val;
+    }
+
+    // ==========================================
+    // SEND DATA DIRECTLY TO GOOGLE SHEETS
+    // ==========================================
+    function handleSubmit() {
+      const unitNo = document.getElementById('unitNumber').value;
+      const feel = answers.q2;
+      const comfort = answers.q3;
+
+      // 1. Validation check
+      if (!unitNo || !feel || !comfort) {
+        alert("Please complete Q1 (Unit Number), Q2 (Feel), and Q3 (Comfort) before submitting.");
+        return;
+      }
+
+      // 2. Gather remaining data
+      const layout = document.getElementById('layoutSelector').value;
+      const active = IDS.filter(id => placed[id]).sort().join('-');
+      const combo = VALID[active] || 'Baseline (No Appliances)';
+      const timestamp = new Date().toLocaleString();
+
+      // 3. Prepare payload for Google Sheets
+      const payload = {
+        timestamp: timestamp,
+        layout: layout,
+        combo: combo,
+        unitNo: unitNo,
+        feel: feel,
+        comfort: comfort
+      };
+
+      // 4. Update UI to show saving state
+      const submitBtn = document.querySelector('.btn-submit');
+      submitBtn.textContent = "Saving...";
+      submitBtn.disabled = true;
+
+      // 5. Send POST request to Google Apps Script
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors", // This is required for Google Apps Script to prevent CORS blocking
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(() => {
+          // Because of "no-cors", we can't read the exact response, but a successful 'then' means the network request fired.
+          alert(`Success! Data saved to Google Sheets for ${unitNo}.`);
+          resetAll();
+          submitBtn.textContent = "Submit Response";
+          submitBtn.disabled = false;
+        })
+        .catch((error) => {
+          alert("Error saving data. Please check your internet connection.");
+          submitBtn.textContent = "Submit Response";
+          submitBtn.disabled = false;
+          console.error("Error:", error);
+        });
+    }
+
+    window.addEventListener('load', () => {
+      changeLayout();
+      window.addEventListener('resize', () => resetAll());
+    });
+  </script>
+</body>
+</html>
