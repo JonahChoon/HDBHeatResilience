@@ -378,6 +378,36 @@
       background: #8a8580;
       cursor: not-allowed;
     }
+
+    /* ========================================= */
+    /* MOBILE PHONE RESPONSIVENESS               */
+    /* ========================================= */
+    @media (max-width: 768px) {
+      .workspace { flex-direction: column; }
+      .sidebar { 
+        width: 100%; 
+        flex-direction: row; 
+        overflow-x: auto; 
+        border-right: none; 
+        border-bottom: 1px solid var(--grid); 
+        align-items: center; 
+        padding: 10px;
+      }
+      .sidebar-title, .sidebar-select-label { display: none; }
+      .sidebar-select { width: auto; }
+      
+      .bottom-panel { 
+        flex-direction: column; 
+        align-items: stretch; 
+        max-height: 40vh; 
+        overflow-y: auto; 
+        gap: 12px;
+      }
+      .q-block { flex-direction: column; align-items: flex-start; gap: 8px;}
+      .q-options { flex-wrap: wrap; }
+      .divider { width: 100%; height: 1px; }
+      .btn-submit { width: 100%; margin-left: 0; padding: 12px;}
+    }
   </style>
 </head>
 
