@@ -16,6 +16,9 @@
       --grid: #dedad2;
       --text: #1a1a1a;
       --muted: #8a8580;
+      --before: #2a7de8;
+      --during: #c94a1e;
+      --after: #22a060;
     }
 
     * {
@@ -31,36 +34,34 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      touch-action: none;
     }
 
     /* HEADER */
     .header {
       background: var(--navy);
       color: white;
-      padding: 10px 18px;
+      padding: 9px 18px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
       gap: 12px;
+      flex-shrink: 0;
     }
 
     .logo {
       background: var(--accent);
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       flex-shrink: 0;
     }
 
     .header h1 {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       flex-grow: 1;
     }
@@ -69,26 +70,169 @@
       display: block;
       color: #8fa3cc;
       font-weight: 400;
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    /* STATUS */
-    .status-bar {
+    /* PHASE BAR */
+    .phase-bar {
       background: var(--panel);
       border-bottom: 1px solid var(--grid);
-      padding: 7px 18px;
+      padding: 7px 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
       gap: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .phase-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .phase-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .phase-btn {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .phase-btn[data-phase="before"]:hover,
+    .phase-btn[data-phase="before"].active {
+      background: var(--before);
+      border-color: var(--before);
+      color: white;
+    }
+
+    .phase-btn[data-phase="during"]:hover,
+    .phase-btn[data-phase="during"].active {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .phase-btn[data-phase="after"]:hover,
+    .phase-btn[data-phase="after"].active {
+      background: var(--after);
+      border-color: var(--after);
+      color: white;
+    }
+
+    .unit-select {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .unit-select.required {
+      border-color: #e88;
+      background: #fff5f5;
+    }
+
+    /* WORKSPACE */
+    .workspace {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* LEFT: DRAG-DROP SIDE */
+    .left-pane {
+      width: 50%;
+      flex-shrink: 0;
+      display: flex;
+      border-right: 2px solid var(--grid);
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 108px;
+      flex-shrink: 0;
+      background: var(--panel);
+      border-right: 1px solid var(--grid);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--grid);
+      text-align: center;
+    }
+
+    .sidebar-select-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+
+    .sidebar-select {
+      width: 100%;
+      font-size: 11px;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid var(--grid);
+      font-family: inherit;
+      background: white;
+    }
+
+    .appliance-slot {
+      width: 88px;
+      height: 74px;
+      border-radius: 10px;
+      border: 1.5px dashed #ccc;
+      background: #f0ede8;
+      flex-shrink: 0;
+    }
+
+    /* STATUS inside blueprint */
+    .drag-status {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      pointer-events: none;
     }
 
     .combo-tag {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
-      padding: 5px 13px;
+      padding: 4px 12px;
       border-radius: 20px;
       background: #e8ecf5;
       border: 1px solid #c0cce0;
@@ -109,84 +253,43 @@
       color: #900;
     }
 
-    .btn-reset {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 12px;
-      background: white;
-      border: 1px solid var(--grid);
-      color: var(--text);
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .btn-reset:hover {
-      background: #f0ede8;
-    }
-
-    /* WORKSPACE */
-    .workspace {
-      display: flex;
+    /* BLUEPRINT */
+    .blueprint-wrap {
       flex: 1;
-      min-height: 0;
+      position: relative;
+      background:
+        linear-gradient(rgba(160, 155, 145, .15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(160, 155, 145, .15) 1px, transparent 1px), #f0ede8;
+      background-size: 24px 24px;
       overflow: hidden;
     }
 
-    /* SIDEBAR */
-    .sidebar {
-      width: 110px;
-      flex-shrink: 0;
-      background: var(--panel);
-      border-right: 1px solid var(--grid);
-      padding: 10px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      overflow-y: auto;
-      overflow-x: visible;
+    .blueprint-wrap.over-drop {
+      outline: 3px dashed rgba(74, 125, 232, .4);
+      outline-offset: -6px;
     }
 
-    .sidebar-title {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--grid);
-      text-align: center;
-    }
-
-    .sidebar-select-label {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-top: 4px;
-    }
-
-    .sidebar-select {
-      width: 100%;
-      font-size: 11px;
-      padding: 4px;
+    .fp-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      max-height: 94%;
+      max-width: 94%;
+      object-fit: contain;
       border-radius: 4px;
-      border: 1px solid var(--grid);
-      font-family: inherit;
-      background: white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
     }
 
-    .appliance-slot {
-      width: 90px;
-      height: 76px;
-      border-radius: 10px;
-      border: 1.5px dashed #ccc;
-      background: #f0ede8;
-      flex-shrink: 0;
+    .fp-img.active {
+      display: block;
     }
 
     /* APPLIANCE CHIPS */
     .appliance {
-      width: 90px;
-      height: 76px;
+      width: 88px;
+      height: 74px;
       border-radius: 10px;
       border: 2px solid #ddd;
       display: flex;
@@ -219,8 +322,8 @@
     }
 
     .appliance img {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
       display: block;
     }
@@ -253,118 +356,351 @@
       background: #f3e8ff;
     }
 
-    /* BLUEPRINT */
-    .blueprint-wrap {
-      flex: 1;
-      position: relative;
-      background: linear-gradient(rgba(160, 155, 145, .15) 1px, transparent 1px), linear-gradient(90deg, rgba(160, 155, 145, .15) 1px, transparent 1px), #f0ede8;
-      background-size: 24px 24px;
+    /* RIGHT: QUESTIONS SIDE */
+    .right-pane {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
-    }
-
-    .blueprint-wrap.over-drop {
-      outline: 3px dashed rgba(74, 125, 232, .4);
-      outline-offset: -6px;
-    }
-
-    /* Floorplan images */
-    .fp-img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      max-height: 95%;
-      max-width: 95%;
-      object-fit: contain;
-      border-radius: 4px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
-    }
-
-    .fp-img.active {
-      display: block;
-    }
-
-    /* BOTTOM PANEL */
-    .bottom-panel {
       background: var(--panel);
-      border-top: 1px solid var(--grid);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
     }
 
-    .q-block {
+    .right-inner {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px;
       display: flex;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column;
     }
 
-    .q-label {
-      font-size: 12px;
+    /* GATE MESSAGES */
+    .gate-msg,
+    .phase-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 10px;
+      color: var(--muted);
+      text-align: center;
+      padding: 24px;
+    }
+
+    .gate-msg .gate-icon,
+    .phase-prompt .gate-icon {
+      font-size: 36px;
+    }
+
+    .gate-msg p,
+    .phase-prompt p {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* SECTION HEADERS */
+    .q-section-header {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin: 12px 0 8px;
+    }
+
+    .q-section-header:first-child {
+      margin-top: 0;
+    }
+
+    .q-section-header.before {
+      background: var(--before);
+    }
+
+    .q-section-header.during {
+      background: var(--during);
+    }
+
+    .q-section-header.after {
+      background: var(--after);
+    }
+
+    /* QUESTION BLOCKS */
+    .q-block-right {
+      margin-bottom: 12px;
+    }
+
+    .q-title {
+      font-size: 11px;
       font-weight: 600;
       color: var(--navy);
-      white-space: nowrap;
+      margin-bottom: 5px;
+      line-height: 1.4;
     }
 
-    .q-select {
+    .q-hint {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .q-input {
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 12px;
       padding: 6px 10px;
       border-radius: 6px;
       border: 1.5px solid var(--grid);
       background: white;
+      width: 100%;
       color: var(--text);
-      cursor: pointer;
     }
 
-    .q-options {
+    .q-input:focus {
+      outline: none;
+      border-color: #8fa3cc;
+    }
+
+    textarea.q-input {
+      resize: vertical;
+      min-height: 56px;
+    }
+
+    /* Inline pair */
+    .q-pair {
       display: flex;
-      gap: 4px;
+      gap: 8px;
     }
 
-    .q-btn {
-      padding: 6px 12px;
+    .q-pair .q-input {
+      flex: 1;
+    }
+
+    .q-pair-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    /* Chips */
+    .q-options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .q-chip {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px;
+      padding: 5px 11px;
       border-radius: 20px;
       border: 1.5px solid var(--grid);
       background: white;
-      font-size: 11px;
       cursor: pointer;
       transition: all .15s;
-      white-space: nowrap;
-      font-family: 'IBM Plex Sans', sans-serif;
+      user-select: none;
     }
 
-    .q-btn:hover {
+    .q-chip:hover {
       border-color: #a0a8c0;
       background: #f0f2f8;
     }
 
-    .q-btn.selected {
-      background: var(--navy);
-      border-color: var(--navy);
+    .q-chip.sel-before {
+      background: var(--before);
+      border-color: var(--before);
       color: white;
     }
 
-    .divider {
-      width: 1px;
-      height: 32px;
-      background: var(--grid);
+    .q-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .q-chip.sel-after {
+      background: var(--after);
+      border-color: var(--after);
+      color: white;
+    }
+
+    /* Sub-groups */
+    .q-sub-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .q-sub-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Other specify */
+    .other-input {
+      display: none;
+      margin-top: 5px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      width: 100%;
+    }
+
+    .other-input.visible {
+      display: block;
+    }
+
+    /* Auto-combo banner */
+    .combo-banner {
+      background: #fff8e7;
+      border: 1.5px solid #f5a623;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: #7a4a00;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .combo-banner span {
+      font-weight: 500;
+    }
+
+    /* Temp fields row */
+    .temp-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .temp-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .temp-field label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .temp-input {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      width: 100%;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .temp-input:focus {
+      outline: none;
+      border-color: #8fa3cc;
+    }
+
+    /* TCV scale */
+    .tcv-scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tcv-chip {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .tcv-chip .tcv-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .tcv-chip .tcv-lbl {
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    .tcv-chip:hover {
+      border-color: #a0a8c0;
+    }
+
+    .tcv-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .tcv-chip.sel-during .tcv-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    /* Divider */
+    hr.q-divider {
+      border: none;
+      border-top: 1px solid var(--grid);
+      margin: 6px 0 10px;
+    }
+
+    /* Footer */
+    .right-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--grid);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
       flex-shrink: 0;
+      background: var(--panel);
+    }
+
+    .btn-reset {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      background: white;
+      border: 1px solid var(--grid);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      background: #f0ede8;
     }
 
     .btn-submit {
-      margin-left: auto;
       background: var(--accent);
       color: white;
       border: none;
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
       font-size: 13px;
-      padding: 8px 18px;
+      padding: 8px 20px;
       border-radius: 7px;
       cursor: pointer;
       white-space: nowrap;
@@ -378,36 +714,6 @@
       background: #8a8580;
       cursor: not-allowed;
     }
-
-    /* ========================================= */
-    /* MOBILE PHONE RESPONSIVENESS               */
-    /* ========================================= */
-    @media (max-width: 768px) {
-      .workspace { flex-direction: column; }
-      .sidebar { 
-        width: 100%; 
-        flex-direction: row; 
-        overflow-x: auto; 
-        border-right: none; 
-        border-bottom: 1px solid var(--grid); 
-        align-items: center; 
-        padding: 10px;
-      }
-      .sidebar-title, .sidebar-select-label { display: none; }
-      .sidebar-select { width: auto; }
-      
-      .bottom-panel { 
-        flex-direction: column; 
-        align-items: stretch; 
-        max-height: 40vh; 
-        overflow-y: auto; 
-        gap: 12px;
-      }
-      .q-block { flex-direction: column; align-items: flex-start; gap: 8px;}
-      .q-options { flex-wrap: wrap; }
-      .divider { width: 100%; height: 1px; }
-      .btn-submit { width: 100%; margin-left: 0; padding: 12px;}
-    }
   </style>
 </head>
 
@@ -418,112 +724,82 @@
     <h1>Heat Resilience Dashboard <small>Phase 2 · Field Study</small></h1>
   </div>
 
-  <div class="status-bar">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span
-        style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Active
-        Combination</span>
-      <div class="combo-tag" id="comboDisplay">Baseline — No Appliances Active</div>
+  <!-- PHASE + UNIT BAR -->
+  <div class="phase-bar">
+    <span class="phase-label">Phase:</span>
+    <div class="phase-btns">
+      <button class="phase-btn" data-phase="before" onclick="setPhase('before')">① Before Experiment</button>
+      <button class="phase-btn" data-phase="during" onclick="setPhase('during')">② During Experiment</button>
+      <button class="phase-btn" data-phase="after" onclick="setPhase('after')">③ After All Experiments</button>
     </div>
-    <button class="btn-reset" onclick="resetAll()">↺ Reset All</button>
+    <select class="unit-select" id="unitNumber" onchange="onUnitChange()">
+      <option value="" disabled selected>Select Unit…</option>
+      <option value="#12-119">#12-119</option>
+      <option value="#13-105">#13-105</option>
+      <option value="#17-127">#17-127</option>
+      <option value="#07-141">#07-141</option>
+      <option value="#07-131">#07-131</option>
+      <option value="#07-137">#07-137</option>
+      <option value="#17-115">#17-115</option>
+      <option value="#15-117">#15-117</option>
+      <option value="#12-107">#12-107</option>
+      <option value="#03-125">#03-125</option>
+      <option value="#07-139">#07-139</option>
+      <option value="#15-125">#15-125</option>
+    </select>
   </div>
 
+  <!-- WORKSPACE -->
   <div class="workspace">
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-title">Drag to plan</div>
 
-      <span class="sidebar-select-label">Floorplan:</span>
-      <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()">
-        <option value="1 Room">1-Room</option>
-        <option value="2 Room">2-Room</option>
-      </select>
-
-      <div style="height: 10px; border-bottom: 1px solid var(--grid); margin-bottom: 5px;"></div>
-
-      <div class="appliance-slot" id="slot-SF"></div>
-      <div class="appliance-slot" id="slot-CF"></div>
-      <div class="appliance-slot" id="slot-AC"></div>
-      <div class="appliance-slot" id="slot-WEF"></div>
-    </div>
-
-    <div class="blueprint-wrap" id="blueprintWrap">
-      <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
-      <img class="fp-img" id="fp-2rm" src="2 Room.png" alt="2-Room floorplan" />
-    </div>
-  </div>
-
-  <div class="bottom-panel">
-    <!-- QUESTION 1: Unit Number -->
-    <div class="q-block">
-      <span class="q-label">Q1 · Unit Number:</span>
-      <select class="q-select" id="unitNumber">
-        <option value="" disabled selected>Select Unit...</option>
-        <option value="#12-119">#12-119</option>
-        <option value="#13-105">#13-105</option>
-        <option value="#17-127">#17-127</option>
-        <option value="#07-141">#07-141</option>
-        <option value="#07-131">#07-131</option>
-        <option value="#07-137">#07-137</option>
-        <option value="#17-115">#17-115</option>
-        <option value="#15-117">#15-117</option>
-        <option value="#12-107">#12-107</option>
-        <option value="#03-125">#03-125</option>
-        <option value="#07-139">#07-139</option>
-        <option value="#15-125">#15-125</option>
-      </select>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- QUESTION 2: Feel -->
-    <div class="q-block">
-      <span class="q-label">Q2 · Feel:</span>
-      <div class="q-options">
-        <button class="q-btn" data-q="2" data-val="Cooler" onclick="selectQ(this)">❄️ Cooler</button>
-        <button class="q-btn" data-q="2" data-val="Neutral" onclick="selectQ(this)">😐 Neutral</button>
-        <button class="q-btn" data-q="2" data-val="Warmer" onclick="selectQ(this)">🌡️ Warmer</button>
+    <!-- LEFT: DRAG-DROP -->
+    <div class="left-pane">
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">Drag to plan</div>
+        <span class="sidebar-select-label">Floorplan:</span>
+        <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()">
+          <option value="1 Room">1-Room</option>
+          <option value="2 Room">2-Room</option>
+        </select>
+        <div style="height:8px;border-bottom:1px solid var(--grid);margin-bottom:3px;"></div>
+        <div class="appliance-slot" id="slot-SF"></div>
+        <div class="appliance-slot" id="slot-CF"></div>
+        <div class="appliance-slot" id="slot-AC"></div>
+        <div class="appliance-slot" id="slot-WEF"></div>
+      </div>
+      <div class="blueprint-wrap" id="blueprintWrap">
+        <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
+        <img class="fp-img" id="fp-2rm" src="2 Room.png" alt="2-Room floorplan" />
+        <div class="drag-status">
+          <div class="combo-tag" id="comboDisplay">Baseline — No Appliances Active</div>
+        </div>
       </div>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- QUESTION 3: Comfort -->
-    <div class="q-block">
-      <span class="q-label">Q3 · Comfort:</span>
-      <div class="q-options">
-        <button class="q-btn" data-q="3" data-val="Uncomfortable" onclick="selectQ(this)">🙁 Uncomfortable</button>
-        <button class="q-btn" data-q="3" data-val="Neutral" onclick="selectQ(this)">😐 Neutral</button>
-        <button class="q-btn" data-q="3" data-val="Comfortable" onclick="selectQ(this)">🙂 Comfortable</button>
+    <!-- RIGHT: QUESTIONS -->
+    <div class="right-pane">
+      <div class="right-inner" id="rightInner"></div>
+      <div class="right-footer">
+        <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+        <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Submit Response</button>
       </div>
     </div>
 
-    <button class="btn-submit" onclick="handleSubmit()">Submit Response</button>
   </div>
 
-  <!-- APPLIANCE CHIPS - Uses your local images -->
-  <div class="appliance" id="SF">
-    <img src="SF.png" alt="Stand Fan" />
-    <span class="appliance-name">Stand Fan</span>
+  <!-- APPLIANCE CHIPS (positioned absolutely) -->
+  <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
+  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span>
   </div>
-  <div class="appliance" id="CF">
-    <img src="CF.png" alt="Ceiling Fan" />
-    <span class="appliance-name">Ceiling Fan</span>
+  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span>
   </div>
-  <div class="appliance" id="AC">
-    <img src="AC.png" alt="Air Cooler" />
-    <span class="appliance-name">Air Cooler</span>
-  </div>
-  <div class="appliance" id="WEF">
-    <img src="WEF.png" alt="Window Fan" />
-    <span class="appliance-name">Window Fan</span>
+  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span>
   </div>
 
   <script>
-    // ==========================================
-    // PASTE YOUR GOOGLE SCRIPT WEB APP URL HERE:
-    // ==========================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFvC6HFub1o4OWWUA1_fleDInwVxoyBYPOczxK-NSurpPOJZSpHfKkKm4tSGxbx2o7DA/exec";
-    // ==========================================
+    // ============================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBoDGItLOkNmQPc3cjSSI1p5oTEohhlHN9kQl0SggD_r57vtAksJ1bFQm6qdmzP52FRw/exec";
+    // ============================================================
 
     const VALID = {
       'CF': 'Combi 1 · Ceiling Fan only',
@@ -536,10 +812,10 @@
     const PARTIAL = new Set(['SF', 'CF', 'AC', 'AC-SF', 'AC-CF']);
     const IDS = ['SF', 'CF', 'AC', 'WEF'];
     const placed = { SF: false, CF: false, AC: false, WEF: false };
-    const answers = { q2: null, q3: null };
     let dragging = null, dragOffX = 0, dragOffY = 0;
+    let currentPhase = null;
 
-    // Setup Drag & Drop
+    // ---- DRAG & DROP ----
     IDS.forEach(id => {
       const el = document.getElementById(id);
       el.addEventListener('pointerdown', e => {
@@ -569,13 +845,12 @@
         const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
-        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) {
-          tryPlace(id);
-        } else {
-          snapBack(id);
-        }
+        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id);
+        else snapBack(id);
         dragging = null;
         updateStatus();
+        // If during phase, refresh the combo banner
+        if (currentPhase === 'during') refreshComboBanner();
       });
     });
 
@@ -589,26 +864,19 @@
       placed[id] = true;
       document.getElementById(id).classList.add('placed');
     }
-
     function snapBack(id) {
       const slot = document.getElementById('slot-' + id);
       const sr = slot.getBoundingClientRect();
       const el = document.getElementById(id);
-      el.style.left = sr.left + 'px';
-      el.style.top = sr.top + 'px';
-      placed[id] = false;
-      el.classList.remove('placed');
+      el.style.left = sr.left + 'px'; el.style.top = sr.top + 'px';
+      placed[id] = false; el.classList.remove('placed');
     }
-
     let warnTimer = null;
     function warn(msg) {
       const b = document.getElementById('comboDisplay');
-      b.textContent = '⚠ ' + msg;
-      b.className = 'combo-tag invalid';
-      clearTimeout(warnTimer);
-      warnTimer = setTimeout(updateStatus, 2800);
+      b.textContent = '⚠ ' + msg; b.className = 'combo-tag invalid';
+      clearTimeout(warnTimer); warnTimer = setTimeout(updateStatus, 2800);
     }
-
     function updateStatus() {
       const active = IDS.filter(id => placed[id]).sort();
       const key = active.join('-');
@@ -617,92 +885,502 @@
       else if (VALID[key]) { b.textContent = VALID[key]; b.className = 'combo-tag active'; }
       else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
     }
-
+    function getCurrentCombo() {
+      const active = IDS.filter(id => placed[id]).sort().join('-');
+      return VALID[active] || 'Baseline (No Appliances)';
+    }
     function changeLayout() {
       const v = document.getElementById('layoutSelector').value;
       document.getElementById('fp-1rm').classList.toggle('active', v === '1 Room');
       document.getElementById('fp-2rm').classList.toggle('active', v === '2 Room');
-      resetAll();
+      IDS.forEach(id => snapBack(id));
+      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
     }
-
     function resetAll() {
       IDS.forEach(id => snapBack(id));
       setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
-      document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('unitNumber').value = ""; // Reset dropdown
-      answers.q2 = answers.q3 = null;
+      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .q-input').forEach(inp => inp.value = '');
+      document.querySelectorAll('#rightInner .other-input').forEach(inp => { inp.value = ''; inp.classList.remove('visible'); });
+      document.querySelectorAll('#rightInner .temp-input').forEach(inp => inp.value = '');
+      if (currentPhase === 'during') setTimeout(refreshComboBanner, 50);
     }
 
-    function selectQ(btn) {
-      const q = btn.dataset.q;
-      document.querySelectorAll(`.q-btn[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      answers['q' + q] = btn.dataset.val;
+    // ---- PHASE ----
+    function onUnitChange() {
+      document.getElementById('unitNumber').classList.remove('required');
+      renderRight();
+    }
+    function setPhase(phase) {
+      currentPhase = phase;
+      document.querySelectorAll('.phase-btn').forEach(b => b.classList.toggle('active', b.dataset.phase === phase));
+      renderRight();
     }
 
-    // ==========================================
-    // SEND DATA DIRECTLY TO GOOGLE SHEETS
-    // ==========================================
-    function handleSubmit() {
-      const unitNo = document.getElementById('unitNumber').value;
-      const feel = answers.q2;
-      const comfort = answers.q3;
-
-      // 1. Validation check
-      if (!unitNo || !feel || !comfort) {
-        alert("Please complete Q1 (Unit Number), Q2 (Feel), and Q3 (Comfort) before submitting.");
+    function renderRight() {
+      const unit = document.getElementById('unitNumber').value;
+      const inner = document.getElementById('rightInner');
+      if (!unit) {
+        inner.innerHTML = `<div class="gate-msg"><div class="gate-icon">🏠</div><p>Please <strong>select a Unit Number</strong> above before answering questions.</p></div>`;
         return;
       }
+      if (!currentPhase) {
+        inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · During · After</strong></p></div>`;
+        return;
+      }
+      if (currentPhase === 'before') renderBefore();
+      if (currentPhase === 'during') renderDuring();
+      if (currentPhase === 'after') renderAfter();
+    }
 
-      // 2. Gather remaining data
+    // ============================================================
+    // BEFORE
+    // ============================================================
+    function renderBefore() {
+      const inner = document.getElementById('rightInner');
+      inner.innerHTML = `
+    <div class="q-section-header before">① Before the Experiment</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Age / Sex</div>
+      <div class="q-pair">
+        <div><div class="q-pair-label">Age</div><input class="q-input" type="number" id="b_age" placeholder="e.g. 45" min="1" max="120"/></div>
+        <div><div class="q-pair-label">Sex</div><div class="q-options-grid" style="margin-top:2px;">${chip('b_sex', 'Male', 'radio')} ${chip('b_sex', 'Female', 'radio')}</div></div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Height / Weight</div>
+      <div class="q-pair">
+        <div><div class="q-pair-label">Height (cm)</div><input class="q-input" type="number" id="b_height" placeholder="e.g. 165"/></div>
+        <div><div class="q-pair-label">Weight (kg)</div><input class="q-input" type="number" id="b_weight" placeholder="e.g. 60"/></div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">No. of Occupants in Household</div>
+      <input class="q-input" type="number" id="b_occupants" placeholder="e.g. 3" min="1" style="width:120px;"/>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">How long do you stay home daily? <span class="q-hint">(Excl. sleeping time)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_homestay', 'Less than 4 hours', 'radio')}
+        ${chip('b_homestay', '4 to 8 hours', 'radio')}
+        ${chip('b_homestay', '8 to 12 hours', 'radio')}
+        ${chip('b_homestay', 'The whole day', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Where do you spend most of your time?</div>
+      <div class="q-options-grid">
+        ${chip('b_space', 'Living Room', 'radio')} ${chip('b_space', 'Bedroom', 'radio')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">What do you do when the weather is too hot? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_whenhot', 'Open windows', 'checkbox')}
+        ${chip('b_whenhot', 'Change clothing', 'checkbox')}
+        ${chip('b_whenhot', 'Drink cold drinks', 'checkbox')}
+        ${chip('b_whenhot', 'Take a shower', 'checkbox')}
+        ${chip('b_whenhot', 'Handheld/electric fans', 'checkbox')}
+        ${chip('b_whenhot', 'Cooling appliances', 'checkbox')}
+        ${chip('b_whenhot', 'Others', 'checkbox', 'b_whenhot_other')}
+      </div>
+      <input class="other-input" id="b_whenhot_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What cooling appliances do you normally use? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_appliances', 'Ceiling fan', 'checkbox')}
+        ${chip('b_appliances', 'Standing/Table fan', 'checkbox')}
+        ${chip('b_appliances', 'Air circulator', 'checkbox')}
+        ${chip('b_appliances', 'Air cooler', 'checkbox')}
+        ${chip('b_appliances', 'Portable Air-con', 'checkbox')}
+        ${chip('b_appliances', 'None', 'checkbox')}
+        ${chip('b_appliances', 'Others', 'checkbox', 'b_appliances_other')}
+      </div>
+      <input class="other-input" id="b_appliances_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">When do you turn on cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_whenturnon', 'When feeling hot', 'checkbox')}
+        ${chip('b_whenturnon', 'Before sleeping', 'checkbox')}
+        ${chip('b_whenturnon', 'During meals', 'checkbox')}
+        ${chip('b_whenturnon', 'When cooking', 'checkbox')}
+        ${chip('b_whenturnon', 'When guests present', 'checkbox')}
+        ${chip('b_whenturnon', 'When entering house/room', 'checkbox')}
+        ${chip('b_whenturnon', 'Others', 'checkbox', 'b_whenturnon_other')}
+      </div>
+      <input class="other-input" id="b_whenturnon_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Preferred appliance settings</div>
+      <div class="q-sub-group">
+        <div>
+          <div class="q-sub-label">Speed</div>
+          <div class="q-options-grid">${chip('b_speed', 'Low', 'radio')} ${chip('b_speed', 'Medium', 'radio')} ${chip('b_speed', 'High', 'radio')}</div>
+        </div>
+        <div>
+          <div class="q-sub-label">Oscillation</div>
+          <div class="q-options-grid">${chip('b_osc', 'On', 'radio')} ${chip('b_osc', 'Off', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Daily Routine Description</div>
+      <textarea class="q-input" id="b_routine" placeholder="Briefly describe your typical daily routine at home…"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Why do you avoid certain cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_avoid', 'Save on electricity', 'checkbox')}
+        ${chip('b_avoid', 'Health concerns', 'checkbox')}
+        ${chip('b_avoid', 'Noise concerns', 'checkbox')}
+        ${chip('b_avoid', 'Cost of appliances', 'checkbox')}
+        ${chip('b_avoid', 'Prefer natural ventilation', 'checkbox')}
+        ${chip('b_avoid', 'Others', 'checkbox', 'b_avoid_other')}
+      </div>
+      <input class="other-input" id="b_avoid_other" placeholder="Please specify…"/>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">General Activity Level</div>
+      <div class="q-options-grid">
+        ${chip('b_activity', 'Mostly inactive', 'radio')}
+        ${chip('b_activity', 'Somewhat active', 'radio')}
+        ${chip('b_activity', 'Active', 'radio')}
+        ${chip('b_activity', 'Very active', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Current Activity &amp; Pre-activity status</div>
+      <div class="q-sub-group">
+        <div>
+          <div class="q-sub-label">Right before this:</div>
+          <div class="q-options-grid">${chip('b_pre', 'Resting', 'radio')} ${chip('b_pre', 'Light', 'radio')} ${chip('b_pre', 'Moderate', 'radio')} ${chip('b_pre', 'Vigorous', 'radio')}</div>
+        </div>
+        <div>
+          <div class="q-sub-label">Right now:</div>
+          <div class="q-options-grid">${chip('b_now', 'Reclining', 'radio')} ${chip('b_now', 'Sitting', 'radio')} ${chip('b_now', 'Standing', 'radio')} ${chip('b_now', 'Light Activity', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Do you take any regular medications?</div>
+      <div class="q-options-grid">${chip('b_meds', 'No', 'radio')} ${chip('b_meds', 'Yes', 'radio', 'b_meds_specify')}</div>
+      <input class="other-input" id="b_meds_specify" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">How much water do you drink typically?</div>
+      <div class="q-options-grid">
+        ${chip('b_water', '1 Litre', 'radio')} ${chip('b_water', '1–2 Litres', 'radio')} ${chip('b_water', '2 Litres', 'radio')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">Q1 · Indoor environment preference</div>
+      <div class="q-options-grid">${chip('b_q1', 'Cooler', 'radio')} ${chip('b_q1', 'No Change Preference', 'radio')} ${chip('b_q1', 'Warmer', 'radio')}</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q2 · If the room feels slightly warm, how do you feel?</div>
+      <div class="q-options-grid">${chip('b_q2', 'Comfortable / Acceptable', 'radio')} ${chip('b_q2', 'Neutral / Can accept', 'radio')} ${chip('b_q2', 'Uncomfortable', 'radio')}</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q3 · If the room feels slightly cool, how do you feel?</div>
+      <div class="q-options-grid">${chip('b_q3', 'Acceptable', 'radio')} ${chip('b_q3', 'Neutral / Can accept', 'radio')} ${chip('b_q3', 'Uncomfortable', 'radio')}</div>
+    </div>
+  `;
+    }
+
+    // ============================================================
+    // DURING
+    // ============================================================
+    function renderDuring() {
+      const inner = document.getElementById('rightInner');
+      const combo = getCurrentCombo();
+      inner.innerHTML = `
+    <div class="q-section-header during">② During the Experiment</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Current Combination Under Test</div>
+      <div class="combo-banner" id="comboBanner">🔬 <span id="comboText">${combo}</span></div>
+      <div class="q-hint" style="margin-top:-6px;margin-bottom:4px;">Auto-detected from layout. Drag appliances on the left to update.</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Temperature Readings</div>
+      <div class="temp-row">
+        <div class="temp-field">
+          <label>Initial Baseline Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_tempBaseline" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Measured Indoor Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_tempIndoor" placeholder="—" step="0.1"/>
+        </div>
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">Thermal Comfort Vote (TCV)</div>
+      <div class="q-hint" style="margin-bottom:6px;">How comfortable are you with the thermal environment right now?</div>
+      <div class="tcv-scale">
+        ${tcvChip('+3', 'Very Comfy')}
+        ${tcvChip('+2', 'Comfy')}
+        ${tcvChip('+1', 'Slightly Comfy')}
+        ${tcvChip('0', 'Neutral')}
+        ${tcvChip('-1', 'Slightly Uncomfy')}
+        ${tcvChip('-2', 'Uncomfy')}
+        ${tcvChip('-3', 'Very Uncomfy')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">Thermal Preference (TPV)</div>
+      <div class="q-hint" style="margin-bottom:5px;">Right now, would you prefer to be…</div>
+      <div class="q-options-grid">${chip('d_tpv', 'Cooler', 'radio')} ${chip('d_tpv', 'No Change', 'radio')} ${chip('d_tpv', 'Warmer', 'radio')}</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Airflow Preference</div>
+      <div class="q-hint" style="margin-bottom:5px;">Right now, would you prefer the airflow to be…</div>
+      <div class="q-options-grid">${chip('d_airflow', 'Less airflow', 'radio')} ${chip('d_airflow', 'No Change', 'radio')} ${chip('d_airflow', 'More airflow', 'radio')}</div>
+    </div>
+
+    <div class="q-block-right" id="d_humidity_block">
+      <div class="q-title">Air Humidity Preference <span class="q-hint">(Ask ONLY when Air Cooler is active)</span></div>
+      <div class="q-options-grid">${chip('d_humidity', 'Drier', 'radio')} ${chip('d_humidity', 'Just Right', 'radio')} ${chip('d_humidity', 'More Humid', 'radio')}</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Airflow Disturbance Rating</div>
+      <div class="q-options-grid">
+        ${chip('d_disturbance', '0 — Not Disturbed', 'radio')}
+        ${chip('d_disturbance', '1 — Disturbed', 'radio')}
+        ${chip('d_disturbance', '2 — Strongly Disturbed', 'radio')}
+      </div>
+    </div>
+  `;
+
+      // Highlight humidity block if AC is placed
+      updateHumidityVisibility();
+    }
+
+    function refreshComboBanner() {
+      const el = document.getElementById('comboText');
+      if (el) el.textContent = getCurrentCombo();
+      updateHumidityVisibility();
+    }
+
+    function updateHumidityVisibility() {
+      const block = document.getElementById('d_humidity_block');
+      if (!block) return;
+      const acActive = placed.AC;
+      block.style.opacity = acActive ? '1' : '0.4';
+      block.title = acActive ? '' : 'Enable the Air Cooler in the layout to activate this question';
+    }
+
+    // ============================================================
+    // AFTER
+    // ============================================================
+    function renderAfter() {
+      const inner = document.getElementById('rightInner');
+      inner.innerHTML = `
+    <div class="q-section-header after">③ After All Experiments</div>
+
+    <div class="q-block-right">
+      <div class="q-title">If there is an ideal cooling device that can cool your house at no cost, when and where will you use it?</div>
+      <textarea class="q-input" id="a_idealDevice" placeholder="Describe when and where you would use it…"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">At what point do you think heat becomes unhealthy to you?</div>
+      <textarea class="q-input" id="a_heatThreshold" placeholder="Describe the conditions or temperature at which you feel heat becomes unhealthy…"></textarea>
+    </div>
+  `;
+    }
+
+    // ============================================================
+    // CHIP HELPERS
+    // ============================================================
+    function chip(group, label, type, otherId) {
+      const oa = otherId ? `data-other="${otherId}"` : '';
+      return `<span class="q-chip" data-group="${group}" data-val="${label}" data-type="${type}" ${oa} onclick="toggleChip(this)">${label}</span>`;
+    }
+    function tcvChip(num, lbl) {
+      return `<div class="tcv-chip" data-group="d_tcv" data-val="${num}" onclick="toggleTCV(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
+    }
+    function toggleChip(el) {
+      const group = el.dataset.group;
+      const type = el.dataset.type;
+      const otherId = el.dataset.other;
+      const selClass = 'sel-' + currentPhase;
+      if (type === 'radio') {
+        document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
+          c.classList.remove('sel-before', 'sel-during', 'sel-after');
+          const oid = c.dataset.other;
+          if (oid) { const oi = document.getElementById(oid); if (oi) oi.classList.remove('visible'); }
+        });
+        el.classList.add(selClass);
+      } else {
+        el.classList.toggle(selClass);
+      }
+      if (otherId) {
+        const oi = document.getElementById(otherId);
+        if (oi) oi.classList.toggle('visible', el.classList.contains(selClass));
+      }
+    }
+    function toggleTCV(el) {
+      document.querySelectorAll('#rightInner .tcv-chip').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-during');
+    }
+
+    // ============================================================
+    // DATA COLLECTION
+    // ============================================================
+    function getRadio(group) {
+      const el = document.querySelector(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`);
+      return el ? el.dataset.val : '';
+    }
+    function getRadioWithOther(group, otherId) {
+      const val = getRadio(group);
+      if (val && otherId) {
+        const other = document.getElementById(otherId)?.value?.trim();
+        if (other) return `${val} (${other})`;
+      }
+      return val;
+    }
+    function getCheckboxes(group, otherId) {
+      const selected = [...document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`)].map(e => e.dataset.val);
+      if (selected.includes('Others') && otherId) {
+        const other = document.getElementById(otherId)?.value?.trim();
+        if (other) { const i = selected.indexOf('Others'); selected[i] = `Others: ${other}`; }
+      }
+      return selected.join('; ');
+    }
+    function getTCV() {
+      const el = document.querySelector('#rightInner .tcv-chip.sel-during');
+      return el ? el.dataset.val : '';
+    }
+
+    function collectBeforeData() {
+      return {
+        b_age: document.getElementById('b_age')?.value || '',
+        b_sex: getRadio('b_sex'),
+        b_height: document.getElementById('b_height')?.value || '',
+        b_weight: document.getElementById('b_weight')?.value || '',
+        b_occupants: document.getElementById('b_occupants')?.value || '',
+        b_homeStay: getRadio('b_homestay'),
+        b_spaceUsed: getRadio('b_space'),
+        b_whenHot: getCheckboxes('b_whenhot', 'b_whenhot_other'),
+        b_appliances: getCheckboxes('b_appliances', 'b_appliances_other'),
+        b_whenTurnOn: getCheckboxes('b_whenturnon', 'b_whenturnon_other'),
+        b_prefSpeed: getRadio('b_speed'),
+        b_prefOsc: getRadio('b_osc'),
+        b_routine: document.getElementById('b_routine')?.value || '',
+        b_avoidReason: getCheckboxes('b_avoid', 'b_avoid_other'),
+        b_activityLevel: getRadio('b_activity'),
+        b_priorActivity: getRadio('b_pre'),
+        b_currentPosture: getRadio('b_now'),
+        b_meds: getRadioWithOther('b_meds', 'b_meds_specify'),
+        b_water: getRadio('b_water'),
+        b_q1_envPref: getRadio('b_q1'),
+        b_q2_warmFeel: getRadio('b_q2'),
+        b_q3_coolFeel: getRadio('b_q3'),
+      };
+    }
+    function collectDuringData() {
+      return {
+        d_combo: getCurrentCombo(),
+        d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
+        d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
+        d_tcv: getTCV(),
+        d_tpv: getRadio('d_tpv'),
+        d_airflow: getRadio('d_airflow'),
+        d_humidity: placed.AC ? getRadio('d_humidity') : 'N/A (AC not active)',
+        d_disturbance: getRadio('d_disturbance'),
+      };
+    }
+    function collectAfterData() {
+      return {
+        a_idealDevice: document.getElementById('a_idealDevice')?.value || '',
+        a_heatThreshold: document.getElementById('a_heatThreshold')?.value || '',
+      };
+    }
+
+    // ============================================================
+    // SUBMIT
+    // ============================================================
+    function handleSubmit() {
+      const unit = document.getElementById('unitNumber').value;
+      if (!unit) { document.getElementById('unitNumber').classList.add('required'); alert('Please select a Unit Number first.'); return; }
+      if (!currentPhase) { alert('Please select a phase (Before / During / After).'); return; }
+
       const layout = document.getElementById('layoutSelector').value;
       const active = IDS.filter(id => placed[id]).sort().join('-');
       const combo = VALID[active] || 'Baseline (No Appliances)';
       const timestamp = new Date().toLocaleString();
 
-      // 3. Prepare payload for Google Sheets
-      const payload = {
-        timestamp: timestamp,
-        layout: layout,
-        combo: combo,
-        unitNo: unitNo,
-        feel: feel,
-        comfort: comfort
-      };
+      let phaseData = {};
+      if (currentPhase === 'before') phaseData = collectBeforeData();
+      if (currentPhase === 'during') phaseData = collectDuringData();
+      if (currentPhase === 'after') phaseData = collectAfterData();
 
-      // 4. Update UI to show saving state
-      const submitBtn = document.querySelector('.btn-submit');
-      submitBtn.textContent = "Saving...";
-      submitBtn.disabled = true;
+      const payload = { timestamp, phase: currentPhase, unitNo: unit, layout, combo, ...phaseData };
 
-      // 5. Send POST request to Google Apps Script
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Saving…'; btn.disabled = true;
+
       fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors", // This is required for Google Apps Script to prevent CORS blocking
-        headers: {
-          "Content-Type": "application/json"
-        },
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
         .then(() => {
-          // Because of "no-cors", we can't read the exact response, but a successful 'then' means the network request fired.
-          alert(`Success! Data saved to Google Sheets for ${unitNo}.`);
+          alert(`✅ Saved!\nPhase: ${currentPhase.toUpperCase()}\nUnit: ${unit}`);
+          btn.textContent = 'Submit Response'; btn.disabled = false;
           resetAll();
-          submitBtn.textContent = "Submit Response";
-          submitBtn.disabled = false;
         })
-        .catch((error) => {
-          alert("Error saving data. Please check your internet connection.");
-          submitBtn.textContent = "Submit Response";
-          submitBtn.disabled = false;
-          console.error("Error:", error);
+        .catch(() => {
+          alert('Error saving. Check your connection.');
+          btn.textContent = 'Submit Response'; btn.disabled = false;
         });
     }
 
+    // ---- INIT ----
     window.addEventListener('load', () => {
       changeLayout();
-      window.addEventListener('resize', () => resetAll());
+      renderRight();
+      window.addEventListener('resize', () => { IDS.forEach(id => snapBack(id)); setTimeout(updateStatus, 30); });
     });
   </script>
 </body>
+
 </html>
