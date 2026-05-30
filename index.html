@@ -159,7 +159,7 @@
       overflow: hidden;
     }
 
-    /* LEFT: DRAG-DROP SIDE */
+    /* LEFT: DRAG-DROP */
     .left-pane {
       width: 50%;
       flex-shrink: 0;
@@ -218,7 +218,7 @@
       flex-shrink: 0;
     }
 
-    /* STATUS inside blueprint */
+    /* STATUS */
     .drag-status {
       position: absolute;
       bottom: 8px;
@@ -257,9 +257,7 @@
     .blueprint-wrap {
       flex: 1;
       position: relative;
-      background:
-        linear-gradient(rgba(160, 155, 145, .15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(160, 155, 145, .15) 1px, transparent 1px), #f0ede8;
+      background: linear-gradient(rgba(160, 155, 145, .15) 1px, transparent 1px), linear-gradient(90deg, rgba(160, 155, 145, .15) 1px, transparent 1px), #f0ede8;
       background-size: 24px 24px;
       overflow: hidden;
     }
@@ -356,7 +354,7 @@
       background: #f3e8ff;
     }
 
-    /* RIGHT: QUESTIONS SIDE */
+    /* RIGHT PANE */
     .right-pane {
       width: 50%;
       display: flex;
@@ -426,6 +424,19 @@
       background: var(--after);
     }
 
+    /* SUB-SECTION HEADERS */
+    .q-sub-section {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--navy);
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: #e8ecf5;
+      margin: 10px 0 6px;
+    }
+
     /* QUESTION BLOCKS */
     .q-block-right {
       margin-bottom: 12px;
@@ -466,7 +477,6 @@
       min-height: 56px;
     }
 
-    /* Inline pair */
     .q-pair {
       display: flex;
       gap: 8px;
@@ -554,7 +564,7 @@
       display: block;
     }
 
-    /* Auto-combo banner */
+    /* Combo banner */
     .combo-banner {
       background: #fff8e7;
       border: 1.5px solid #f5a623;
@@ -573,7 +583,7 @@
       font-weight: 500;
     }
 
-    /* Temp fields row */
+    /* Temp fields */
     .temp-row {
       display: flex;
       gap: 10px;
@@ -659,7 +669,87 @@
       color: rgba(255, 255, 255, .7);
     }
 
-    /* Divider */
+    /* Scale chips for numbered ratings */
+    .scale-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .scale-chip .sc-num {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .scale-chip .sc-lbl {
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    .scale-chip:hover {
+      border-color: #a0a8c0;
+    }
+
+    .scale-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .scale-chip.sel-during .sc-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    /* Placement image chips */
+    .placement-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .placement-chip {
+      border: 2px solid var(--grid);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      background: white;
+      transition: all .15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .placement-chip:hover {
+      border-color: #a0a8c0;
+      background: #f0f2f8;
+    }
+
+    .placement-chip.sel-before {
+      border-color: var(--before);
+      background: #e8f0ff;
+    }
+
+    .placement-chip .pl-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .placement-chip .pl-emoji {
+      font-size: 22px;
+    }
+
     hr.q-divider {
       border: none;
       border-top: 1px solid var(--grid);
@@ -787,7 +877,7 @@
 
   </div>
 
-  <!-- APPLIANCE CHIPS (positioned absolutely) -->
+  <!-- APPLIANCE CHIPS -->
   <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
   <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span>
   </div>
@@ -819,37 +909,28 @@
     IDS.forEach(id => {
       const el = document.getElementById(id);
       el.addEventListener('pointerdown', e => {
-        e.preventDefault();
-        dragging = el;
+        e.preventDefault(); dragging = el;
         const r = el.getBoundingClientRect();
-        dragOffX = e.clientX - r.left;
-        dragOffY = e.clientY - r.top;
-        el.classList.add('dragging');
-        el.style.zIndex = 9999;
+        dragOffX = e.clientX - r.left; dragOffY = e.clientY - r.top;
+        el.classList.add('dragging'); el.style.zIndex = 9999;
         el.setPointerCapture(e.pointerId);
       });
       el.addEventListener('pointermove', e => {
-        if (dragging !== el) return;
-        e.preventDefault();
-        el.style.left = (e.clientX - dragOffX) + 'px';
-        el.style.top = (e.clientY - dragOffY) + 'px';
+        if (dragging !== el) return; e.preventDefault();
+        el.style.left = (e.clientX - dragOffX) + 'px'; el.style.top = (e.clientY - dragOffY) + 'px';
         const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
         const over = e.clientX > wr.left && e.clientX < wr.right && e.clientY > wr.top && e.clientY < wr.bottom;
         document.getElementById('blueprintWrap').classList.toggle('over-drop', over);
       });
       el.addEventListener('pointerup', e => {
         if (dragging !== el) return;
-        el.classList.remove('dragging');
-        el.style.zIndex = 10;
+        el.classList.remove('dragging'); el.style.zIndex = 10;
         document.getElementById('blueprintWrap').classList.remove('over-drop');
         const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
-        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id);
-        else snapBack(id);
-        dragging = null;
-        updateStatus();
-        // If during phase, refresh the combo banner
+        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id); else snapBack(id);
+        dragging = null; updateStatus();
         if (currentPhase === 'during') refreshComboBanner();
       });
     });
@@ -861,8 +942,7 @@
       if (id === 'CF' && placed.SF) { warn('Cannot combine Ceiling Fan and Stand Fan'); snapBack(id); return; }
       if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
       if (!VALID[key] && !PARTIAL.has(key)) { warn('Not a valid study combination'); snapBack(id); return; }
-      placed[id] = true;
-      document.getElementById(id).classList.add('placed');
+      placed[id] = true; document.getElementById(id).classList.add('placed');
     }
     function snapBack(id) {
       const slot = document.getElementById('slot-' + id);
@@ -899,7 +979,7 @@
     function resetAll() {
       IDS.forEach(id => snapBack(id));
       setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
-      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
       document.querySelectorAll('#rightInner .q-input').forEach(inp => inp.value = '');
       document.querySelectorAll('#rightInner .other-input').forEach(inp => { inp.value = ''; inp.classList.remove('visible'); });
       document.querySelectorAll('#rightInner .temp-input').forEach(inp => inp.value = '');
@@ -916,18 +996,11 @@
       document.querySelectorAll('.phase-btn').forEach(b => b.classList.toggle('active', b.dataset.phase === phase));
       renderRight();
     }
-
     function renderRight() {
       const unit = document.getElementById('unitNumber').value;
       const inner = document.getElementById('rightInner');
-      if (!unit) {
-        inner.innerHTML = `<div class="gate-msg"><div class="gate-icon">🏠</div><p>Please <strong>select a Unit Number</strong> above before answering questions.</p></div>`;
-        return;
-      }
-      if (!currentPhase) {
-        inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · During · After</strong></p></div>`;
-        return;
-      }
+      if (!unit) { inner.innerHTML = `<div class="gate-msg"><div class="gate-icon">🏠</div><p>Please <strong>select a Unit Number</strong> above before answering questions.</p></div>`; return; }
+      if (!currentPhase) { inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · During · After</strong></p></div>`; return; }
       if (currentPhase === 'before') renderBefore();
       if (currentPhase === 'during') renderDuring();
       if (currentPhase === 'after') renderAfter();
@@ -940,6 +1013,9 @@
       const inner = document.getElementById('rightInner');
       inner.innerHTML = `
     <div class="q-section-header before">① Before the Experiment</div>
+
+    <!-- A. GENERAL DEMOGRAPHICS -->
+    <div class="q-sub-section">A · General Demographics</div>
 
     <div class="q-block-right">
       <div class="q-title">Age / Sex</div>
@@ -964,8 +1040,11 @@
 
     <hr class="q-divider"/>
 
+    <!-- B. LIFESTYLE HABITS -->
+    <div class="q-sub-section">B · Lifestyle Habits</div>
+
     <div class="q-block-right">
-      <div class="q-title">How long do you stay home daily? <span class="q-hint">(Excl. sleeping time)</span></div>
+      <div class="q-title">How long do you stay in your house daily? <span class="q-hint">(Excl. sleeping time)</span></div>
       <div class="q-options-grid">
         ${chip('b_homestay', 'Less than 4 hours', 'radio')}
         ${chip('b_homestay', '4 to 8 hours', 'radio')}
@@ -975,51 +1054,57 @@
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Where do you spend most of your time?</div>
+      <div class="q-title">Where do you spend most of your time at home?</div>
       <div class="q-options-grid">
-        ${chip('b_space', 'Living Room', 'radio')} ${chip('b_space', 'Bedroom', 'radio')}
+        ${chip('b_space', 'Living Room', 'radio')}
+        ${chip('b_space', 'Bedroom', 'radio')}
+        ${chip('b_space', 'Kitchen', 'radio')}
       </div>
     </div>
-
-    <hr class="q-divider"/>
 
     <div class="q-block-right">
       <div class="q-title">What do you do when the weather is too hot? <span class="q-hint">(Select all that apply)</span></div>
       <div class="q-options-grid">
         ${chip('b_whenhot', 'Open windows', 'checkbox')}
+        ${chip('b_whenhot', 'Open doors', 'checkbox')}
         ${chip('b_whenhot', 'Change clothing', 'checkbox')}
         ${chip('b_whenhot', 'Drink cold drinks', 'checkbox')}
         ${chip('b_whenhot', 'Take a shower', 'checkbox')}
-        ${chip('b_whenhot', 'Handheld/electric fans', 'checkbox')}
-        ${chip('b_whenhot', 'Cooling appliances', 'checkbox')}
+        ${chip('b_whenhot', 'Use manual/handheld electric fans', 'checkbox')}
+        ${chip('b_whenhot', 'Use cooling appliances', 'checkbox')}
         ${chip('b_whenhot', 'Others', 'checkbox', 'b_whenhot_other')}
       </div>
       <input class="other-input" id="b_whenhot_other" placeholder="Please specify…"/>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">What cooling appliances do you normally use? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-title">What do you wear when the weather is too hot?</div>
+      <input class="q-input" type="text" id="b_wear" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What type of cooling appliances do you normally use? <span class="q-hint">(Select all that apply)</span></div>
       <div class="q-options-grid">
         ${chip('b_appliances', 'Ceiling fan', 'checkbox')}
-        ${chip('b_appliances', 'Standing/Table fan', 'checkbox')}
+        ${chip('b_appliances', 'Standing fan / Table fan', 'checkbox')}
         ${chip('b_appliances', 'Air circulator', 'checkbox')}
         ${chip('b_appliances', 'Air cooler', 'checkbox')}
         ${chip('b_appliances', 'Portable Air-con', 'checkbox')}
-        ${chip('b_appliances', 'None', 'checkbox')}
+        ${chip('b_appliances', "I don't use any cooling appliance", 'checkbox')}
         ${chip('b_appliances', 'Others', 'checkbox', 'b_appliances_other')}
       </div>
       <input class="other-input" id="b_appliances_other" placeholder="Please specify…"/>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">When do you turn on cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-title">In what situations do you turn on your cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
       <div class="q-options-grid">
         ${chip('b_whenturnon', 'When feeling hot', 'checkbox')}
         ${chip('b_whenturnon', 'Before sleeping', 'checkbox')}
         ${chip('b_whenturnon', 'During meals', 'checkbox')}
         ${chip('b_whenturnon', 'When cooking', 'checkbox')}
-        ${chip('b_whenturnon', 'When guests present', 'checkbox')}
-        ${chip('b_whenturnon', 'When entering house/room', 'checkbox')}
+        ${chip('b_whenturnon', 'When guests are present', 'checkbox')}
+        ${chip('b_whenturnon', 'When I enter the house/room', 'checkbox')}
         ${chip('b_whenturnon', 'Others', 'checkbox', 'b_whenturnon_other')}
       </div>
       <input class="other-input" id="b_whenturnon_other" placeholder="Please specify…"/>
@@ -1040,46 +1125,41 @@
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Daily Routine Description</div>
+      <div class="q-title">Daily Routine Description <span class="q-hint">(Use meal-times as a checkpoint)</span></div>
       <textarea class="q-input" id="b_routine" placeholder="Briefly describe your typical daily routine at home…"></textarea>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Why do you avoid certain cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-title">If you do not use certain cooling appliances, what are your main reasons? <span class="q-hint">(Select all that apply)</span></div>
       <div class="q-options-grid">
-        ${chip('b_avoid', 'Save on electricity', 'checkbox')}
-        ${chip('b_avoid', 'Health concerns', 'checkbox')}
+        ${chip('b_avoid', 'Save on electricity bills', 'checkbox')}
+        ${chip('b_avoid', 'Health concerns (e.g. catching cold, dry air, rheumatism)', 'checkbox')}
         ${chip('b_avoid', 'Noise concerns', 'checkbox')}
-        ${chip('b_avoid', 'Cost of appliances', 'checkbox')}
+        ${chip('b_avoid', 'Cost of purchasing appliances', 'checkbox')}
         ${chip('b_avoid', 'Prefer natural ventilation', 'checkbox')}
         ${chip('b_avoid', 'Others', 'checkbox', 'b_avoid_other')}
       </div>
       <input class="other-input" id="b_avoid_other" placeholder="Please specify…"/>
     </div>
 
-    <hr class="q-divider"/>
-
     <div class="q-block-right">
-      <div class="q-title">General Activity Level</div>
+      <div class="q-title">General Activity Level <span class="q-hint">(per week)</span></div>
       <div class="q-options-grid">
-        ${chip('b_activity', 'Mostly inactive', 'radio')}
-        ${chip('b_activity', 'Somewhat active', 'radio')}
-        ${chip('b_activity', 'Active', 'radio')}
-        ${chip('b_activity', 'Very active', 'radio')}
+        ${chip('b_activity', 'Mostly inactive (Sitting / rarely moving)', 'radio')}
+        ${chip('b_activity', 'Somewhat active (Standing / light chores, 2–3× a week)', 'radio')}
+        ${chip('b_activity', 'Active (Walks / moderate activity 30 min, 4–5× a week)', 'radio')}
+        ${chip('b_activity', 'Very active (Frequently moving / lifting objects)', 'radio')}
       </div>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Current Activity &amp; Pre-activity status</div>
-      <div class="q-sub-group">
-        <div>
-          <div class="q-sub-label">Right before this:</div>
-          <div class="q-options-grid">${chip('b_pre', 'Resting', 'radio')} ${chip('b_pre', 'Light', 'radio')} ${chip('b_pre', 'Moderate', 'radio')} ${chip('b_pre', 'Vigorous', 'radio')}</div>
-        </div>
-        <div>
-          <div class="q-sub-label">Right now:</div>
-          <div class="q-options-grid">${chip('b_now', 'Reclining', 'radio')} ${chip('b_now', 'Sitting', 'radio')} ${chip('b_now', 'Standing', 'radio')} ${chip('b_now', 'Light Activity', 'radio')}</div>
-        </div>
+      <div class="q-title">What are you doing right now? <span class="q-hint">(Filled in by interviewer — ASHRAE)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_posture', 'Reclining', 'radio')}
+        ${chip('b_posture', 'Sitting', 'radio')}
+        ${chip('b_posture', 'Standing relaxed', 'radio')}
+        ${chip('b_posture', 'Light activity standing', 'radio')}
+        ${chip('b_posture', 'Moderate activity standing', 'radio')}
       </div>
     </div>
 
@@ -1090,27 +1170,58 @@
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">How much water do you drink typically?</div>
+      <div class="q-title">How much do you hydrate typically?</div>
       <div class="q-options-grid">
-        ${chip('b_water', '1 Litre', 'radio')} ${chip('b_water', '1–2 Litres', 'radio')} ${chip('b_water', '2 Litres', 'radio')}
+        ${chip('b_water', '< 4 Glasses', 'radio')}
+        ${chip('b_water', '4–8 Glasses', 'radio')}
+        ${chip('b_water', '> 8 Glasses', 'radio')}
       </div>
     </div>
 
     <hr class="q-divider"/>
 
+    <!-- C. BASELINE PREFERENCE -->
+    <div class="q-sub-section">C · Baseline Preference — Classification Segment</div>
+
     <div class="q-block-right">
-      <div class="q-title">Q1 · Indoor environment preference</div>
-      <div class="q-options-grid">${chip('b_q1', 'Cooler', 'radio')} ${chip('b_q1', 'No Change Preference', 'radio')} ${chip('b_q1', 'Warmer', 'radio')}</div>
+      <div class="q-title">Q1 · In general, what kind of indoor environment do you prefer?</div>
+      <div class="q-options-grid">
+        ${chip('b_q1', '❄️ Cooler', 'radio')}
+        ${chip('b_q1', '😐 No Change / Preference', 'radio')}
+        ${chip('b_q1', '🔥 Warmer', 'radio')}
+      </div>
     </div>
 
     <div class="q-block-right">
       <div class="q-title">Q2 · If the room feels slightly warm, how do you feel?</div>
-      <div class="q-options-grid">${chip('b_q2', 'Comfortable / Acceptable', 'radio')} ${chip('b_q2', 'Neutral / Can accept', 'radio')} ${chip('b_q2', 'Uncomfortable', 'radio')}</div>
+      <div class="q-options-grid">
+        ${chip('b_q2', '🙂 Comfortable / Acceptable', 'radio')}
+        ${chip('b_q2', '😐 Neutral / Can accept', 'radio')}
+        ${chip('b_q2', '😟 Uncomfortable', 'radio')}
+      </div>
     </div>
 
     <div class="q-block-right">
       <div class="q-title">Q3 · If the room feels slightly cool, how do you feel?</div>
-      <div class="q-options-grid">${chip('b_q3', 'Acceptable', 'radio')} ${chip('b_q3', 'Neutral / Can accept', 'radio')} ${chip('b_q3', 'Uncomfortable', 'radio')}</div>
+      <div class="q-options-grid">
+        ${chip('b_q3', '🙂 Comfortable / Acceptable', 'radio')}
+        ${chip('b_q3', '😐 Neutral / Can accept', 'radio')}
+        ${chip('b_q3', '😟 Uncomfortable', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q4 · Preferred placement of Air Cooler &amp; Stand Fan</div>
+      <div class="placement-grid">
+        <div class="placement-chip" data-group="b_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
+          <span class="pl-emoji">🌬️➡️❄️</span>
+          <span class="pl-label">Stand Fan in front of Air Cooler</span>
+        </div>
+        <div class="placement-chip" data-group="b_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
+          <span class="pl-emoji">❄️➡️🌬️</span>
+          <span class="pl-label">Air Cooler behind Stand Fan</span>
+        </div>
+      </div>
     </div>
   `;
     }
@@ -1127,27 +1238,48 @@
     <div class="q-block-right">
       <div class="q-title">Current Combination Under Test</div>
       <div class="combo-banner" id="comboBanner">🔬 <span id="comboText">${combo}</span></div>
-      <div class="q-hint" style="margin-top:-6px;margin-bottom:4px;">Auto-detected from layout. Drag appliances on the left to update.</div>
+      <div class="q-hint" style="margin-top:-6px;margin-bottom:8px;">Auto-detected from layout. Drag appliances on the left to update.</div>
+      <div class="q-hint" style="margin-bottom:4px;font-weight:600;color:var(--navy);">Or select manually:</div>
+      <div class="q-options-grid">
+        ${chip('d_comboManual', '1 · SF only', 'radio')}
+        ${chip('d_comboManual', '2 · CF only', 'radio')}
+        ${chip('d_comboManual', '3 · Air Cooler (0.75 m)', 'radio')}
+        ${chip('d_comboManual', '4 · SF + Air Cooler', 'radio')}
+        ${chip('d_comboManual', '5 · CF + Air Cooler', 'radio')}
+        ${chip('d_comboManual', '6 · SF + WEF + Air Cooler', 'radio')}
+      </div>
     </div>
 
     <div class="q-block-right">
       <div class="q-title">Temperature Readings</div>
       <div class="temp-row">
         <div class="temp-field">
-          <label>Initial Baseline Temp (°C)</label>
-          <input class="temp-input" type="number" id="d_tempBaseline" placeholder="—" step="0.1"/>
-        </div>
-        <div class="temp-field">
           <label>Measured Indoor Temp (°C)</label>
           <input class="temp-input" type="number" id="d_tempIndoor" placeholder="—" step="0.1"/>
         </div>
+        <div class="temp-field">
+          <label>Initial Baseline Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_tempBaseline" placeholder="—" step="0.1"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What are you doing right now? <span class="q-hint">(Filled in by surveyor — ASHRAE)</span></div>
+      <div class="q-options-grid">
+        ${chip('d_posture', 'Reclining', 'radio')}
+        ${chip('d_posture', 'Sitting', 'radio')}
+        ${chip('d_posture', 'Standing relaxed', 'radio')}
+        ${chip('d_posture', 'Light activity standing', 'radio')}
+        ${chip('d_posture', 'Moderate activity standing', 'radio')}
       </div>
     </div>
 
     <hr class="q-divider"/>
 
+    <!-- A. TCV -->
+    <div class="q-sub-section">A · Thermal Comfort Vote (TCV)</div>
     <div class="q-block-right">
-      <div class="q-title">Thermal Comfort Vote (TCV)</div>
       <div class="q-hint" style="margin-bottom:6px;">How comfortable are you with the thermal environment right now?</div>
       <div class="tcv-scale">
         ${tcvChip('+3', 'Very Comfy')}
@@ -1162,34 +1294,66 @@
 
     <hr class="q-divider"/>
 
-    <div class="q-block-right">
-      <div class="q-title">Thermal Preference (TPV)</div>
-      <div class="q-hint" style="margin-bottom:5px;">Right now, would you prefer to be…</div>
-      <div class="q-options-grid">${chip('d_tpv', 'Cooler', 'radio')} ${chip('d_tpv', 'No Change', 'radio')} ${chip('d_tpv', 'Warmer', 'radio')}</div>
-    </div>
+    <!-- B. STANDARDISED PREFERENCE SCALES -->
+    <div class="q-sub-section">B · Standardised Preference Scales</div>
 
+    <!-- Temperature -->
     <div class="q-block-right">
-      <div class="q-title">Airflow Preference</div>
-      <div class="q-hint" style="margin-bottom:5px;">Right now, would you prefer the airflow to be…</div>
-      <div class="q-options-grid">${chip('d_airflow', 'Less airflow', 'radio')} ${chip('d_airflow', 'No Change', 'radio')} ${chip('d_airflow', 'More airflow', 'radio')}</div>
-    </div>
-
-    <div class="q-block-right" id="d_humidity_block">
-      <div class="q-title">Air Humidity Preference <span class="q-hint">(Ask ONLY when Air Cooler is active)</span></div>
-      <div class="q-options-grid">${chip('d_humidity', 'Drier', 'radio')} ${chip('d_humidity', 'Just Right', 'radio')} ${chip('d_humidity', 'More Humid', 'radio')}</div>
-    </div>
-
-    <div class="q-block-right">
-      <div class="q-title">Airflow Disturbance Rating</div>
+      <div class="q-title">Temperature — How comfortable is the temperature right now?</div>
       <div class="q-options-grid">
-        ${chip('d_disturbance', '0 — Not Disturbed', 'radio')}
-        ${chip('d_disturbance', '1 — Disturbed', 'radio')}
-        ${chip('d_disturbance', '2 — Strongly Disturbed', 'radio')}
+        ${scaleChip('d_tempComfort', '1', 'Uncomfortable — too cool')}
+        ${scaleChip('d_tempComfort', '2', 'Comfortable')}
+        ${scaleChip('d_tempComfort', '3', 'Uncomfortable — too warm')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Temperature — Right now, would you prefer the temperature to be?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_tempPref', '-1', 'Cooler')}
+        ${scaleChip('d_tempPref', '0', 'No change')}
+        ${scaleChip('d_tempPref', '+1', 'Warmer')}
+      </div>
+    </div>
+
+    <!-- Airflow -->
+    <div class="q-block-right">
+      <div class="q-title">Airflow — How would you describe the airflow right now?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_airflowDisturbance', '0', 'Not disturbing')}
+        ${scaleChip('d_airflowDisturbance', '1', 'Disturbing')}
+        ${scaleChip('d_airflowDisturbance', '2', 'Strongly disturbing')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Airflow — Right now, would you prefer the airflow to be?</div>
+      <div class="q-hint" style="margin-bottom:5px;">If "lower" is preferred, also check the disturbance rating above.</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_airflowPref', '-1', 'Lower')}
+        ${scaleChip('d_airflowPref', '0', 'No change')}
+        ${scaleChip('d_airflowPref', '+1', 'Higher')}
+      </div>
+    </div>
+
+    <!-- Humidity (AC only) -->
+    <div class="q-block-right" id="d_humidity_block">
+      <div class="q-title">Air Humidity <span class="q-hint">(Asked only when Air Cooler is active)</span></div>
+      <div class="q-sub-label" style="margin-bottom:5px;">How would you describe the humidity right now?</div>
+      <div class="q-options-grid" style="margin-bottom:8px;">
+        ${scaleChip('d_humidityRating', '-2', 'Dry')}
+        ${scaleChip('d_humidityRating', '0', 'Just right')}
+        ${scaleChip('d_humidityRating', '2', 'Humid')}
+        ${scaleChip('d_humidityRating', '3', 'Too humid')}
+      </div>
+      <div class="q-sub-label" style="margin-bottom:5px;">Right now, would you prefer the humidity to be?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_humidityPref', '-1', 'Drier')}
+        ${scaleChip('d_humidityPref', '0', 'No change')}
+        ${scaleChip('d_humidityPref', '+1', 'More humid')}
       </div>
     </div>
   `;
-
-      // Highlight humidity block if AC is placed
       updateHumidityVisibility();
     }
 
@@ -1198,13 +1362,11 @@
       if (el) el.textContent = getCurrentCombo();
       updateHumidityVisibility();
     }
-
     function updateHumidityVisibility() {
       const block = document.getElementById('d_humidity_block');
       if (!block) return;
-      const acActive = placed.AC;
-      block.style.opacity = acActive ? '1' : '0.4';
-      block.title = acActive ? '' : 'Enable the Air Cooler in the layout to activate this question';
+      block.style.opacity = placed.AC ? '1' : '0.4';
+      block.title = placed.AC ? '' : 'Enable the Air Cooler in the layout to activate this question';
     }
 
     // ============================================================
@@ -1216,13 +1378,27 @@
     <div class="q-section-header after">③ After All Experiments</div>
 
     <div class="q-block-right">
-      <div class="q-title">If there is an ideal cooling device that can cool your house at no cost, when and where will you use it?</div>
-      <textarea class="q-input" id="a_idealDevice" placeholder="Describe when and where you would use it…"></textarea>
+      <div class="q-title">If there was an ideal cooling device you could have in your home, when and where would you prefer to use it on a daily basis?</div>
+      <textarea class="q-input" id="a_idealDevice" placeholder="Describe when and where you would use it…" style="min-height:80px;"></textarea>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">At what point do you think heat becomes unhealthy to you?</div>
-      <textarea class="q-input" id="a_heatThreshold" placeholder="Describe the conditions or temperature at which you feel heat becomes unhealthy…"></textarea>
+      <div class="q-title">Which of the top 6 combinations do you prefer to have if offered at no cost?</div>
+      <div class="q-options-grid" style="margin-bottom:6px;">
+        ${chip('a_preferredCombo', '1 · SF only', 'radio')}
+        ${chip('a_preferredCombo', '2 · CF only', 'radio')}
+        ${chip('a_preferredCombo', '3 · Air Cooler (0.75 m)', 'radio')}
+        ${chip('a_preferredCombo', '4 · SF + Air Cooler', 'radio')}
+        ${chip('a_preferredCombo', '5 · CF + Air Cooler', 'radio')}
+        ${chip('a_preferredCombo', '6 · SF + WEF + Air Cooler', 'radio')}
+      </div>
+      <textarea class="q-input" id="a_preferredComboReason" placeholder="Optional: reason for preference…" style="min-height:56px;"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">How comfortable are you spending $40–$50 more per month on electricity to use the air cooler on hot days?</div>
+      <div class="q-hint" style="margin-bottom:6px;">Current bill is approx. $5–$10/month.</div>
+      <textarea class="q-input" id="a_willingnessPay" placeholder="Describe your level of comfort with this additional cost…" style="min-height:80px;"></textarea>
     </div>
   `;
     }
@@ -1237,29 +1413,36 @@
     function tcvChip(num, lbl) {
       return `<div class="tcv-chip" data-group="d_tcv" data-val="${num}" onclick="toggleTCV(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
     }
+    function scaleChip(group, num, lbl) {
+      return `<div class="scale-chip" data-group="${group}" data-val="${num}" onclick="toggleScaleChip(this)"><span class="sc-num">${num}</span><span class="sc-lbl">${lbl}</span></div>`;
+    }
     function toggleChip(el) {
-      const group = el.dataset.group;
-      const type = el.dataset.type;
-      const otherId = el.dataset.other;
+      const group = el.dataset.group, type = el.dataset.type, otherId = el.dataset.other;
       const selClass = 'sel-' + currentPhase;
       if (type === 'radio') {
         document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
           c.classList.remove('sel-before', 'sel-during', 'sel-after');
-          const oid = c.dataset.other;
-          if (oid) { const oi = document.getElementById(oid); if (oi) oi.classList.remove('visible'); }
+          const oid = c.dataset.other; if (oid) { const oi = document.getElementById(oid); if (oi) oi.classList.remove('visible'); }
         });
         el.classList.add(selClass);
       } else {
         el.classList.toggle(selClass);
       }
-      if (otherId) {
-        const oi = document.getElementById(otherId);
-        if (oi) oi.classList.toggle('visible', el.classList.contains(selClass));
-      }
+      if (otherId) { const oi = document.getElementById(otherId); if (oi) oi.classList.toggle('visible', el.classList.contains(selClass)); }
     }
     function toggleTCV(el) {
       document.querySelectorAll('#rightInner .tcv-chip').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
+    }
+    function toggleScaleChip(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-during');
+    }
+    function togglePlacement(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .placement-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-before');
     }
 
     // ============================================================
@@ -1271,19 +1454,21 @@
     }
     function getRadioWithOther(group, otherId) {
       const val = getRadio(group);
-      if (val && otherId) {
-        const other = document.getElementById(otherId)?.value?.trim();
-        if (other) return `${val} (${other})`;
-      }
+      if (val && otherId) { const other = document.getElementById(otherId)?.value?.trim(); if (other) return `${val} (${other})`; }
       return val;
     }
     function getCheckboxes(group, otherId) {
       const selected = [...document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`)].map(e => e.dataset.val);
-      if (selected.includes('Others') && otherId) {
-        const other = document.getElementById(otherId)?.value?.trim();
-        if (other) { const i = selected.indexOf('Others'); selected[i] = `Others: ${other}`; }
-      }
+      if (selected.includes('Others') && otherId) { const other = document.getElementById(otherId)?.value?.trim(); if (other) { const i = selected.indexOf('Others'); selected[i] = `Others: ${other}`; } }
       return selected.join('; ');
+    }
+    function getScaleVal(group) {
+      const el = document.querySelector(`#rightInner .scale-chip[data-group="${group}"].sel-during`);
+      return el ? el.dataset.val : '';
+    }
+    function getPlacementVal(group) {
+      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before`);
+      return el ? el.dataset.val : '';
     }
     function getTCV() {
       const el = document.querySelector('#rightInner .tcv-chip.sel-during');
@@ -1300,6 +1485,7 @@
         b_homeStay: getRadio('b_homestay'),
         b_spaceUsed: getRadio('b_space'),
         b_whenHot: getCheckboxes('b_whenhot', 'b_whenhot_other'),
+        b_wear: document.getElementById('b_wear')?.value || '',
         b_appliances: getCheckboxes('b_appliances', 'b_appliances_other'),
         b_whenTurnOn: getCheckboxes('b_whenturnon', 'b_whenturnon_other'),
         b_prefSpeed: getRadio('b_speed'),
@@ -1307,31 +1493,37 @@
         b_routine: document.getElementById('b_routine')?.value || '',
         b_avoidReason: getCheckboxes('b_avoid', 'b_avoid_other'),
         b_activityLevel: getRadio('b_activity'),
-        b_priorActivity: getRadio('b_pre'),
-        b_currentPosture: getRadio('b_now'),
+        b_currentPosture: getRadio('b_posture'),
         b_meds: getRadioWithOther('b_meds', 'b_meds_specify'),
         b_water: getRadio('b_water'),
         b_q1_envPref: getRadio('b_q1'),
         b_q2_warmFeel: getRadio('b_q2'),
         b_q3_coolFeel: getRadio('b_q3'),
+        b_q4_placement: getPlacementVal('b_q4'),
       };
     }
     function collectDuringData() {
       return {
         d_combo: getCurrentCombo(),
-        d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
+        d_comboManual: getRadio('d_comboManual'),
         d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
+        d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
+        d_posture: getRadio('d_posture'),
         d_tcv: getTCV(),
-        d_tpv: getRadio('d_tpv'),
-        d_airflow: getRadio('d_airflow'),
-        d_humidity: placed.AC ? getRadio('d_humidity') : 'N/A (AC not active)',
-        d_disturbance: getRadio('d_disturbance'),
+        d_tempComfort: getScaleVal('d_tempComfort'),
+        d_tempPref: getScaleVal('d_tempPref'),
+        d_airflowDisturbance: getScaleVal('d_airflowDisturbance'),
+        d_airflowPref: getScaleVal('d_airflowPref'),
+        d_humidityRating: placed.AC ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
+        d_humidityPref: placed.AC ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
       };
     }
     function collectAfterData() {
       return {
         a_idealDevice: document.getElementById('a_idealDevice')?.value || '',
-        a_heatThreshold: document.getElementById('a_heatThreshold')?.value || '',
+        a_preferredCombo: getRadio('a_preferredCombo'),
+        a_preferredComboReason: document.getElementById('a_preferredComboReason')?.value || '',
+        a_willingnessPay: document.getElementById('a_willingnessPay')?.value || '',
       };
     }
 
