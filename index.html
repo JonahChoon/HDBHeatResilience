@@ -501,6 +501,28 @@
     .q-chip.sel-during { background: var(--during); border-color: var(--during); color: white; }
     .q-chip.sel-after { background: var(--after); border-color: var(--after); color: white; }
 
+
+
+    /* Door & Window Configuration Grid */
+    .window-config-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 16px 18px;
+    }
+
+    .window-config-card {
+      background: white;
+      border: 1.5px solid var(--grid);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .window-config-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Sub-groups */
     .q-sub-group {
       display: flex;
@@ -1233,30 +1255,68 @@
       </div>
     </div>
 
+    <div class="q-block-right" id="d_placement_block">
+      <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
+      <div class="placement-grid">
+        <div class="placement-chip" data-group="d_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
+          <span class="pl-emoji">🌬️➡️❄️</span>
+          <span class="pl-label">Stand Fan in front of Air Cooler</span>
+        </div>
+        <div class="placement-chip" data-group="d_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
+          <span class="pl-emoji">❄️➡️🌬️</span>
+          <span class="pl-label">Air Cooler behind Stand Fan</span>
+        </div>
+      </div>
+      <div class="q-hint" id="d_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
+    </div>
+
     <div class="q-block-right">
-      <div class="q-title">Door and Window Configuration</div>
-      <div class="q-sub-group">
-        <div>
+      <div class="q-title">Interviewer to observe the Door and Window Configuration</div>
+      <div class="window-config-grid">
+        <div class="window-config-card">
           <div class="q-sub-label">Door</div>
           <div class="q-options-grid">${chip('d_door', 'Open', 'radio')} ${chip('d_door', 'Closed', 'radio')}</div>
         </div>
-        <div id="d_bedroomDoor_block">
+
+        <div class="window-config-card" id="d_bedroomDoor_block">
           <div class="q-sub-label">Bedroom Door <span class="q-hint">(Only for 2 Rooms)</span></div>
           <div class="q-options-grid">${chip('d_bedroomDoor', 'Open', 'radio')} ${chip('d_bedroomDoor', 'Closed', 'radio')}</div>
         </div>
-        <div>
-          <div class="q-sub-label">Window (Top)</div>
-          <div class="q-options-grid">${chip('d_windowTop', 'Open', 'radio')} ${chip('d_windowTop', 'Closed', 'radio')}</div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Top)</div>
+          <div class="q-options-grid">${chip('d_corridorWindowTop', 'Open', 'radio')} ${chip('d_corridorWindowTop', 'Closed', 'radio')}</div>
         </div>
-        <div>
-          <div class="q-sub-label">Window (Bottom)</div>
-          <div class="q-options-grid">${chip('d_windowBottom', 'Open', 'radio')} ${chip('d_windowBottom', 'Closed', 'radio')}</div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Bottom)</div>
+          <div class="q-options-grid">${chip('d_corridorWindowBottom', 'Open', 'radio')} ${chip('d_corridorWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Top)</div>
+          <div class="q-options-grid">${chip('d_kitchenWindowTop', 'Open', 'radio')} ${chip('d_kitchenWindowTop', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Bottom)</div>
+          <div class="q-options-grid">${chip('d_kitchenWindowBottom', 'Open', 'radio')} ${chip('d_kitchenWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card" id="d_bedroomWindowTop_block">
+          <div class="q-sub-label">Bedroom Window (Top) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomWindowTop', 'Open', 'radio')} ${chip('d_bedroomWindowTop', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card" id="d_bedroomWindowBottom_block">
+          <div class="q-sub-label">Bedroom Window (Bottom) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomWindowBottom', 'Open', 'radio')} ${chip('d_bedroomWindowBottom', 'Closed', 'radio')}</div>
         </div>
       </div>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Participant's Clothing <span class="q-hint">(What they are wearing)</span></div>
+      <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
       <input class="q-input" type="text" id="d_clothing" placeholder="e.g. T-shirt and shorts"/>
     </div>
 
@@ -1311,13 +1371,13 @@
     <div class="q-block-right">
       <div class="q-hint" style="margin-bottom:8px;">How comfortable are you with the thermal environment right now?</div>
       <div class="tcv-scale">
-        ${tcvChip('+3', 'Very Comfy')}
-        ${tcvChip('+2', 'Comfy')}
-        ${tcvChip('+1', 'Slightly Comfy')}
-        ${tcvChip('0', 'Neutral')}
-        ${tcvChip('-1', 'Slightly Uncomfy')}
-        ${tcvChip('-2', 'Uncomfy')}
         ${tcvChip('-3', 'Very Uncomfy')}
+        ${tcvChip('-2', 'Uncomfy')}
+        ${tcvChip('-1', 'Slightly Uncomfy')}
+        ${tcvChip('0', 'Neutral')}
+        ${tcvChip('+1', 'Slightly Comfy')}
+        ${tcvChip('+2', 'Comfy')}
+        ${tcvChip('+3', 'Very Comfy')}
       </div>
     </div>
 
@@ -1370,10 +1430,10 @@
       <div class="q-title">Air Humidity <span class="q-hint">(Asked only when Air Cooler is active)</span></div>
       <div class="q-sub-label" style="margin-bottom:6px;">How would you describe the humidity right now?</div>
       <div class="q-options-grid" style="margin-bottom:12px;">
-        ${scaleChip('d_humidityRating', '-2', 'Dry')}
+        ${scaleChip('d_humidityRating', '-1', 'Dry')}
         ${scaleChip('d_humidityRating', '0', 'Just right')}
-        ${scaleChip('d_humidityRating', '2', 'Humid')}
-        ${scaleChip('d_humidityRating', '3', 'Too humid')}
+        ${scaleChip('d_humidityRating', '1', 'Humid')}
+        ${scaleChip('d_humidityRating', '2', 'Too humid')}
       </div>
       <div class="q-sub-label" style="margin-bottom:6px;">Right now, would you prefer the humidity to be?</div>
       <div class="q-options-grid">
@@ -1383,21 +1443,6 @@
       </div>
     </div>
 
-
-    <div class="q-block-right" id="d_placement_block">
-      <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
-      <div class="placement-grid">
-        <div class="placement-chip" data-group="d_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
-          <span class="pl-emoji">🌬️➡️❄️</span>
-          <span class="pl-label">Stand Fan in front of Air Cooler</span>
-        </div>
-        <div class="placement-chip" data-group="d_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
-          <span class="pl-emoji">❄️➡️🌬️</span>
-          <span class="pl-label">Air Cooler behind Stand Fan</span>
-        </div>
-      </div>
-      <div class="q-hint" id="d_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
-    </div>
   `;
       updateDuringConditionalVisibility();
     }
@@ -1414,7 +1459,7 @@
     function updateDuringConditionalVisibility() {
       updateHumidityVisibility();
       updatePlacementVisibility();
-      updateBedroomDoorVisibility();
+      updateTwoRoomOnlyVisibility();
     }
     function updateHumidityVisibility() {
       const block = document.getElementById('d_humidity_block');
@@ -1435,14 +1480,21 @@
       const hint = document.getElementById('d_placement_hint');
       if (hint) hint.style.display = enabled ? 'none' : 'block';
     }
-    function updateBedroomDoorVisibility() {
-      const block = document.getElementById('d_bedroomDoor_block');
-      if (!block) return;
+    function updateTwoRoomOnlyVisibility() {
       const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
-      block.style.display = isTwoRoom ? 'block' : 'none';
-      if (!isTwoRoom) {
-        document.querySelectorAll('#rightInner .q-chip[data-group="d_bedroomDoor"]').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
-      }
+      const blocks = [
+        { id: 'd_bedroomDoor_block', group: 'd_bedroomDoor' },
+        { id: 'd_bedroomWindowTop_block', group: 'd_bedroomWindowTop' },
+        { id: 'd_bedroomWindowBottom_block', group: 'd_bedroomWindowBottom' },
+      ];
+      blocks.forEach(item => {
+        const block = document.getElementById(item.id);
+        if (!block) return;
+        block.style.display = isTwoRoom ? 'block' : 'none';
+        if (!isTwoRoom) {
+          document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+        }
+      });
     }
 
     // ============================================================
@@ -1590,8 +1642,12 @@
         d_comboManual: getRadio('d_comboManual'),
         d_door: getRadio('d_door'),
         d_bedroomDoor: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomDoor') : 'N/A (1 Room)',
-        d_windowTop: getRadio('d_windowTop'),
-        d_windowBottom: getRadio('d_windowBottom'),
+        d_corridorWindowTop: getRadio('d_corridorWindowTop'),
+        d_corridorWindowBottom: getRadio('d_corridorWindowBottom'),
+        d_kitchenWindowTop: getRadio('d_kitchenWindowTop'),
+        d_kitchenWindowBottom: getRadio('d_kitchenWindowBottom'),
+        d_bedroomWindowTop: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowTop') : 'N/A (1 Room)',
+        d_bedroomWindowBottom: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowBottom') : 'N/A (1 Room)',
         d_clothing: document.getElementById('d_clothing')?.value || '',
         d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
         d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
