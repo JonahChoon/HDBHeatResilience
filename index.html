@@ -40,7 +40,7 @@
     .header {
       background: var(--navy);
       color: white;
-      padding: 9px 18px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -49,19 +49,19 @@
 
     .logo {
       background: var(--accent);
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
     .header h1 {
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 600;
       flex-grow: 1;
     }
@@ -70,23 +70,24 @@
       display: block;
       color: #8fa3cc;
       font-weight: 400;
-      font-size: 10px;
+      font-size: 12px;
+      margin-top: 2px;
     }
 
     /* PHASE BAR */
     .phase-bar {
       background: var(--panel);
       border-bottom: 1px solid var(--grid);
-      padding: 7px 16px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       flex-shrink: 0;
       flex-wrap: wrap;
     }
 
     .phase-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -96,15 +97,15 @@
 
     .phase-btns {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .phase-btn {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 5px 14px;
+      padding: 8px 16px;
       border-radius: 20px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -136,8 +137,8 @@
 
     .unit-select {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 12px;
-      padding: 5px 10px;
+      font-size: 14px;
+      padding: 8px 12px;
       border-radius: 6px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -170,19 +171,19 @@
 
     /* SIDEBAR */
     .sidebar {
-      width: 108px;
+      width: 120px;
       flex-shrink: 0;
       background: var(--panel);
       border-right: 1px solid var(--grid);
-      padding: 10px 8px;
+      padding: 12px 10px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       overflow-y: auto;
     }
 
     .sidebar-title {
-      font-size: 9px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 1.2px;
       text-transform: uppercase;
@@ -193,16 +194,16 @@
     }
 
     .sidebar-select-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--navy);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .sidebar-select {
       width: 100%;
-      font-size: 11px;
-      padding: 4px;
+      font-size: 13px;
+      padding: 6px;
       border-radius: 4px;
       border: 1px solid var(--grid);
       font-family: inherit;
@@ -210,18 +211,19 @@
     }
 
     .appliance-slot {
-      width: 88px;
-      height: 74px;
+      width: 96px;
+      height: 82px;
       border-radius: 10px;
       border: 1.5px dashed #ccc;
       background: #f0ede8;
       flex-shrink: 0;
+      margin: 0 auto;
     }
 
     /* STATUS */
     .drag-status {
       position: absolute;
-      bottom: 8px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 50;
@@ -230,10 +232,10 @@
 
     .combo-tag {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 6px 16px;
+      border-radius: 24px;
       background: #e8ecf5;
       border: 1px solid #c0cce0;
       color: var(--navy);
@@ -286,22 +288,22 @@
 
     /* APPLIANCE CHIPS */
     .appliance {
-      width: 88px;
-      height: 74px;
+      width: 96px;
+      height: 82px;
       border-radius: 10px;
       border: 2px solid #ddd;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 4px;
       cursor: grab;
       position: absolute;
       user-select: none;
       box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
       transition: box-shadow .15s, transform .15s;
       z-index: 10;
-      padding: 5px;
+      padding: 6px;
       background: white;
     }
 
@@ -320,39 +322,26 @@
     }
 
     .appliance img {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       object-fit: contain;
       display: block;
     }
 
     .appliance-name {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 600;
       text-align: center;
       line-height: 1.2;
       color: #333;
     }
 
-    #SF {
-      border-color: #f5a623;
-      background: #fff8e7;
-    }
-
-    #CF {
-      border-color: #4a7de8;
-      background: #e8f0ff;
-    }
-
-    #AC {
-      border-color: #22c480;
-      background: #e8faf4;
-    }
-
-    #WEF {
-      border-color: #9b59f5;
-      background: #f3e8ff;
-    }
+    #SF { border-color: #f5a623; background: #fff8e7; }
+    #CF { border-color: #4a7de8; background: #e8f0ff; }
+    #AC { border-color: #22c480; background: #e8faf4; }
+    #WEF { border-color: #9b59f5; background: #f3e8ff; }
+    #SEAT { border-color: #c09b7d; background: #faede3; }
+    #SENSOR { border-color: #607d8b; background: #eceff1; }
 
     /* RIGHT PANE */
     .right-pane {
@@ -366,7 +355,7 @@
     .right-inner {
       flex: 1;
       overflow-y: auto;
-      padding: 14px 16px;
+      padding: 20px 24px;
       display: flex;
       flex-direction: column;
     }
@@ -379,7 +368,7 @@
       align-items: center;
       justify-content: center;
       flex: 1;
-      gap: 10px;
+      gap: 12px;
       color: var(--muted);
       text-align: center;
       padding: 24px;
@@ -387,79 +376,71 @@
 
     .gate-msg .gate-icon,
     .phase-prompt .gate-icon {
-      font-size: 36px;
+      font-size: 42px;
     }
 
     .gate-msg p,
     .phase-prompt p {
-      font-size: 13px;
+      font-size: 16px;
       line-height: 1.5;
     }
 
     /* SECTION HEADERS */
     .q-section-header {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: white;
-      padding: 5px 12px;
+      padding: 8px 14px;
       border-radius: 6px;
-      margin: 12px 0 8px;
+      margin: 16px 0 10px;
     }
 
     .q-section-header:first-child {
       margin-top: 0;
     }
 
-    .q-section-header.before {
-      background: var(--before);
-    }
-
-    .q-section-header.during {
-      background: var(--during);
-    }
-
-    .q-section-header.after {
-      background: var(--after);
-    }
+    .q-section-header.before { background: var(--before); }
+    .q-section-header.during { background: var(--during); }
+    .q-section-header.after { background: var(--after); }
 
     /* SUB-SECTION HEADERS */
     .q-sub-section {
-      font-size: 9px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
       color: var(--navy);
-      padding: 4px 10px;
+      padding: 6px 12px;
       border-radius: 4px;
       background: #e8ecf5;
-      margin: 10px 0 6px;
+      margin: 14px 0 8px;
     }
 
     /* QUESTION BLOCKS */
     .q-block-right {
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .q-title {
-      font-size: 11px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--navy);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       line-height: 1.4;
     }
 
     .q-hint {
-      font-size: 10px;
+      font-size: 12px;
       color: var(--muted);
       font-weight: 400;
     }
 
     .q-input {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 12px;
-      padding: 6px 10px;
+      font-size: 15px;
+      padding: 8px 12px;
       border-radius: 6px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -474,12 +455,12 @@
 
     textarea.q-input {
       resize: vertical;
-      min-height: 56px;
+      min-height: 72px;
     }
 
     .q-pair {
       display: flex;
-      gap: 8px;
+      gap: 12px;
     }
 
     .q-pair .q-input {
@@ -487,22 +468,22 @@
     }
 
     .q-pair-label {
-      font-size: 10px;
+      font-size: 12px;
       color: var(--muted);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     /* Chips */
     .q-options-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 8px;
     }
 
     .q-chip {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 11px;
-      padding: 5px 11px;
+      font-size: 14px;
+      padding: 8px 16px;
       border-radius: 20px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -516,33 +497,19 @@
       background: #f0f2f8;
     }
 
-    .q-chip.sel-before {
-      background: var(--before);
-      border-color: var(--before);
-      color: white;
-    }
-
-    .q-chip.sel-during {
-      background: var(--during);
-      border-color: var(--during);
-      color: white;
-    }
-
-    .q-chip.sel-after {
-      background: var(--after);
-      border-color: var(--after);
-      color: white;
-    }
+    .q-chip.sel-before { background: var(--before); border-color: var(--before); color: white; }
+    .q-chip.sel-during { background: var(--during); border-color: var(--during); color: white; }
+    .q-chip.sel-after { background: var(--after); border-color: var(--after); color: white; }
 
     /* Sub-groups */
     .q-sub-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 10px;
     }
 
     .q-sub-label {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--muted);
     }
@@ -550,10 +517,10 @@
     /* Other specify */
     .other-input {
       display: none;
-      margin-top: 5px;
+      margin-top: 8px;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 11px;
-      padding: 5px 9px;
+      font-size: 14px;
+      padding: 8px 12px;
       border-radius: 5px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -569,14 +536,14 @@
       background: #fff8e7;
       border: 1.5px solid #f5a623;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 10px 14px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
+      font-size: 13px;
       color: #7a4a00;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .combo-banner span {
@@ -586,28 +553,28 @@
     /* Temp fields */
     .temp-row {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .temp-field {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       flex: 1;
-      min-width: 100px;
+      min-width: 120px;
     }
 
     .temp-field label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--muted);
     }
 
     .temp-input {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
-      padding: 6px 10px;
+      font-size: 16px;
+      padding: 8px 12px;
       border-radius: 6px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -625,13 +592,13 @@
     .tcv-scale {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 8px;
     }
 
     .tcv-chip {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 11px;
-      padding: 5px 10px;
+      font-size: 14px;
+      padding: 8px 14px;
       border-radius: 8px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -641,17 +608,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1px;
+      gap: 2px;
     }
 
     .tcv-chip .tcv-num {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
+      font-size: 14px;
       font-weight: 700;
     }
 
     .tcv-chip .tcv-lbl {
-      font-size: 9px;
+      font-size: 11px;
       color: var(--muted);
     }
 
@@ -672,8 +639,8 @@
     /* Scale chips for numbered ratings */
     .scale-chip {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      padding: 5px 10px;
+      font-size: 14px;
+      padding: 8px 14px;
       border-radius: 8px;
       border: 1.5px solid var(--grid);
       background: white;
@@ -683,16 +650,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1px;
+      gap: 2px;
     }
 
     .scale-chip .sc-num {
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 700;
     }
 
     .scale-chip .sc-lbl {
-      font-size: 9px;
+      font-size: 11px;
       color: var(--muted);
     }
 
@@ -713,21 +680,21 @@
     /* Placement image chips */
     .placement-grid {
       display: flex;
-      gap: 8px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .placement-chip {
       border: 2px solid var(--grid);
       border-radius: 8px;
-      padding: 6px 10px;
+      padding: 10px 14px;
       cursor: pointer;
       background: white;
       transition: all .15s;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
 
     .placement-chip:hover {
@@ -741,40 +708,40 @@
     }
 
     .placement-chip .pl-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--navy);
     }
 
     .placement-chip .pl-emoji {
-      font-size: 22px;
+      font-size: 26px;
     }
 
     hr.q-divider {
       border: none;
       border-top: 1px solid var(--grid);
-      margin: 6px 0 10px;
+      margin: 10px 0 16px;
     }
 
     /* Footer */
     .right-footer {
-      padding: 10px 16px;
+      padding: 14px 24px;
       border-top: 1px solid var(--grid);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       flex-shrink: 0;
       background: var(--panel);
     }
 
     .btn-reset {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 12px;
+      font-size: 14px;
       background: white;
       border: 1px solid var(--grid);
       color: var(--text);
-      padding: 6px 14px;
+      padding: 10px 18px;
       border-radius: 6px;
       cursor: pointer;
     }
@@ -789,8 +756,8 @@
       border: none;
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
-      font-size: 13px;
-      padding: 8px 20px;
+      font-size: 15px;
+      padding: 10px 24px;
       border-radius: 7px;
       cursor: pointer;
       white-space: nowrap;
@@ -851,11 +818,18 @@
           <option value="1 Room">1-Room</option>
           <option value="2 Room">2-Room</option>
         </select>
-        <div style="height:8px;border-bottom:1px solid var(--grid);margin-bottom:3px;"></div>
+        <div style="height:8px;border-bottom:1px solid var(--grid);margin-bottom:6px;"></div>
+        
+        <!-- Slots for Appliances -->
         <div class="appliance-slot" id="slot-SF"></div>
         <div class="appliance-slot" id="slot-CF"></div>
         <div class="appliance-slot" id="slot-AC"></div>
         <div class="appliance-slot" id="slot-WEF"></div>
+        <div style="height:8px;border-bottom:1px solid var(--grid);margin-bottom:6px;"></div>
+        
+        <!-- Slots for Context Elements -->
+        <div class="appliance-slot" id="slot-SEAT"></div>
+        <div class="appliance-slot" id="slot-SENSOR"></div>
       </div>
       <div class="blueprint-wrap" id="blueprintWrap">
         <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
@@ -877,14 +851,15 @@
 
   </div>
 
-  <!-- APPLIANCE CHIPS -->
+  <!-- APPLIANCE CHIPS (Drag items) -->
   <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
-  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span>
-  </div>
-  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span>
-  </div>
-  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span>
-  </div>
+  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span></div>
+  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span></div>
+  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span></div>
+  
+  <!-- CONTEXT CHIPS (Seat and Sensor) -->
+  <div class="appliance" id="SEAT"><img src="SEAT.png" alt="Seat" /><span class="appliance-name">Seat</span></div>
+  <div class="appliance" id="SENSOR"><img src="SENSOR.png" alt="Sensor" /><span class="appliance-name">Sensor (1x)</span></div>
 
   <script>
     // ============================================================
@@ -900,8 +875,13 @@
       'AC-SF-WEF': 'Combi 6 · Stand Fan + Air Cooler + Window Fan',
     };
     const PARTIAL = new Set(['SF', 'CF', 'AC', 'AC-SF', 'AC-CF']);
-    const IDS = ['SF', 'CF', 'AC', 'WEF'];
-    const placed = { SF: false, CF: false, AC: false, WEF: false };
+    
+    // Split arrays so Seat and Sensor do not interfere with combination rules
+    const APPLIANCE_IDS = ['SF', 'CF', 'AC', 'WEF'];
+    const CONTEXT_IDS = ['SEAT', 'SENSOR'];
+    const IDS = [...APPLIANCE_IDS, ...CONTEXT_IDS];
+    
+    const placed = { SF: false, CF: false, AC: false, WEF: false, SEAT: false, SENSOR: false };
     let dragging = null, dragOffX = 0, dragOffY = 0;
     let currentPhase = null;
 
@@ -937,13 +917,19 @@
 
     function tryPlace(id) {
       const next = { ...placed, [id]: true };
-      const key = IDS.filter(k => next[k]).sort().join('-');
-      if (id === 'WEF' && !(placed.SF && placed.AC)) { warn('WEF only valid with Stand Fan + Air Cooler'); snapBack(id); return; }
-      if (id === 'CF' && placed.SF) { warn('Cannot combine Ceiling Fan and Stand Fan'); snapBack(id); return; }
-      if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
-      if (!VALID[key] && !PARTIAL.has(key)) { warn('Not a valid study combination'); snapBack(id); return; }
+      
+      // Only perform validation if it's an appliance (ignore seat and sensor)
+      if (APPLIANCE_IDS.includes(id)) {
+        const activeAppliances = APPLIANCE_IDS.filter(k => next[k]).sort().join('-');
+        if (id === 'WEF' && !(placed.SF && placed.AC)) { warn('WEF only valid with Stand Fan + Air Cooler'); snapBack(id); return; }
+        if (id === 'CF' && placed.SF) { warn('Cannot combine Ceiling Fan and Stand Fan'); snapBack(id); return; }
+        if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
+        if (activeAppliances !== '' && !VALID[activeAppliances] && !PARTIAL.has(activeAppliances)) { warn('Not a valid study combination'); snapBack(id); return; }
+      }
+      
       placed[id] = true; document.getElementById(id).classList.add('placed');
     }
+
     function snapBack(id) {
       const slot = document.getElementById('slot-' + id);
       const sr = slot.getBoundingClientRect();
@@ -958,7 +944,8 @@
       clearTimeout(warnTimer); warnTimer = setTimeout(updateStatus, 2800);
     }
     function updateStatus() {
-      const active = IDS.filter(id => placed[id]).sort();
+      // Status display only cares about actual appliances
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort();
       const key = active.join('-');
       const b = document.getElementById('comboDisplay');
       if (!key) { b.textContent = 'Baseline — No Appliances Active'; b.className = 'combo-tag'; }
@@ -966,7 +953,7 @@
       else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
     }
     function getCurrentCombo() {
-      const active = IDS.filter(id => placed[id]).sort().join('-');
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
       return VALID[active] || 'Baseline (No Appliances)';
     }
     function changeLayout() {
@@ -1396,9 +1383,13 @@
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">How comfortable are you spending $40–$50 more per month on electricity to use the air cooler on hot days?</div>
-      <div class="q-hint" style="margin-bottom:6px;">Current bill is approx. $5–$10/month.</div>
-      <textarea class="q-input" id="a_willingnessPay" placeholder="Describe your level of comfort with this additional cost…" style="min-height:80px;"></textarea>
+      <div class="q-title">Are you comfortable spending $5–$10 more per month on electricity to use the air cooler on hot days?</div>
+      <div class="q-options-grid" style="margin-bottom:8px;">
+        ${chip('a_willingnessPay', 'Yes', 'radio', 'a_willingnessPayReason_Yes')}
+        ${chip('a_willingnessPay', 'No', 'radio', 'a_willingnessPayReason_No')}
+      </div>
+      <textarea class="other-input" id="a_willingnessPayReason_Yes" placeholder="If Yes, please elaborate on why..." style="min-height:56px; resize:vertical;"></textarea>
+      <textarea class="other-input" id="a_willingnessPayReason_No" placeholder="If No, please elaborate on why..." style="min-height:56px; resize:vertical;"></textarea>
     </div>
   `;
     }
@@ -1523,7 +1514,9 @@
         a_idealDevice: document.getElementById('a_idealDevice')?.value || '',
         a_preferredCombo: getRadio('a_preferredCombo'),
         a_preferredComboReason: document.getElementById('a_preferredComboReason')?.value || '',
-        a_willingnessPay: document.getElementById('a_willingnessPay')?.value || '',
+        a_willingnessPay: getRadio('a_willingnessPay'),
+        a_willingnessPayReason_Yes: document.getElementById('a_willingnessPayReason_Yes')?.value || '',
+        a_willingnessPayReason_No: document.getElementById('a_willingnessPayReason_No')?.value || '',
       };
     }
 
@@ -1536,7 +1529,8 @@
       if (!currentPhase) { alert('Please select a phase (Before / During / After).'); return; }
 
       const layout = document.getElementById('layoutSelector').value;
-      const active = IDS.filter(id => placed[id]).sort().join('-');
+      // When submitting, we only care about the appliances for the combo data
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
       const combo = VALID[active] || 'Baseline (No Appliances)';
       const timestamp = new Date().toLocaleString();
 
