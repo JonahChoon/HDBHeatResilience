@@ -707,6 +707,18 @@
       background: #e8f0ff;
     }
 
+    .placement-chip.sel-during {
+      border-color: var(--during);
+      background: #fff1e8;
+    }
+
+    .placement-chip.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(0.3);
+    }
+
     .placement-chip .pl-label {
       font-size: 14px;
       font-weight: 600;
@@ -975,7 +987,7 @@
       document.getElementById('fp-1rm').classList.toggle('active', v === '1 Room');
       document.getElementById('fp-2rm').classList.toggle('active', v === '2 Room');
       IDS.forEach(id => snapBack(id));
-      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
+      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); if (currentPhase === 'during') updateDuringConditionalVisibility(); }, 20);
     }
     function resetAll() {
       IDS.forEach(id => snapBack(id));
@@ -1210,20 +1222,6 @@
         ${chip('b_q3', '😟 Uncomfortable', 'radio')}
       </div>
     </div>
-
-    <div class="q-block-right">
-      <div class="q-title">Q4 · Preferred placement of Air Cooler &amp; Stand Fan</div>
-      <div class="placement-grid">
-        <div class="placement-chip" data-group="b_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
-          <span class="pl-emoji">🌬️➡️❄️</span>
-          <span class="pl-label">Stand Fan in front of Air Cooler</span>
-        </div>
-        <div class="placement-chip" data-group="b_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
-          <span class="pl-emoji">❄️➡️🌬️</span>
-          <span class="pl-label">Air Cooler behind Stand Fan</span>
-        </div>
-      </div>
-    </div>
   `;
     }
 
@@ -1252,6 +1250,33 @@
     </div>
 
     <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Door and Window Configuration</div>
+      <div class="q-sub-group">
+        <div>
+          <div class="q-sub-label">Door</div>
+          <div class="q-options-grid">${chip('d_door', 'Open', 'radio')} ${chip('d_door', 'Closed', 'radio')}</div>
+        </div>
+        <div id="d_bedroomDoor_block">
+          <div class="q-sub-label">Bedroom Door <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomDoor', 'Open', 'radio')} ${chip('d_bedroomDoor', 'Closed', 'radio')}</div>
+        </div>
+        <div>
+          <div class="q-sub-label">Window (Top)</div>
+          <div class="q-options-grid">${chip('d_windowTop', 'Open', 'radio')} ${chip('d_windowTop', 'Closed', 'radio')}</div>
+        </div>
+        <div>
+          <div class="q-sub-label">Window (Bottom)</div>
+          <div class="q-options-grid">${chip('d_windowBottom', 'Open', 'radio')} ${chip('d_windowBottom', 'Closed', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
+      <input class="q-input" type="text" id="d_clothing" placeholder="e.g. T-shirt and shorts"/>
+    </div>
+
+    <div class="q-block-right">
       <div class="q-title">Temperature Readings</div>
       <div class="temp-row">
         <div class="temp-field">
@@ -1261,6 +1286,21 @@
         <div class="temp-field">
           <label>Initial Baseline Temp (°C)</label>
           <input class="temp-input" type="number" id="d_tempBaseline" placeholder="—" step="0.1"/>
+        </div>
+      </div>
+      <div class="q-sub-label" style="margin-top:14px;margin-bottom:6px;">Spot Measurement</div>
+      <div class="temp-row">
+        <div class="temp-field">
+          <label>Air Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_spotAirTemp" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Humidity (%)</label>
+          <input class="temp-input" type="number" id="d_spotHumidity" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Wind Speed (m/s)</label>
+          <input class="temp-input" type="number" id="d_spotWindSpeed" placeholder="—" step="0.01"/>
         </div>
       </div>
     </div>
@@ -1354,20 +1394,67 @@
         ${scaleChip('d_humidityPref', '+1', 'More humid')}
       </div>
     </div>
+
+
+    <div class="q-block-right" id="d_placement_block">
+      <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
+      <div class="placement-grid">
+        <div class="placement-chip" data-group="d_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
+          <span class="pl-emoji">🌬️➡️❄️</span>
+          <span class="pl-label">Stand Fan in front of Air Cooler</span>
+        </div>
+        <div class="placement-chip" data-group="d_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
+          <span class="pl-emoji">❄️➡️🌬️</span>
+          <span class="pl-label">Air Cooler behind Stand Fan</span>
+        </div>
+      </div>
+      <div class="q-hint" id="d_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
+    </div>
   `;
-      updateHumidityVisibility();
+      updateDuringConditionalVisibility();
     }
 
     function refreshComboBanner() {
       const el = document.getElementById('comboText');
       if (el) el.textContent = getCurrentCombo();
+      updateDuringConditionalVisibility();
+    }
+    function isAirCoolerUsed() {
+      const manual = getRadio('d_comboManual');
+      return placed.AC || manual.includes('Air Cooler');
+    }
+    function updateDuringConditionalVisibility() {
       updateHumidityVisibility();
+      updatePlacementVisibility();
+      updateBedroomDoorVisibility();
     }
     function updateHumidityVisibility() {
       const block = document.getElementById('d_humidity_block');
       if (!block) return;
-      block.style.opacity = placed.AC ? '1' : '0.4';
-      block.title = placed.AC ? '' : 'Enable the Air Cooler in the layout to activate this question';
+      block.style.opacity = isAirCoolerUsed() ? '1' : '0.4';
+      block.title = isAirCoolerUsed() ? '' : 'Enable/select an Air Cooler combination to activate this question';
+    }
+    function updatePlacementVisibility() {
+      const block = document.getElementById('d_placement_block');
+      if (!block) return;
+      const enabled = isAirCoolerUsed();
+      block.style.opacity = enabled ? '1' : '0.55';
+      block.title = enabled ? '' : 'Enable/select an Air Cooler combination to answer this question';
+      document.querySelectorAll('#rightInner .placement-chip[data-group="d_q4"]').forEach(c => {
+        c.classList.toggle('disabled', !enabled);
+        if (!enabled) c.classList.remove('sel-before', 'sel-during', 'sel-after');
+      });
+      const hint = document.getElementById('d_placement_hint');
+      if (hint) hint.style.display = enabled ? 'none' : 'block';
+    }
+    function updateBedroomDoorVisibility() {
+      const block = document.getElementById('d_bedroomDoor_block');
+      if (!block) return;
+      const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
+      block.style.display = isTwoRoom ? 'block' : 'none';
+      if (!isTwoRoom) {
+        document.querySelectorAll('#rightInner .q-chip[data-group="d_bedroomDoor"]').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      }
     }
 
     // ============================================================
@@ -1434,6 +1521,7 @@
         el.classList.toggle(selClass);
       }
       if (otherId) { const oi = document.getElementById(otherId); if (oi) oi.classList.toggle('visible', el.classList.contains(selClass)); }
+      if (currentPhase === 'during' && group === 'd_comboManual') updateDuringConditionalVisibility();
     }
     function toggleTCV(el) {
       document.querySelectorAll('#rightInner .tcv-chip').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
@@ -1445,9 +1533,11 @@
       el.classList.add('sel-during');
     }
     function togglePlacement(el) {
+      if (currentPhase === 'during' && el.dataset.group === 'd_q4' && !isAirCoolerUsed()) return;
       const group = el.dataset.group;
+      const selClass = 'sel-' + currentPhase;
       document.querySelectorAll(`#rightInner .placement-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
-      el.classList.add('sel-before');
+      el.classList.add(selClass);
     }
 
     // ============================================================
@@ -1472,7 +1562,7 @@
       return el ? el.dataset.val : '';
     }
     function getPlacementVal(group) {
-      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before`);
+      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
       return el ? el.dataset.val : '';
     }
     function getTCV() {
@@ -1504,23 +1594,31 @@
         b_q1_envPref: getRadio('b_q1'),
         b_q2_warmFeel: getRadio('b_q2'),
         b_q3_coolFeel: getRadio('b_q3'),
-        b_q4_placement: getPlacementVal('b_q4'),
       };
     }
     function collectDuringData() {
       return {
         d_combo: getCurrentCombo(),
         d_comboManual: getRadio('d_comboManual'),
+        d_door: getRadio('d_door'),
+        d_bedroomDoor: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomDoor') : 'N/A (1 Room)',
+        d_windowTop: getRadio('d_windowTop'),
+        d_windowBottom: getRadio('d_windowBottom'),
+        d_clothing: document.getElementById('d_clothing')?.value || '',
         d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
         d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
+        d_spotAirTemp: document.getElementById('d_spotAirTemp')?.value || '',
+        d_spotHumidity: document.getElementById('d_spotHumidity')?.value || '',
+        d_spotWindSpeed: document.getElementById('d_spotWindSpeed')?.value || '',
         d_posture: getRadio('d_posture'),
         d_tcv: getTCV(),
         d_tempComfort: getScaleVal('d_tempComfort'),
         d_tempPref: getScaleVal('d_tempPref'),
         d_airflowDisturbance: getScaleVal('d_airflowDisturbance'),
         d_airflowPref: getScaleVal('d_airflowPref'),
-        d_humidityRating: placed.AC ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
-        d_humidityPref: placed.AC ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
+        d_humidityRating: isAirCoolerUsed() ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
+        d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
+        d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
       };
     }
     function collectAfterData() {
