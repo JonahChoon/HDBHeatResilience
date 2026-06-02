@@ -1286,6 +1286,10 @@
           <label>Wind Speed (m/s)</label>
           <input class="temp-input" type="number" id="d_spotWindSpeed" placeholder="—" step="0.01"/>
         </div>
+        <div class="temp-field">
+          <label>MRT (°C)</label>
+          <input class="temp-input" type="number" id="d_spotMRT" placeholder="—" step="0.1"/>
+        </div>
       </div>
     </div>
 
@@ -1594,6 +1598,7 @@
         d_spotAirTemp: document.getElementById('d_spotAirTemp')?.value || '',
         d_spotHumidity: document.getElementById('d_spotHumidity')?.value || '',
         d_spotWindSpeed: document.getElementById('d_spotWindSpeed')?.value || '',
+        d_spotMRT: document.getElementById('d_spotMRT')?.value || '',
         d_posture: getRadio('d_posture'),
         d_tcv: getTCV(),
         d_tempComfort: getScaleVal('d_tempComfort'),
