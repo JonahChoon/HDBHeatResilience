@@ -501,6 +501,8 @@
     .q-chip.sel-during { background: var(--during); border-color: var(--during); color: white; }
     .q-chip.sel-after { background: var(--after); border-color: var(--after); color: white; }
 
+
+
     /* Door & Window Configuration Grid */
     .window-config-grid {
       display: grid;
@@ -813,6 +815,7 @@
     <h1>Heat Resilience Dashboard <small>Phase 2 · Field Study</small></h1>
   </div>
 
+  <!-- PHASE + UNIT BAR -->
   <div class="phase-bar">
     <span class="phase-label">Phase:</span>
     <div class="phase-btns">
@@ -837,8 +840,10 @@
     </select>
   </div>
 
+  <!-- WORKSPACE -->
   <div class="workspace">
 
+    <!-- LEFT: DRAG-DROP -->
     <div class="left-pane">
       <div class="sidebar" id="sidebar">
         <div class="sidebar-title">Drag to plan</div>
@@ -849,12 +854,14 @@
         </select>
         <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
         
+        <!-- Slots for Appliances -->
         <div class="appliance-slot" id="slot-SF"></div>
         <div class="appliance-slot" id="slot-CF"></div>
         <div class="appliance-slot" id="slot-AC"></div>
         <div class="appliance-slot" id="slot-WEF"></div>
         <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
         
+        <!-- Slots for Context Elements -->
         <div class="appliance-slot" id="slot-SEAT"></div>
         <div class="appliance-slot" id="slot-SENSOR"></div>
         
@@ -868,6 +875,7 @@
       </div>
     </div>
 
+    <!-- RIGHT: QUESTIONS -->
     <div class="right-pane">
       <div class="right-inner" id="rightInner"></div>
       <div class="right-footer">
@@ -878,6 +886,7 @@
 
   </div>
 
+  <!-- APPLIANCE CHIPS (Drag items) -->
   <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
   <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span></div>
   <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span></div>
@@ -1024,6 +1033,7 @@
       inner.innerHTML = `
     <div class="q-section-header before">① Before the Experiment</div>
 
+    <!-- A. GENERAL DEMOGRAPHICS -->
     <div class="q-sub-section">A · General Demographics</div>
 
     <div class="q-block-right">
@@ -1049,6 +1059,7 @@
 
     <hr class="q-divider"/>
 
+    <!-- B. LIFESTYLE HABITS -->
     <div class="q-sub-section">B · Lifestyle Habits</div>
 
     <div class="q-block-right">
@@ -1188,6 +1199,7 @@
 
     <hr class="q-divider"/>
 
+    <!-- C. BASELINE PREFERENCE -->
     <div class="q-sub-section">C · Baseline Preference — Classification Segment</div>
 
     <div class="q-block-right">
@@ -1219,15 +1231,10 @@
 
     <hr class="q-divider"/>
 
-    <div class="q-sub-section">Additional Comments</div>
     <div class="q-block-right">
-      <textarea class="q-input" id="b_comments" placeholder="Any other observations or remarks…"></textarea>
+      <div class="q-title">Additional Comments</div>
+      <textarea class="q-input" id="b_additionalComments" placeholder="Enter any additional comments for Before phase…" style="min-height:90px;"></textarea>
     </div>
-
-    <div class="q-block-right">
-  <div class="q-title">Additional Comments <span class="q-hint">(Before — optional)</span></div>
-  <textarea class="q-input" id="b_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
-</div>
   `;
     }
 
@@ -1366,6 +1373,7 @@
 
     <hr class="q-divider"/>
 
+    <!-- A. TCV -->
     <div class="q-sub-section">A · Thermal Comfort Vote (TCV)</div>
     <div class="q-block-right">
       <div class="q-hint" style="margin-bottom:8px;">How comfortable are you with the thermal environment right now?</div>
@@ -1382,8 +1390,10 @@
 
     <hr class="q-divider"/>
 
+    <!-- B. STANDARDISED PREFERENCE SCALES -->
     <div class="q-sub-section">B · Standardised Preference Scales</div>
 
+    <!-- Temperature -->
     <div class="q-block-right">
       <div class="q-title">Temperature — How comfortable is the temperature right now?</div>
       <div class="q-options-grid">
@@ -1402,6 +1412,7 @@
       </div>
     </div>
 
+    <!-- Airflow -->
     <div class="q-block-right">
       <div class="q-title">Airflow — How would you describe the airflow right now?</div>
       <div class="q-options-grid">
@@ -1421,6 +1432,7 @@
       </div>
     </div>
 
+    <!-- Humidity (AC only) -->
     <div class="q-block-right" id="d_humidity_block">
       <div class="q-title">Air Humidity <span class="q-hint">(Asked only when Air Cooler is active)</span></div>
       <div class="q-sub-label" style="margin-bottom:6px;">How would you describe the humidity right now?</div>
@@ -1440,9 +1452,9 @@
 
     <hr class="q-divider"/>
 
-    <div class="q-sub-section">Additional Comments</div>
     <div class="q-block-right">
-      <textarea class="q-input" id="d_comments" placeholder="Any other observations or remarks…"></textarea>
+      <div class="q-title">Additional Comments</div>
+      <textarea class="q-input" id="d_additionalComments" placeholder="Enter any additional comments for During phase…" style="min-height:90px;"></textarea>
     </div>
 
   `;
@@ -1497,11 +1509,6 @@
           document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
         }
       });
-
-      <div class="q-block-right">
-  <div class="q-title">Additional Comments <span class="q-hint">(During — optional)</span></div>
-  <textarea class="q-input" id="d_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
-</div>
     }
 
     // ============================================================
@@ -1542,9 +1549,9 @@
 
     <hr class="q-divider"/>
 
-    <div class="q-sub-section">Additional Comments</div>
     <div class="q-block-right">
-      <textarea class="q-input" id="a_comments" placeholder="Any other observations or remarks…"></textarea>
+      <div class="q-title">Additional Comments</div>
+      <textarea class="q-input" id="a_additionalComments" placeholder="Enter any additional comments for After phase…" style="min-height:90px;"></textarea>
     </div>
   `;
     }
@@ -1648,7 +1655,6 @@
         b_q1_envPref: getRadio('b_q1'),
         b_q2_warmFeel: getRadio('b_q2'),
         b_q3_coolFeel: getRadio('b_q3'),
-        b_comments: document.getElementById('b_comments')?.value || '',
         b_additionalComments: document.getElementById('b_additionalComments')?.value || '',
       };
     }
@@ -1680,7 +1686,6 @@
         d_humidityRating: isAirCoolerUsed() ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
         d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
         d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
-        d_comments: document.getElementById('d_comments')?.value || '',
         d_additionalComments: document.getElementById('d_additionalComments')?.value || '',
       };
     }
@@ -1692,15 +1697,8 @@
         a_willingnessPay: getRadio('a_willingnessPay'),
         a_willingnessPayReason_Yes: document.getElementById('a_willingnessPayReason_Yes')?.value || '',
         a_willingnessPayReason_No: document.getElementById('a_willingnessPayReason_No')?.value || '',
-        a_comments: document.getElementById('a_comments')?.value || '',
         a_additionalComments: document.getElementById('a_additionalComments')?.value || '',
       };
-
-      <div class="q-block-right">
-  <div class="q-title">Additional Comments <span class="q-hint">(After — optional)</span></div>
-  <textarea class="q-input" id="a_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
-</div>
-      
     }
 
     // ============================================================
