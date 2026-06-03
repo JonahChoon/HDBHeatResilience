@@ -1223,6 +1223,11 @@
     <div class="q-block-right">
       <textarea class="q-input" id="b_comments" placeholder="Any other observations or remarks…"></textarea>
     </div>
+
+    <div class="q-block-right">
+  <div class="q-title">Additional Comments <span class="q-hint">(Before — optional)</span></div>
+  <textarea class="q-input" id="b_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
+</div>
   `;
     }
 
@@ -1492,6 +1497,11 @@
           document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
         }
       });
+
+      <div class="q-block-right">
+  <div class="q-title">Additional Comments <span class="q-hint">(During — optional)</span></div>
+  <textarea class="q-input" id="d_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
+</div>
     }
 
     // ============================================================
@@ -1639,6 +1649,7 @@
         b_q2_warmFeel: getRadio('b_q2'),
         b_q3_coolFeel: getRadio('b_q3'),
         b_comments: document.getElementById('b_comments')?.value || '',
+        b_additionalComments: document.getElementById('b_additionalComments')?.value || '',
       };
     }
     function collectDuringData() {
@@ -1670,6 +1681,7 @@
         d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
         d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
         d_comments: document.getElementById('d_comments')?.value || '',
+        d_additionalComments: document.getElementById('d_additionalComments')?.value || '',
       };
     }
     function collectAfterData() {
@@ -1681,7 +1693,14 @@
         a_willingnessPayReason_Yes: document.getElementById('a_willingnessPayReason_Yes')?.value || '',
         a_willingnessPayReason_No: document.getElementById('a_willingnessPayReason_No')?.value || '',
         a_comments: document.getElementById('a_comments')?.value || '',
+        a_additionalComments: document.getElementById('a_additionalComments')?.value || '',
       };
+
+      <div class="q-block-right">
+  <div class="q-title">Additional Comments <span class="q-hint">(After — optional)</span></div>
+  <textarea class="q-input" id="a_additionalComments" placeholder="Any other observations or notes…" style="min-height:90px;"></textarea>
+</div>
+      
     }
 
     // ============================================================
