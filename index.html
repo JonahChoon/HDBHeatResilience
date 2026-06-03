@@ -805,6 +805,270 @@
       background: #8a8580;
       cursor: not-allowed;
     }
+
+
+    /* ============================================================
+       COMPACT MODE — makes page feel like browser zoom 90%
+       Added to reduce the zoomed-in feeling on laptop/iPad
+    ============================================================ */
+
+    body {
+      font-size: 14px;
+    }
+
+    .header {
+      padding: 10px 18px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      font-size: 13px;
+    }
+
+    .header h1 {
+      font-size: 17px;
+    }
+
+    .header h1 small {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .phase-bar {
+      padding: 8px 16px;
+      gap: 12px;
+    }
+
+    .phase-label {
+      font-size: 12px;
+    }
+
+    .phase-btn {
+      font-size: 14px;
+      padding: 8px 14px;
+    }
+
+    .unit-select {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .sidebar {
+      width: 120px;
+      padding: 12px 8px;
+      gap: 9px;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+    }
+
+    .sidebar-select-label {
+      font-size: 12px;
+    }
+
+    .sidebar-select {
+      font-size: 13px;
+      padding: 6px;
+    }
+
+    .appliance-slot {
+      width: 92px;
+      height: 78px;
+    }
+
+    .appliance {
+      width: 92px;
+      height: 78px;
+      padding: 6px;
+      gap: 4px;
+    }
+
+    .appliance img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .appliance-name {
+      font-size: 11.5px;
+    }
+
+    .fp-img {
+      max-height: 97%;
+      max-width: 97%;
+    }
+
+    .combo-tag {
+      font-size: 13px;
+      padding: 6px 16px;
+    }
+
+    .right-inner {
+      padding: 16px 22px;
+    }
+
+    .q-section-header {
+      font-size: 14px;
+      padding: 8px 14px;
+      margin: 14px 0 10px;
+    }
+
+    .q-sub-section {
+      font-size: 12.5px;
+      padding: 7px 12px;
+      margin: 14px 0 8px;
+    }
+
+    .q-block-right {
+      margin-bottom: 16px;
+    }
+
+    .q-title {
+      font-size: 15.5px;
+      margin-bottom: 6px;
+    }
+
+    .q-hint {
+      font-size: 12.5px;
+    }
+
+    .q-input {
+      font-size: 14px;
+      padding: 9px 12px;
+    }
+
+    textarea.q-input {
+      min-height: 70px;
+    }
+
+    .q-options-grid {
+      gap: 8px;
+    }
+
+    .q-chip {
+      font-size: 14px;
+      padding: 8px 14px;
+    }
+
+    .tcv-chip,
+    .scale-chip {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+
+    .tcv-chip .tcv-num,
+    .scale-chip .sc-num {
+      font-size: 14px;
+    }
+
+    .tcv-chip .tcv-lbl,
+    .scale-chip .sc-lbl {
+      font-size: 11.5px;
+    }
+
+    .temp-row {
+      gap: 12px;
+    }
+
+    .temp-field {
+      min-width: 115px;
+    }
+
+    .temp-field label {
+      font-size: 12.5px;
+    }
+
+    .temp-input {
+      font-size: 15px;
+      padding: 8px 10px;
+    }
+
+    .window-config-grid {
+      grid-template-columns: repeat(2, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .window-config-card {
+      padding: 10px;
+    }
+
+    .q-sub-label {
+      font-size: 13px;
+    }
+
+    .placement-grid {
+      gap: 12px;
+    }
+
+    .placement-chip {
+      padding: 10px 14px;
+    }
+
+    .placement-chip .pl-emoji {
+      font-size: 24px;
+    }
+
+    .placement-chip .pl-label {
+      font-size: 12.5px;
+    }
+
+    .right-footer {
+      padding: 12px 22px;
+    }
+
+    .btn-reset {
+      font-size: 14px;
+      padding: 9px 16px;
+    }
+
+    .btn-submit {
+      font-size: 15px;
+      padding: 10px 22px;
+    }
+
+    @media (max-width: 1200px) {
+      .left-pane {
+        width: 48%;
+      }
+
+      .right-pane {
+        width: 52%;
+      }
+
+      .right-inner {
+        padding: 14px 18px;
+      }
+
+      .q-title {
+        font-size: 15px;
+      }
+
+      .q-chip {
+        font-size: 13.5px;
+        padding: 7px 12px;
+      }
+
+      .appliance-slot,
+      .appliance {
+        width: 84px;
+        height: 72px;
+      }
+
+      .appliance img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .appliance-name {
+        font-size: 10.5px;
+      }
+
+      .sidebar {
+        width: 108px;
+      }
+    }
+
   </style>
 </head>
 
@@ -962,12 +1226,42 @@
       placed[id] = true; document.getElementById(id).classList.add('placed');
     }
 
-    function snapBack(id) {
+    function positionInSlot(id) {
       const slot = document.getElementById('slot-' + id);
-      const sr = slot.getBoundingClientRect();
       const el = document.getElementById(id);
-      el.style.left = sr.left + 'px'; el.style.top = sr.top + 'px';
-      placed[id] = false; el.classList.remove('placed');
+      if (!slot || !el) return;
+
+      const sr = slot.getBoundingClientRect();
+      const sidebar = document.getElementById('sidebar');
+      const sidebarRect = sidebar.getBoundingClientRect();
+
+      // Keep loose/unplaced components visually tied to their sidebar slots while scrolling.
+      el.style.left = sr.left + 'px';
+      el.style.top = sr.top + 'px';
+
+      // Hide the component when its slot has scrolled out of the visible sidebar area.
+      const visible =
+        sr.bottom > sidebarRect.top &&
+        sr.top < sidebarRect.bottom;
+
+      if (!placed[id] && dragging !== el) {
+        el.style.visibility = visible ? 'visible' : 'hidden';
+      }
+    }
+
+    function snapBack(id) {
+      placed[id] = false;
+      const el = document.getElementById(id);
+      el.classList.remove('placed');
+      el.style.visibility = 'visible';
+      positionInSlot(id);
+    }
+
+    function syncSidebarComponents() {
+      IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (!placed[id] && dragging !== el) positionInSlot(id);
+      });
     }
     let warnTimer = null;
     function warn(msg) {
@@ -1745,7 +2039,18 @@
     window.addEventListener('load', () => {
       changeLayout();
       renderRight();
-      window.addEventListener('resize', () => { IDS.forEach(id => snapBack(id)); setTimeout(updateStatus, 30); });
+
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        sidebar.addEventListener('scroll', syncSidebarComponents, { passive: true });
+      }
+
+      window.addEventListener('resize', () => {
+        IDS.forEach(id => {
+          if (!placed[id]) positionInSlot(id);
+        });
+        setTimeout(updateStatus, 30);
+      });
     });
   </script>
 </body>
