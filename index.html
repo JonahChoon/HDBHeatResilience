@@ -311,4 +311,1426 @@
       cursor: grabbing;
     }
 
-    .app
+    .appliance.dragging {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
+      transform: scale(1.05) rotate(1deg);
+      z-index: 9999;
+    }
+
+    .appliance.placed {
+      box-shadow: 0 3px 14px rgba(0, 0, 0, .20);
+    }
+
+    .appliance img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .appliance-name {
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.2;
+      color: #333;
+    }
+
+    #SF { border-color: #f5a623; background: #fff8e7; }
+    #CF { border-color: #4a7de8; background: #e8f0ff; }
+    #AC { border-color: #22c480; background: #e8faf4; }
+    #WEF { border-color: #9b59f5; background: #f3e8ff; }
+    #SEAT { border-color: #c09b7d; background: #faede3; }
+    #SENSOR { border-color: #607d8b; background: #eceff1; }
+
+    /* RIGHT PANE */
+    .right-pane {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .right-inner {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* GATE MESSAGES */
+    .gate-msg,
+    .phase-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 16px;
+      color: var(--muted);
+      text-align: center;
+      padding: 30px;
+    }
+
+    .gate-msg .gate-icon,
+    .phase-prompt .gate-icon {
+      font-size: 52px;
+    }
+
+    .gate-msg p,
+    .phase-prompt p {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    /* SECTION HEADERS */
+    .q-section-header {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin: 20px 0 12px;
+    }
+
+    .q-section-header:first-child {
+      margin-top: 0;
+    }
+
+    .q-section-header.before { background: var(--before); }
+    .q-section-header.during { background: var(--during); }
+    .q-section-header.after { background: var(--after); }
+
+    /* SUB-SECTION HEADERS */
+    .q-sub-section {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--navy);
+      padding: 8px 14px;
+      border-radius: 4px;
+      background: #e8ecf5;
+      margin: 18px 0 10px;
+    }
+
+    /* QUESTION BLOCKS */
+    .q-block-right {
+      margin-bottom: 24px;
+    }
+
+    .q-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .q-hint {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .q-input {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      width: 100%;
+      color: var(--text);
+    }
+
+    .q-input:focus {
+      outline: none;
+      border-color: #8fa3cc;
+    }
+
+    textarea.q-input {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .q-pair {
+      display: flex;
+      gap: 16px;
+    }
+
+    .q-pair .q-input {
+      flex: 1;
+    }
+
+    .q-pair-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* Chips */
+    .q-options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .q-chip {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      padding: 10px 18px;
+      border-radius: 24px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+    }
+
+    .q-chip:hover {
+      border-color: #a0a8c0;
+      background: #f0f2f8;
+    }
+
+    .q-chip.sel-before { background: var(--before); border-color: var(--before); color: white; }
+    .q-chip.sel-during { background: var(--during); border-color: var(--during); color: white; }
+    .q-chip.sel-after { background: var(--after); border-color: var(--after); color: white; }
+
+    /* Door & Window Configuration Grid */
+    .window-config-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 16px 18px;
+    }
+
+    .window-config-card {
+      background: white;
+      border: 1.5px solid var(--grid);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .window-config-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sub-groups */
+    .q-sub-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .q-sub-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Other specify */
+    .other-input {
+      display: none;
+      margin-top: 10px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      width: 100%;
+    }
+
+    .other-input.visible {
+      display: block;
+    }
+
+    /* Combo banner */
+    .combo-banner {
+      background: #fff8e7;
+      border: 1.5px solid #f5a623;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      color: #7a4a00;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .combo-banner span {
+      font-weight: 500;
+    }
+
+    /* Temp fields */
+    .temp-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .temp-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .temp-field label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .temp-input {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      width: 100%;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .temp-input:focus {
+      outline: none;
+      border-color: #8fa3cc;
+    }
+
+    /* TCV scale */
+    .tcv-scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tcv-chip {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tcv-chip .tcv-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .tcv-chip .tcv-lbl {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .tcv-chip:hover {
+      border-color: #a0a8c0;
+    }
+
+    .tcv-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .tcv-chip.sel-during .tcv-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    /* Scale chips for numbered ratings */
+    .scale-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .scale-chip .sc-num {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .scale-chip .sc-lbl {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .scale-chip:hover {
+      border-color: #a0a8c0;
+    }
+
+    .scale-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
+    .scale-chip.sel-during .sc-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    /* Placement image chips */
+    .placement-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .placement-chip {
+      border: 2px solid var(--grid);
+      border-radius: 8px;
+      padding: 12px 18px;
+      cursor: pointer;
+      background: white;
+      transition: all .15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .placement-chip:hover {
+      border-color: #a0a8c0;
+      background: #f0f2f8;
+    }
+
+    .placement-chip.sel-before {
+      border-color: var(--before);
+      background: #e8f0ff;
+    }
+
+    .placement-chip.sel-during {
+      border-color: var(--during);
+      background: #fff1e8;
+    }
+
+    .placement-chip.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(0.3);
+    }
+
+    .placement-chip .pl-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .placement-chip .pl-emoji {
+      font-size: 30px;
+    }
+
+    hr.q-divider {
+      border: none;
+      border-top: 1px solid var(--grid);
+      margin: 14px 0 20px;
+    }
+
+    /* Footer */
+    .right-footer {
+      padding: 16px 30px;
+      border-top: 1px solid var(--grid);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+      background: var(--panel);
+    }
+
+    .btn-reset {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      background: white;
+      border: 1px solid var(--grid);
+      color: var(--text);
+      padding: 12px 22px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      background: #f0ede8;
+    }
+
+    .btn-submit {
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      padding: 12px 28px;
+      border-radius: 7px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-submit:hover {
+      background: #a83a10;
+    }
+
+    .btn-submit:disabled {
+      background: #8a8580;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">HDB</div>
+    <h1>Heat Resilience Dashboard <small>Phase 2 · Field Study</small></h1>
+  </div>
+
+  <div class="phase-bar">
+    <span class="phase-label">Phase:</span>
+    <div class="phase-btns">
+      <button class="phase-btn" data-phase="before" onclick="setPhase('before')">① Before Experiment</button>
+      <button class="phase-btn" data-phase="during" onclick="setPhase('during')">② During Experiment</button>
+      <button class="phase-btn" data-phase="after" onclick="setPhase('after')">③ After All Experiments</button>
+    </div>
+    <select class="unit-select" id="unitNumber" onchange="onUnitChange()">
+      <option value="" disabled selected>Select Unit…</option>
+      <option value="#12-119">#12-119</option>
+      <option value="#13-105">#13-105</option>
+      <option value="#17-127">#17-127</option>
+      <option value="#07-141">#07-141</option>
+      <option value="#07-131">#07-131</option>
+      <option value="#07-137">#07-137</option>
+      <option value="#17-115">#17-115</option>
+      <option value="#15-117">#15-117</option>
+      <option value="#12-107">#12-107</option>
+      <option value="#03-125">#03-125</option>
+      <option value="#07-139">#07-139</option>
+      <option value="#15-125">#15-125</option>
+    </select>
+  </div>
+
+  <div class="workspace">
+
+    <div class="left-pane">
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">Drag to plan</div>
+        <span class="sidebar-select-label">Floorplan:</span>
+        <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()">
+          <option value="1 Room">1-Room</option>
+          <option value="2 Room">2-Room</option>
+        </select>
+        <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
+        
+        <div class="appliance-slot" id="slot-SF"></div>
+        <div class="appliance-slot" id="slot-CF"></div>
+        <div class="appliance-slot" id="slot-AC"></div>
+        <div class="appliance-slot" id="slot-WEF"></div>
+        <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
+        
+        <div class="appliance-slot" id="slot-SEAT"></div>
+        <div class="appliance-slot" id="slot-SENSOR"></div>
+        
+      </div>
+      <div class="blueprint-wrap" id="blueprintWrap">
+        <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
+        <img class="fp-img" id="fp-2rm" src="2 Room.png" alt="2-Room floorplan" />
+        <div class="drag-status">
+          <div class="combo-tag" id="comboDisplay">Baseline — No Appliances Active</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-pane">
+      <div class="right-inner" id="rightInner"></div>
+      <div class="right-footer">
+        <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+        <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Submit Response</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
+  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span></div>
+  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span></div>
+  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span></div>
+  <div class="appliance" id="SEAT"> <img src="SOFA.png" alt="Seat" /><span class="appliance-name">Seat</span></div>
+  <div class="appliance" id="SENSOR"><img src="SENSOR.png" alt="Sensor" /><span class="appliance-name">Sensor (1x)</span></div>
+  <script>
+    // ============================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBoDGItLOkNmQPc3cjSSI1p5oTEohhlHN9kQl0SggD_r57vtAksJ1bFQm6qdmzP52FRw/exec";
+    // ============================================================
+
+    const VALID = {
+      'CF': 'Combi 1 · Ceiling Fan only',
+      'SF': 'Combi 2 · Stand Fan only',
+      'AC-CF': 'Combi 3 · Ceiling Fan + Air Cooler',
+      'AC-SF': 'Combi 4 · Stand Fan + Air Cooler',
+      'AC': 'Combi 5 · Air Cooler only (0.75 m)',
+      'AC-SF-WEF': 'Combi 6 · Stand Fan + Air Cooler + Window Fan',
+    };
+    const PARTIAL = new Set(['SF', 'CF', 'AC', 'AC-SF', 'AC-CF']);
+    
+    // Split arrays so Seat and Sensor do not interfere with combination rules
+    const APPLIANCE_IDS = ['SF', 'CF', 'AC', 'WEF'];
+    const CONTEXT_IDS = ['SEAT', 'SENSOR'];
+    const IDS = [...APPLIANCE_IDS, ...CONTEXT_IDS];
+    
+    const placed = { SF: false, CF: false, AC: false, WEF: false, SEAT: false, SENSOR: false };
+    let dragging = null, dragOffX = 0, dragOffY = 0;
+    let currentPhase = null;
+
+    // ---- DRAG & DROP ----
+    IDS.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('pointerdown', e => {
+        e.preventDefault(); dragging = el;
+        const r = el.getBoundingClientRect();
+        dragOffX = e.clientX - r.left; dragOffY = e.clientY - r.top;
+        el.classList.add('dragging'); el.style.zIndex = 9999;
+        el.setPointerCapture(e.pointerId);
+      });
+      el.addEventListener('pointermove', e => {
+        if (dragging !== el) return; e.preventDefault();
+        el.style.left = (e.clientX - dragOffX) + 'px'; el.style.top = (e.clientY - dragOffY) + 'px';
+        const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
+        const over = e.clientX > wr.left && e.clientX < wr.right && e.clientY > wr.top && e.clientY < wr.bottom;
+        document.getElementById('blueprintWrap').classList.toggle('over-drop', over);
+      });
+      el.addEventListener('pointerup', e => {
+        if (dragging !== el) return;
+        el.classList.remove('dragging'); el.style.zIndex = 10;
+        document.getElementById('blueprintWrap').classList.remove('over-drop');
+        const wr = document.getElementById('blueprintWrap').getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
+        if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id); else snapBack(id);
+        dragging = null; updateStatus();
+        if (currentPhase === 'during') refreshComboBanner();
+      });
+    });
+
+    function tryPlace(id) {
+      const next = { ...placed, [id]: true };
+      
+      // Only perform validation if it's an appliance (ignore seat and sensor)
+      if (APPLIANCE_IDS.includes(id)) {
+        const activeAppliances = APPLIANCE_IDS.filter(k => next[k]).sort().join('-');
+        if (id === 'WEF' && !(placed.SF && placed.AC)) { warn('WEF only valid with Stand Fan + Air Cooler'); snapBack(id); return; }
+        if (id === 'CF' && placed.SF) { warn('Cannot combine Ceiling Fan and Stand Fan'); snapBack(id); return; }
+        if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
+        if (activeAppliances !== '' && !VALID[activeAppliances] && !PARTIAL.has(activeAppliances)) { warn('Not a valid study combination'); snapBack(id); return; }
+      }
+      
+      placed[id] = true; document.getElementById(id).classList.add('placed');
+    }
+
+    function snapBack(id) {
+      const slot = document.getElementById('slot-' + id);
+      const sr = slot.getBoundingClientRect();
+      const el = document.getElementById(id);
+      el.style.left = sr.left + 'px'; el.style.top = sr.top + 'px';
+      placed[id] = false; el.classList.remove('placed');
+    }
+    let warnTimer = null;
+    function warn(msg) {
+      const b = document.getElementById('comboDisplay');
+      b.textContent = '⚠ ' + msg; b.className = 'combo-tag invalid';
+      clearTimeout(warnTimer); warnTimer = setTimeout(updateStatus, 2800);
+    }
+    function updateStatus() {
+      // Status display only cares about actual appliances
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort();
+      const key = active.join('-');
+      const b = document.getElementById('comboDisplay');
+      if (!key) { b.textContent = 'Baseline — No Appliances Active'; b.className = 'combo-tag'; }
+      else if (VALID[key]) { b.textContent = VALID[key]; b.className = 'combo-tag active'; }
+      else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
+    }
+    function getCurrentCombo() {
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
+      return VALID[active] || 'Baseline (No Appliances)';
+    }
+    function changeLayout() {
+      const v = document.getElementById('layoutSelector').value;
+      document.getElementById('fp-1rm').classList.toggle('active', v === '1 Room');
+      document.getElementById('fp-2rm').classList.toggle('active', v === '2 Room');
+      IDS.forEach(id => snapBack(id));
+      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); if (currentPhase === 'during') updateDuringConditionalVisibility(); }, 20);
+    }
+    function resetAll() {
+      IDS.forEach(id => snapBack(id));
+      setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
+      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .q-input').forEach(inp => inp.value = '');
+      document.querySelectorAll('#rightInner .other-input').forEach(inp => { inp.value = ''; inp.classList.remove('visible'); });
+      document.querySelectorAll('#rightInner .temp-input').forEach(inp => inp.value = '');
+      if (currentPhase === 'during') setTimeout(refreshComboBanner, 50);
+    }
+
+    // ---- PHASE ----
+    function onUnitChange() {
+      document.getElementById('unitNumber').classList.remove('required');
+      renderRight();
+    }
+    function setPhase(phase) {
+      currentPhase = phase;
+      document.querySelectorAll('.phase-btn').forEach(b => b.classList.toggle('active', b.dataset.phase === phase));
+      renderRight();
+    }
+    function renderRight() {
+      const unit = document.getElementById('unitNumber').value;
+      const inner = document.getElementById('rightInner');
+      if (!unit) { inner.innerHTML = `<div class="gate-msg"><div class="gate-icon">🏠</div><p>Please <strong>select a Unit Number</strong> above before answering questions.</p></div>`; return; }
+      if (!currentPhase) { inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · During · After</strong></p></div>`; return; }
+      if (currentPhase === 'before') renderBefore();
+      if (currentPhase === 'during') renderDuring();
+      if (currentPhase === 'after') renderAfter();
+    }
+
+    // ============================================================
+    // BEFORE
+    // ============================================================
+    function renderBefore() {
+      const inner = document.getElementById('rightInner');
+      inner.innerHTML = `
+    <div class="q-section-header before">① Before the Experiment</div>
+
+    <div class="q-sub-section">A · General Demographics</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Age / Sex</div>
+      <div class="q-pair">
+        <div><div class="q-pair-label">Age</div><input class="q-input" type="number" id="b_age" placeholder="e.g. 45" min="1" max="120"/></div>
+        <div><div class="q-pair-label">Sex</div><div class="q-options-grid" style="margin-top:2px;">${chip('b_sex', 'Male', 'radio')} ${chip('b_sex', 'Female', 'radio')}</div></div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Height / Weight</div>
+      <div class="q-pair">
+        <div><div class="q-pair-label">Height (cm)</div><input class="q-input" type="number" id="b_height" placeholder="e.g. 165"/></div>
+        <div><div class="q-pair-label">Weight (kg)</div><input class="q-input" type="number" id="b_weight" placeholder="e.g. 60"/></div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">No. of Occupants in Household</div>
+      <input class="q-input" type="number" id="b_occupants" placeholder="e.g. 3" min="1" style="width:120px;"/>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">B · Lifestyle Habits</div>
+
+    <div class="q-block-right">
+      <div class="q-title">How long do you stay in your house daily? <span class="q-hint">(Excl. sleeping time)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_homestay', 'Less than 4 hours', 'radio')}
+        ${chip('b_homestay', '4 to 8 hours', 'radio')}
+        ${chip('b_homestay', '8 to 12 hours', 'radio')}
+        ${chip('b_homestay', 'The whole day', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Where do you spend most of your time at home?</div>
+      <div class="q-options-grid">
+        ${chip('b_space', 'Living Room', 'radio')}
+        ${chip('b_space', 'Bedroom', 'radio')}
+        ${chip('b_space', 'Kitchen', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What do you do when the weather is too hot? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_whenhot', 'Open windows', 'checkbox')}
+        ${chip('b_whenhot', 'Open doors', 'checkbox')}
+        ${chip('b_whenhot', 'Change clothing', 'checkbox')}
+        ${chip('b_whenhot', 'Drink cold drinks', 'checkbox')}
+        ${chip('b_whenhot', 'Take a shower', 'checkbox')}
+        ${chip('b_whenhot', 'Use manual/handheld electric fans', 'checkbox')}
+        ${chip('b_whenhot', 'Use cooling appliances', 'checkbox')}
+        ${chip('b_whenhot', 'Others', 'checkbox', 'b_whenhot_other')}
+      </div>
+      <input class="other-input" id="b_whenhot_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What do you wear when the weather is too hot?</div>
+      <input class="q-input" type="text" id="b_wear" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What type of cooling appliances do you normally use? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_appliances', 'Ceiling fan', 'checkbox')}
+        ${chip('b_appliances', 'Standing fan / Table fan', 'checkbox')}
+        ${chip('b_appliances', 'Air circulator', 'checkbox')}
+        ${chip('b_appliances', 'Air cooler', 'checkbox')}
+        ${chip('b_appliances', 'Portable Air-con', 'checkbox')}
+        ${chip('b_appliances', "I don't use any cooling appliance", 'checkbox')}
+        ${chip('b_appliances', 'Others', 'checkbox', 'b_appliances_other')}
+      </div>
+      <input class="other-input" id="b_appliances_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">In what situations do you turn on your cooling appliances? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_whenturnon', 'When feeling hot', 'checkbox')}
+        ${chip('b_whenturnon', 'Before sleeping', 'checkbox')}
+        ${chip('b_whenturnon', 'During meals', 'checkbox')}
+        ${chip('b_whenturnon', 'When cooking', 'checkbox')}
+        ${chip('b_whenturnon', 'When guests are present', 'checkbox')}
+        ${chip('b_whenturnon', 'When I enter the house/room', 'checkbox')}
+        ${chip('b_whenturnon', 'Others', 'checkbox', 'b_whenturnon_other')}
+      </div>
+      <input class="other-input" id="b_whenturnon_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Preferred appliance settings</div>
+      <div class="q-sub-group">
+        <div>
+          <div class="q-sub-label">Speed</div>
+          <div class="q-options-grid">${chip('b_speed', 'Low', 'radio')} ${chip('b_speed', 'Medium', 'radio')} ${chip('b_speed', 'High', 'radio')}</div>
+        </div>
+        <div>
+          <div class="q-sub-label">Oscillation</div>
+          <div class="q-options-grid">${chip('b_osc', 'On', 'radio')} ${chip('b_osc', 'Off', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Daily Routine Description <span class="q-hint">(Use meal-times as a checkpoint)</span></div>
+      <textarea class="q-input" id="b_routine" placeholder="Briefly describe your typical daily routine at home…"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">If you do not use certain cooling appliances, what are your main reasons? <span class="q-hint">(Select all that apply)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_avoid', 'Save on electricity bills', 'checkbox')}
+        ${chip('b_avoid', 'Health concerns (e.g. catching cold, dry air, rheumatism)', 'checkbox')}
+        ${chip('b_avoid', 'Noise concerns', 'checkbox')}
+        ${chip('b_avoid', 'Cost of purchasing appliances', 'checkbox')}
+        ${chip('b_avoid', 'Prefer natural ventilation', 'checkbox')}
+        ${chip('b_avoid', 'Others', 'checkbox', 'b_avoid_other')}
+      </div>
+      <input class="other-input" id="b_avoid_other" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">General Activity Level <span class="q-hint">(per week)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_activity', 'Mostly inactive (Sitting / rarely moving)', 'radio')}
+        ${chip('b_activity', 'Somewhat active (Standing / light chores, 2–3× a week)', 'radio')}
+        ${chip('b_activity', 'Active (Walks / moderate activity 30 min, 4–5× a week)', 'radio')}
+        ${chip('b_activity', 'Very active (Frequently moving / lifting objects)', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What are you doing right now? <span class="q-hint">(Filled in by interviewer — ASHRAE)</span></div>
+      <div class="q-options-grid">
+        ${chip('b_posture', 'Reclining', 'radio')}
+        ${chip('b_posture', 'Sitting', 'radio')}
+        ${chip('b_posture', 'Standing relaxed', 'radio')}
+        ${chip('b_posture', 'Light activity standing', 'radio')}
+        ${chip('b_posture', 'Moderate activity standing', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Do you take any regular medications?</div>
+      <div class="q-options-grid">${chip('b_meds', 'No', 'radio')} ${chip('b_meds', 'Yes', 'radio', 'b_meds_specify')}</div>
+      <input class="other-input" id="b_meds_specify" placeholder="Please specify…"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">How much do you hydrate typically?</div>
+      <div class="q-options-grid">
+        ${chip('b_water', '< 4 Glasses', 'radio')}
+        ${chip('b_water', '4–8 Glasses', 'radio')}
+        ${chip('b_water', '> 8 Glasses', 'radio')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">C · Baseline Preference — Classification Segment</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q1 · In general, what kind of indoor environment do you prefer?</div>
+      <div class="q-options-grid">
+        ${chip('b_q1', '❄️ Cooler', 'radio')}
+        ${chip('b_q1', '😐 No Change / Preference', 'radio')}
+        ${chip('b_q1', '🔥 Warmer', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q2 · If the room feels slightly warm, how do you feel?</div>
+      <div class="q-options-grid">
+        ${chip('b_q2', '🙂 Comfortable / Acceptable', 'radio')}
+        ${chip('b_q2', '😐 Neutral / Can accept', 'radio')}
+        ${chip('b_q2', '😟 Uncomfortable', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Q3 · If the room feels slightly cool, how do you feel?</div>
+      <div class="q-options-grid">
+        ${chip('b_q3', '🙂 Comfortable / Acceptable', 'radio')}
+        ${chip('b_q3', '😐 Neutral / Can accept', 'radio')}
+        ${chip('b_q3', '😟 Uncomfortable', 'radio')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">Additional Comments</div>
+    <div class="q-block-right">
+      <textarea class="q-input" id="b_comments" placeholder="Any other observations or remarks…"></textarea>
+    </div>
+  `;
+    }
+
+    // ============================================================
+    // DURING
+    // ============================================================
+    function renderDuring() {
+      const inner = document.getElementById('rightInner');
+      const combo = getCurrentCombo();
+      inner.innerHTML = `
+    <div class="q-section-header during">② During the Experiment</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Current Combination Under Test</div>
+      <div class="combo-banner" id="comboBanner">🔬 <span id="comboText">${combo}</span></div>
+      <div class="q-hint" style="margin-top:-8px;margin-bottom:12px;">Auto-detected from layout. Drag appliances on the left to update.</div>
+      <div class="q-hint" style="margin-bottom:6px;font-weight:600;color:var(--navy);">Or select manually:</div>
+      <div class="q-options-grid">
+        ${chip('d_comboManual', '1 · SF only', 'radio')}
+        ${chip('d_comboManual', '2 · CF only', 'radio')}
+        ${chip('d_comboManual', '3 · Air Cooler (0.75 m)', 'radio')}
+        ${chip('d_comboManual', '4 · SF + Air Cooler', 'radio')}
+        ${chip('d_comboManual', '5 · CF + Air Cooler', 'radio')}
+        ${chip('d_comboManual', '6 · SF + WEF + Air Cooler', 'radio')}
+      </div>
+    </div>
+
+    <div class="q-block-right" id="d_placement_block">
+      <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
+      <div class="placement-grid">
+        <div class="placement-chip" data-group="d_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
+          <span class="pl-emoji">🌬️➡️❄️</span>
+          <span class="pl-label">Stand Fan in front of Air Cooler</span>
+        </div>
+        <div class="placement-chip" data-group="d_q4" data-val="AC behind SF" onclick="togglePlacement(this)">
+          <span class="pl-emoji">❄️➡️🌬️</span>
+          <span class="pl-label">Air Cooler behind Stand Fan</span>
+        </div>
+      </div>
+      <div class="q-hint" id="d_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Door and Window Configuration</div>
+      <div class="window-config-grid">
+        <div class="window-config-card">
+          <div class="q-sub-label">Door</div>
+          <div class="q-options-grid">${chip('d_door', 'Open', 'radio')} ${chip('d_door', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card" id="d_bedroomDoor_block">
+          <div class="q-sub-label">Bedroom Door <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomDoor', 'Open', 'radio')} ${chip('d_bedroomDoor', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Top)</div>
+          <div class="q-options-grid">${chip('d_corridorWindowTop', 'Open', 'radio')} ${chip('d_corridorWindowTop', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Bottom)</div>
+          <div class="q-options-grid">${chip('d_corridorWindowBottom', 'Open', 'radio')} ${chip('d_corridorWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Top)</div>
+          <div class="q-options-grid">${chip('d_kitchenWindowTop', 'Open', 'radio')} ${chip('d_kitchenWindowTop', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Bottom)</div>
+          <div class="q-options-grid">${chip('d_kitchenWindowBottom', 'Open', 'radio')} ${chip('d_kitchenWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card" id="d_bedroomWindowTop_block">
+          <div class="q-sub-label">Bedroom Window (Top) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomWindowTop', 'Open', 'radio')} ${chip('d_bedroomWindowTop', 'Closed', 'radio')}</div>
+        </div>
+
+        <div class="window-config-card" id="d_bedroomWindowBottom_block">
+          <div class="q-sub-label">Bedroom Window (Bottom) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('d_bedroomWindowBottom', 'Open', 'radio')} ${chip('d_bedroomWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
+      <input class="q-input" type="text" id="d_clothing" placeholder="e.g. T-shirt and shorts"/>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Temperature Readings</div>
+      <div class="temp-row">
+        <div class="temp-field">
+          <label>Measured Indoor Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_tempIndoor" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Initial Baseline Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_tempBaseline" placeholder="—" step="0.1"/>
+        </div>
+      </div>
+      <div class="q-sub-label" style="margin-top:14px;margin-bottom:6px;">Spot Measurement</div>
+      <div class="temp-row">
+        <div class="temp-field">
+          <label>Air Temp (°C)</label>
+          <input class="temp-input" type="number" id="d_spotAirTemp" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Humidity (%)</label>
+          <input class="temp-input" type="number" id="d_spotHumidity" placeholder="—" step="0.1"/>
+        </div>
+        <div class="temp-field">
+          <label>Wind Speed (m/s)</label>
+          <input class="temp-input" type="number" id="d_spotWindSpeed" placeholder="—" step="0.01"/>
+        </div>
+        <div class="temp-field">
+          <label>MRT (°C)</label>
+          <input class="temp-input" type="number" id="d_spotMRT" placeholder="—" step="0.1"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">What are you doing right now? <span class="q-hint">(Filled in by surveyor — ASHRAE)</span></div>
+      <div class="q-options-grid">
+        ${chip('d_posture', 'Reclining', 'radio')}
+        ${chip('d_posture', 'Sitting', 'radio')}
+        ${chip('d_posture', 'Standing relaxed', 'radio')}
+        ${chip('d_posture', 'Light activity standing', 'radio')}
+        ${chip('d_posture', 'Moderate activity standing', 'radio')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">A · Thermal Comfort Vote (TCV)</div>
+    <div class="q-block-right">
+      <div class="q-hint" style="margin-bottom:8px;">How comfortable are you with the thermal environment right now?</div>
+      <div class="tcv-scale">
+        ${tcvChip('-3', 'Very Uncomfy')}
+        ${tcvChip('-2', 'Uncomfy')}
+        ${tcvChip('-1', 'Slightly Uncomfy')}
+        ${tcvChip('0', 'Neutral')}
+        ${tcvChip('+1', 'Slightly Comfy')}
+        ${tcvChip('+2', 'Comfy')}
+        ${tcvChip('+3', 'Very Comfy')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">B · Standardised Preference Scales</div>
+
+    <div class="q-block-right">
+      <div class="q-title">Temperature — How comfortable is the temperature right now?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_tempComfort', '1', 'Uncomfortable — too cool')}
+        ${scaleChip('d_tempComfort', '2', 'Comfortable')}
+        ${scaleChip('d_tempComfort', '3', 'Uncomfortable — too warm')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Temperature — Right now, would you prefer the temperature to be?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_tempPref', '-1', 'Cooler')}
+        ${scaleChip('d_tempPref', '0', 'No change')}
+        ${scaleChip('d_tempPref', '+1', 'Warmer')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Airflow — How would you describe the airflow right now?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_airflowDisturbance', '0', 'Not disturbing')}
+        ${scaleChip('d_airflowDisturbance', '1', 'Disturbing')}
+        ${scaleChip('d_airflowDisturbance', '2', 'Strongly disturbing')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Airflow — Right now, would you prefer the airflow to be?</div>
+      <div class="q-hint" style="margin-bottom:6px;">If "lower" is preferred, also check the disturbance rating above.</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_airflowPref', '-1', 'Lower')}
+        ${scaleChip('d_airflowPref', '0', 'No change')}
+        ${scaleChip('d_airflowPref', '+1', 'Higher')}
+      </div>
+    </div>
+
+    <div class="q-block-right" id="d_humidity_block">
+      <div class="q-title">Air Humidity <span class="q-hint">(Asked only when Air Cooler is active)</span></div>
+      <div class="q-sub-label" style="margin-bottom:6px;">How would you describe the humidity right now?</div>
+      <div class="q-options-grid" style="margin-bottom:12px;">
+        ${scaleChip('d_humidityRating', '-1', 'Dry')}
+        ${scaleChip('d_humidityRating', '0', 'Just right')}
+        ${scaleChip('d_humidityRating', '1', 'Humid')}
+        ${scaleChip('d_humidityRating', '2', 'Too humid')}
+      </div>
+      <div class="q-sub-label" style="margin-bottom:6px;">Right now, would you prefer the humidity to be?</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_humidityPref', '-1', 'Drier')}
+        ${scaleChip('d_humidityPref', '0', 'No change')}
+        ${scaleChip('d_humidityPref', '+1', 'More humid')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">Additional Comments</div>
+    <div class="q-block-right">
+      <textarea class="q-input" id="d_comments" placeholder="Any other observations or remarks…"></textarea>
+    </div>
+
+  `;
+      updateDuringConditionalVisibility();
+    }
+
+    function refreshComboBanner() {
+      const el = document.getElementById('comboText');
+      if (el) el.textContent = getCurrentCombo();
+      updateDuringConditionalVisibility();
+    }
+    function isAirCoolerUsed() {
+      const manual = getRadio('d_comboManual');
+      return placed.AC || manual.includes('Air Cooler');
+    }
+    function updateDuringConditionalVisibility() {
+      updateHumidityVisibility();
+      updatePlacementVisibility();
+      updateTwoRoomOnlyVisibility();
+    }
+    function updateHumidityVisibility() {
+      const block = document.getElementById('d_humidity_block');
+      if (!block) return;
+      block.style.opacity = isAirCoolerUsed() ? '1' : '0.4';
+      block.title = isAirCoolerUsed() ? '' : 'Enable/select an Air Cooler combination to activate this question';
+    }
+    function updatePlacementVisibility() {
+      const block = document.getElementById('d_placement_block');
+      if (!block) return;
+      const enabled = isAirCoolerUsed();
+      block.style.opacity = enabled ? '1' : '0.55';
+      block.title = enabled ? '' : 'Enable/select an Air Cooler combination to answer this question';
+      document.querySelectorAll('#rightInner .placement-chip[data-group="d_q4"]').forEach(c => {
+        c.classList.toggle('disabled', !enabled);
+        if (!enabled) c.classList.remove('sel-before', 'sel-during', 'sel-after');
+      });
+      const hint = document.getElementById('d_placement_hint');
+      if (hint) hint.style.display = enabled ? 'none' : 'block';
+    }
+    function updateTwoRoomOnlyVisibility() {
+      const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
+      const blocks = [
+        { id: 'd_bedroomDoor_block', group: 'd_bedroomDoor' },
+        { id: 'd_bedroomWindowTop_block', group: 'd_bedroomWindowTop' },
+        { id: 'd_bedroomWindowBottom_block', group: 'd_bedroomWindowBottom' },
+      ];
+      blocks.forEach(item => {
+        const block = document.getElementById(item.id);
+        if (!block) return;
+        block.style.display = isTwoRoom ? 'block' : 'none';
+        if (!isTwoRoom) {
+          document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+        }
+      });
+    }
+
+    // ============================================================
+    // AFTER
+    // ============================================================
+    function renderAfter() {
+      const inner = document.getElementById('rightInner');
+      inner.innerHTML = `
+    <div class="q-section-header after">③ After All Experiments</div>
+
+    <div class="q-block-right">
+      <div class="q-title">If there was an ideal cooling device you could have in your home, when and where would you prefer to use it on a daily basis?</div>
+      <textarea class="q-input" id="a_idealDevice" placeholder="Describe when and where you would use it…" style="min-height:90px;"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Which of the top 6 combinations do you prefer to have if offered at no cost?</div>
+      <div class="q-options-grid" style="margin-bottom:8px;">
+        ${chip('a_preferredCombo', '1 · SF only', 'radio')}
+        ${chip('a_preferredCombo', '2 · CF only', 'radio')}
+        ${chip('a_preferredCombo', '3 · Air Cooler (0.75 m)', 'radio')}
+        ${chip('a_preferredCombo', '4 · SF + Air Cooler', 'radio')}
+        ${chip('a_preferredCombo', '5 · CF + Air Cooler', 'radio')}
+        ${chip('a_preferredCombo', '6 · SF + WEF + Air Cooler', 'radio')}
+      </div>
+      <textarea class="q-input" id="a_preferredComboReason" placeholder="Optional: reason for preference…" style="min-height:70px;"></textarea>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Are you comfortable spending $5–$10 more per month on electricity to use the air cooler on hot days?</div>
+      <div class="q-options-grid" style="margin-bottom:12px;">
+        ${chip('a_willingnessPay', 'Yes', 'radio', 'a_willingnessPayReason_Yes')}
+        ${chip('a_willingnessPay', 'No', 'radio', 'a_willingnessPayReason_No')}
+      </div>
+      <textarea class="other-input" id="a_willingnessPayReason_Yes" placeholder="If Yes, please elaborate on why..." style="min-height:70px; resize:vertical;"></textarea>
+      <textarea class="other-input" id="a_willingnessPayReason_No" placeholder="If No, please elaborate on why..." style="min-height:70px; resize:vertical;"></textarea>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-sub-section">Additional Comments</div>
+    <div class="q-block-right">
+      <textarea class="q-input" id="a_comments" placeholder="Any other observations or remarks…"></textarea>
+    </div>
+  `;
+    }
+
+    // ============================================================
+    // CHIP HELPERS
+    // ============================================================
+    function chip(group, label, type, otherId) {
+      const oa = otherId ? `data-other="${otherId}"` : '';
+      return `<span class="q-chip" data-group="${group}" data-val="${label}" data-type="${type}" ${oa} onclick="toggleChip(this)">${label}</span>`;
+    }
+    function tcvChip(num, lbl) {
+      return `<div class="tcv-chip" data-group="d_tcv" data-val="${num}" onclick="toggleTCV(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
+    }
+    function scaleChip(group, num, lbl) {
+      return `<div class="scale-chip" data-group="${group}" data-val="${num}" onclick="toggleScaleChip(this)"><span class="sc-num">${num}</span><span class="sc-lbl">${lbl}</span></div>`;
+    }
+    function toggleChip(el) {
+      const group = el.dataset.group, type = el.dataset.type, otherId = el.dataset.other;
+      const selClass = 'sel-' + currentPhase;
+      if (type === 'radio') {
+        document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
+          c.classList.remove('sel-before', 'sel-during', 'sel-after');
+          const oid = c.dataset.other; if (oid) { const oi = document.getElementById(oid); if (oi) oi.classList.remove('visible'); }
+        });
+        el.classList.add(selClass);
+      } else {
+        el.classList.toggle(selClass);
+      }
+      if (otherId) { const oi = document.getElementById(otherId); if (oi) oi.classList.toggle('visible', el.classList.contains(selClass)); }
+      if (currentPhase === 'during' && group === 'd_comboManual') updateDuringConditionalVisibility();
+    }
+    function toggleTCV(el) {
+      document.querySelectorAll('#rightInner .tcv-chip').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-during');
+    }
+    function toggleScaleChip(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-during');
+    }
+    function togglePlacement(el) {
+      if (currentPhase === 'during' && el.dataset.group === 'd_q4' && !isAirCoolerUsed()) return;
+      const group = el.dataset.group;
+      const selClass = 'sel-' + currentPhase;
+      document.querySelectorAll(`#rightInner .placement-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add(selClass);
+    }
+
+    // ============================================================
+    // DATA COLLECTION
+    // ============================================================
+    function getRadio(group) {
+      const el = document.querySelector(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`);
+      return el ? el.dataset.val : '';
+    }
+    function getRadioWithOther(group, otherId) {
+      const val = getRadio(group);
+      if (val && otherId) { const other = document.getElementById(otherId)?.value?.trim(); if (other) return `${val} (${other})`; }
+      return val;
+    }
+    function getCheckboxes(group, otherId) {
+      const selected = [...document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`)].map(e => e.dataset.val);
+      if (selected.includes('Others') && otherId) { const other = document.getElementById(otherId)?.value?.trim(); if (other) { const i = selected.indexOf('Others'); selected[i] = `Others: ${other}`; } }
+      return selected.join('; ');
+    }
+    function getScaleVal(group) {
+      const el = document.querySelector(`#rightInner .scale-chip[data-group="${group}"].sel-during`);
+      return el ? el.dataset.val : '';
+    }
+    function getPlacementVal(group) {
+      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
+      return el ? el.dataset.val : '';
+    }
+    function getTCV() {
+      const el = document.querySelector('#rightInner .tcv-chip.sel-during');
+      return el ? el.dataset.val : '';
+    }
+
+    function collectBeforeData() {
+      return {
+        b_age: document.getElementById('b_age')?.value || '',
+        b_sex: getRadio('b_sex'),
+        b_height: document.getElementById('b_height')?.value || '',
+        b_weight: document.getElementById('b_weight')?.value || '',
+        b_occupants: document.getElementById('b_occupants')?.value || '',
+        b_homeStay: getRadio('b_homestay'),
+        b_spaceUsed: getRadio('b_space'),
+        b_whenHot: getCheckboxes('b_whenhot', 'b_whenhot_other'),
+        b_wear: document.getElementById('b_wear')?.value || '',
+        b_appliances: getCheckboxes('b_appliances', 'b_appliances_other'),
+        b_whenTurnOn: getCheckboxes('b_whenturnon', 'b_whenturnon_other'),
+        b_prefSpeed: getRadio('b_speed'),
+        b_prefOsc: getRadio('b_osc'),
+        b_routine: document.getElementById('b_routine')?.value || '',
+        b_avoidReason: getCheckboxes('b_avoid', 'b_avoid_other'),
+        b_activityLevel: getRadio('b_activity'),
+        b_currentPosture: getRadio('b_posture'),
+        b_meds: getRadioWithOther('b_meds', 'b_meds_specify'),
+        b_water: getRadio('b_water'),
+        b_q1_envPref: getRadio('b_q1'),
+        b_q2_warmFeel: getRadio('b_q2'),
+        b_q3_coolFeel: getRadio('b_q3'),
+        b_comments: document.getElementById('b_comments')?.value || '',
+      };
+    }
+    function collectDuringData() {
+      return {
+        d_combo: getCurrentCombo(),
+        d_comboManual: getRadio('d_comboManual'),
+        d_door: getRadio('d_door'),
+        d_bedroomDoor: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomDoor') : 'N/A (1 Room)',
+        d_corridorWindowTop: getRadio('d_corridorWindowTop'),
+        d_corridorWindowBottom: getRadio('d_corridorWindowBottom'),
+        d_kitchenWindowTop: getRadio('d_kitchenWindowTop'),
+        d_kitchenWindowBottom: getRadio('d_kitchenWindowBottom'),
+        d_bedroomWindowTop: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowTop') : 'N/A (1 Room)',
+        d_bedroomWindowBottom: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowBottom') : 'N/A (1 Room)',
+        d_clothing: document.getElementById('d_clothing')?.value || '',
+        d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
+        d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
+        d_spotAirTemp: document.getElementById('d_spotAirTemp')?.value || '',
+        d_spotHumidity: document.getElementById('d_spotHumidity')?.value || '',
+        d_spotWindSpeed: document.getElementById('d_spotWindSpeed')?.value || '',
+        d_spotMRT: document.getElementById('d_spotMRT')?.value || '',
+        d_posture: getRadio('d_posture'),
+        d_tcv: getTCV(),
+        d_tempComfort: getScaleVal('d_tempComfort'),
+        d_tempPref: getScaleVal('d_tempPref'),
+        d_airflowDisturbance: getScaleVal('d_airflowDisturbance'),
+        d_airflowPref: getScaleVal('d_airflowPref'),
+        d_humidityRating: isAirCoolerUsed() ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
+        d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
+        d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
+        d_comments: document.getElementById('d_comments')?.value || '',
+      };
+    }
+    function collectAfterData() {
+      return {
+        a_idealDevice: document.getElementById('a_idealDevice')?.value || '',
+        a_preferredCombo: getRadio('a_preferredCombo'),
+        a_preferredComboReason: document.getElementById('a_preferredComboReason')?.value || '',
+        a_willingnessPay: getRadio('a_willingnessPay'),
+        a_willingnessPayReason_Yes: document.getElementById('a_willingnessPayReason_Yes')?.value || '',
+        a_willingnessPayReason_No: document.getElementById('a_willingnessPayReason_No')?.value || '',
+        a_comments: document.getElementById('a_comments')?.value || '',
+      };
+    }
+
+    // ============================================================
+    // SUBMIT
+    // ============================================================
+    function handleSubmit() {
+      const unit = document.getElementById('unitNumber').value;
+      if (!unit) { document.getElementById('unitNumber').classList.add('required'); alert('Please select a Unit Number first.'); return; }
+      if (!currentPhase) { alert('Please select a phase (Before / During / After).'); return; }
+
+      const layout = document.getElementById('layoutSelector').value;
+      // When submitting, we only care about the appliances for the combo data
+      const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
+      const combo = VALID[active] || 'Baseline (No Appliances)';
+      const timestamp = new Date().toLocaleString();
+
+      let phaseData = {};
+      if (currentPhase === 'before') phaseData = collectBeforeData();
+      if (currentPhase === 'during') phaseData = collectDuringData();
+      if (currentPhase === 'after') phaseData = collectAfterData();
+
+      const payload = { timestamp, phase: currentPhase, unitNo: unit, layout, combo, ...phaseData };
+
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Saving…'; btn.disabled = true;
+
+      fetch(WEB_APP_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(() => {
+          alert(`✅ Saved!\nPhase: ${currentPhase.toUpperCase()}\nUnit: ${unit}`);
+          btn.textContent = 'Submit Response'; btn.disabled = false;
+          resetAll();
+        })
+        .catch(() => {
+          alert('Error saving. Check your connection.');
+          btn.textContent = 'Submit Response'; btn.disabled = false;
+        });
+    }
+
+    // ---- INIT ----
+    window.addEventListener('load', () => {
+      changeLayout();
+      renderRight();
+      window.addEventListener('resize', () => { IDS.forEach(id => snapBack(id)); setTimeout(updateStatus, 30); });
+    });
+  </script>
+</body>
+
+</html>
