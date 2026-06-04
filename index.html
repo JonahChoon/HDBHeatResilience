@@ -1094,6 +1094,183 @@
       }
     }
 
+
+    /* ============================================================
+       MOBILE LAYOUT TOGGLE
+       On phones, the layout panel can be hidden so the survey gets
+       the full screen width. Desktop/tablet split view remains unchanged.
+    ============================================================ */
+
+    .mobile-layout-toggle {
+      display: none;
+      background: var(--panel);
+      border-bottom: 1px solid var(--grid);
+      padding: 8px 12px;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .mobile-layout-btn {
+      width: 100%;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .mobile-layout-btn:active {
+      transform: scale(0.99);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        height: 100dvh;
+      }
+
+      .header {
+        padding: 8px 12px;
+        gap: 10px;
+      }
+
+      .logo {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+      }
+
+      .header h1 {
+        font-size: 15px;
+        line-height: 1.2;
+      }
+
+      .header h1 small {
+        font-size: 11px;
+      }
+
+      .phase-bar {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+
+      .phase-label {
+        width: 100%;
+      }
+
+      .phase-btns {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .phase-btn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 9px 10px;
+        font-size: 13px;
+      }
+
+      .unit-select {
+        width: 100%;
+        margin-left: 0;
+        font-size: 13px;
+      }
+
+      .mobile-layout-toggle {
+        display: flex;
+      }
+
+      .workspace {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .left-pane {
+        width: 100%;
+        height: 42dvh;
+        min-height: 280px;
+        border-right: none;
+        border-bottom: 2px solid var(--grid);
+      }
+
+      .right-pane {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .right-inner {
+        padding: 14px 14px;
+      }
+
+      .right-footer {
+        padding: 10px 14px;
+        gap: 10px;
+      }
+
+      .btn-reset,
+      .btn-submit {
+        flex: 1;
+        font-size: 14px;
+        padding: 10px 12px;
+      }
+
+      .sidebar {
+        width: 96px;
+        padding: 10px 6px;
+      }
+
+      .appliance-slot,
+      .appliance {
+        width: 78px;
+        height: 66px;
+      }
+
+      .appliance img {
+        width: 28px;
+        height: 28px;
+      }
+
+      .appliance-name {
+        font-size: 9.5px;
+      }
+
+      .combo-tag {
+        font-size: 11px;
+        padding: 6px 10px;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .window-config-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .q-pair {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      body.layout-collapsed .left-pane {
+        display: none;
+      }
+
+      body.layout-collapsed .right-pane {
+        width: 100%;
+        flex: 1;
+      }
+
+      body.layout-collapsed .appliance {
+        display: none;
+      }
+    }
+
   </style>
 </head>
 
@@ -1128,6 +1305,12 @@
       <option value="#03-125">#03-125 · 2R</option>
     </select>
   </div>
+
+  <!-- MOBILE: SHOW / HIDE LAYOUT PANEL -->
+  <div class="mobile-layout-toggle">
+    <button class="mobile-layout-btn" id="mobileLayoutBtn" onclick="toggleMobileLayout()">☰ Show Layout</button>
+  </div>
+
 
   <!-- WORKSPACE -->
   <div class="workspace">
@@ -2192,11 +2375,46 @@
         });
     }
 
+
+
+    // ---- MOBILE LAYOUT TOGGLE ----
+    function isPhoneWidth() {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function setMobileLayoutCollapsed(collapsed) {
+      if (!isPhoneWidth()) {
+        document.body.classList.remove('layout-collapsed');
+        const btn = document.getElementById('mobileLayoutBtn');
+        if (btn) btn.textContent = '☰ Show Layout';
+        syncSidebarComponents();
+        return;
+      }
+
+      document.body.classList.toggle('layout-collapsed', collapsed);
+      const btn = document.getElementById('mobileLayoutBtn');
+      if (btn) btn.textContent = collapsed ? '☰ Show Layout' : '✕ Hide Layout';
+
+      if (!collapsed) {
+        setTimeout(() => {
+          syncSidebarComponents();
+          updateStatus();
+        }, 60);
+      }
+    }
+
+    function toggleMobileLayout() {
+      if (!isPhoneWidth()) return;
+      const collapsed = !document.body.classList.contains('layout-collapsed');
+      setMobileLayoutCollapsed(collapsed);
+    }
+
     // ---- INIT ----
     window.addEventListener('load', () => {
       applyRoomTypeFromUnit();
       changeLayout();
       renderRight();
+      setMobileLayoutCollapsed(isPhoneWidth());
 
       const sidebar = document.getElementById('sidebar');
       if (sidebar) {
@@ -2204,6 +2422,7 @@
       }
 
       window.addEventListener('resize', () => {
+        setMobileLayoutCollapsed(isPhoneWidth() ? document.body.classList.contains('layout-collapsed') : false);
         IDS.forEach(id => {
           if (!placed[id]) positionInSlot(id);
         });
