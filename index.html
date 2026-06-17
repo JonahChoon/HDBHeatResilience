@@ -344,12 +344,35 @@
       color: #333;
     }
 
-    #SF { border-color: #f5a623; background: #fff8e7; }
-    #CF { border-color: #4a7de8; background: #e8f0ff; }
-    #AC { border-color: #22c480; background: #e8faf4; }
-    #WEF { border-color: #9b59f5; background: #f3e8ff; }
-    #SEAT { border-color: #c09b7d; background: #faede3; }
-    #SENSOR { border-color: #607d8b; background: #eceff1; }
+    #SF {
+      border-color: #f5a623;
+      background: #fff8e7;
+    }
+
+    #CF {
+      border-color: #4a7de8;
+      background: #e8f0ff;
+    }
+
+    #AC {
+      border-color: #22c480;
+      background: #e8faf4;
+    }
+
+    #WEF {
+      border-color: #9b59f5;
+      background: #f3e8ff;
+    }
+
+    #SEAT {
+      border-color: #c09b7d;
+      background: #faede3;
+    }
+
+    #SENSOR {
+      border-color: #607d8b;
+      background: #eceff1;
+    }
 
     /* RIGHT PANE */
     .right-pane {
@@ -409,9 +432,17 @@
       margin-top: 0;
     }
 
-    .q-section-header.before { background: var(--before); }
-    .q-section-header.during { background: var(--during); }
-    .q-section-header.after { background: var(--after); }
+    .q-section-header.before {
+      background: var(--before);
+    }
+
+    .q-section-header.during {
+      background: var(--during);
+    }
+
+    .q-section-header.after {
+      background: var(--after);
+    }
 
     /* SUB-SECTION HEADERS */
     .q-sub-section {
@@ -522,11 +553,23 @@
       filter: grayscale(0.35);
     }
 
-    .q-chip.sel-before { background: var(--before); border-color: var(--before); color: white; }
-    .q-chip.sel-during { background: var(--during); border-color: var(--during); color: white; }
-    .q-chip.sel-after { background: var(--after); border-color: var(--after); color: white; }
+    .q-chip.sel-before {
+      background: var(--before);
+      border-color: var(--before);
+      color: white;
+    }
 
+    .q-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
 
+    .q-chip.sel-after {
+      background: var(--after);
+      border-color: var(--after);
+      color: white;
+    }
 
     /* Door & Window Configuration Grid */
     .window-config-grid {
@@ -776,6 +819,48 @@
       font-size: 30px;
     }
 
+    /* Need rating scale (0-10) */
+    .need-scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .need-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      border: 1.5px solid var(--grid);
+      background: white;
+      cursor: pointer;
+      transition: all .15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .need-chip .nc-num {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .need-chip:hover {
+      border-color: #a0a8c0;
+      background: #f0f2f8;
+    }
+
+    .need-chip.sel-during {
+      background: var(--during);
+      border-color: var(--during);
+      color: white;
+    }
+
     hr.q-divider {
       border: none;
       border-top: 1px solid var(--grid);
@@ -831,10 +916,8 @@
       cursor: not-allowed;
     }
 
-
     /* ============================================================
-       COMPACT MODE — makes page feel like browser zoom 90%
-       Added to reduce the zoomed-in feeling on laptop/iPad
+       COMPACT MODE
     ============================================================ */
 
     body {
@@ -992,6 +1075,15 @@
       font-size: 11.5px;
     }
 
+    .need-chip {
+      width: 44px;
+      height: 44px;
+    }
+
+    .need-chip .nc-num {
+      font-size: 14px;
+    }
+
     .temp-row {
       gap: 12px;
     }
@@ -1094,11 +1186,8 @@
       }
     }
 
-
     /* ============================================================
        MOBILE LAYOUT TOGGLE
-       On phones, the layout panel can be hidden so the survey gets
-       the full screen width. Desktop/tablet split view remains unchanged.
     ============================================================ */
 
     .mobile-layout-toggle {
@@ -1270,7 +1359,6 @@
         display: none;
       }
     }
-
   </style>
 </head>
 
@@ -1311,7 +1399,6 @@
     <button class="mobile-layout-btn" id="mobileLayoutBtn" onclick="toggleMobileLayout()">☰ Show Layout</button>
   </div>
 
-
   <!-- WORKSPACE -->
   <div class="workspace">
 
@@ -1320,23 +1407,19 @@
       <div class="sidebar" id="sidebar">
         <div class="sidebar-title">Drag to plan</div>
         <span class="sidebar-select-label">Floorplan (Auto):</span>
-        <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()" disabled title="Auto-selected based on selected unit number">
+        <select class="sidebar-select" id="layoutSelector" onchange="changeLayout()" disabled
+          title="Auto-selected based on selected unit number">
           <option value="1 Room">1-Room</option>
           <option value="2 Room">2-Room</option>
         </select>
         <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
-        
-        <!-- Slots for Appliances -->
         <div class="appliance-slot" id="slot-SF"></div>
         <div class="appliance-slot" id="slot-CF"></div>
         <div class="appliance-slot" id="slot-AC"></div>
         <div class="appliance-slot" id="slot-WEF"></div>
         <div style="height:10px;border-bottom:1px solid var(--grid);margin-bottom:8px;"></div>
-        
-        <!-- Slots for Context Elements -->
         <div class="appliance-slot" id="slot-SEAT"></div>
         <div class="appliance-slot" id="slot-SENSOR"></div>
-        
       </div>
       <div class="blueprint-wrap" id="blueprintWrap">
         <img class="fp-img active" id="fp-1rm" src="1 Room.png" alt="1-Room floorplan" />
@@ -1360,14 +1443,19 @@
 
   <!-- APPLIANCE CHIPS (Drag items) -->
   <div class="appliance" id="SF"><img src="SF.png" alt="Stand Fan" /><span class="appliance-name">Stand Fan</span></div>
-  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span></div>
-  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span></div>
-  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span></div>
-  <div class="appliance" id="SEAT"> <img src="SOFA.png" alt="Seat" /><span class="appliance-name">Seat</span></div>
-  <div class="appliance" id="SENSOR"><img src="SENSOR.png" alt="Sensor" /><span class="appliance-name">Sensor (1x)</span></div>
+  <div class="appliance" id="CF"><img src="CF.png" alt="Ceiling Fan" /><span class="appliance-name">Ceiling Fan</span>
+  </div>
+  <div class="appliance" id="AC"><img src="AC.png" alt="Air Cooler" /><span class="appliance-name">Air Cooler</span>
+  </div>
+  <div class="appliance" id="WEF"><img src="WEF.png" alt="Window Fan" /><span class="appliance-name">Window Fan</span>
+  </div>
+  <div class="appliance" id="SEAT"><img src="SOFA.png" alt="Seat" /><span class="appliance-name">Seat</span></div>
+  <div class="appliance" id="SENSOR"><img src="SENSOR.png" alt="Sensor" /><span class="appliance-name">Sensor
+      (1x)</span></div>
+
   <script>
     // ============================================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBoDGItLOkNmQPc3cjSSI1p5oTEohhlHN9kQl0SggD_r57vtAksJ1bFQm6qdmzP52FRw/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_UwP90eokzRa8-6HOg0Y4eIzUTNtR0I0lm3hSuBfMTHyGfSqwqS4RG46gy5jeT6IH1A/exec";
     // ============================================================
 
     const VALID = {
@@ -1389,31 +1477,19 @@
     };
 
     const PARTIAL = new Set(['SF', 'CF', 'AC', 'AC-SF', 'AC-CF']);
-    
-    // Split arrays so Seat and Sensor do not interfere with combination rules
     const APPLIANCE_IDS = ['SF', 'CF', 'AC', 'WEF'];
     const CONTEXT_IDS = ['SEAT', 'SENSOR'];
     const IDS = [...APPLIANCE_IDS, ...CONTEXT_IDS];
-    
+
     const placed = { SF: false, CF: false, AC: false, WEF: false, SEAT: false, SENSOR: false };
     let dragging = null, dragOffX = 0, dragOffY = 0;
     let currentPhase = null;
 
-    // Unit list is intentionally kept in the running order provided by the field team.
-    // Selecting a unit automatically controls the room type / floorplan.
     const UNIT_ROOM_TYPE = {
-      '#17-127': '2 Room',
-      '#17-115': '1 Room',
-      '#15-125': '2 Room',
-      '#15-117': '1 Room',
-      '#13-105': '2 Room',
-      '#12-119': '2 Room',
-      '#12-107': '2 Room',
-      '#07-141': '2 Room',
-      '#07-131': '1 Room',
-      '#07-137': '1 Room',
-      '#07-139': '1 Room',
-      '#03-125': '2 Room',
+      '#17-127': '2 Room', '#17-115': '1 Room', '#15-125': '2 Room',
+      '#15-117': '1 Room', '#13-105': '2 Room', '#12-119': '2 Room',
+      '#12-107': '2 Room', '#07-141': '2 Room', '#07-131': '1 Room',
+      '#07-137': '1 Room', '#07-139': '1 Room', '#03-125': '2 Room',
     };
 
     // ---- DRAG & DROP ----
@@ -1448,24 +1524,16 @@
         const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
         if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id); else snapBack(id);
         dragging = null; updateStatus();
-        if (currentPhase === 'during') {
-          refreshComboBanner();
-          updateManualAutoLockState();
-        }
+        if (currentPhase === 'during') { refreshComboBanner(); updateManualAutoLockState(); }
       });
     });
 
     function tryPlace(id) {
       if (currentPhase === 'during' && APPLIANCE_IDS.includes(id) && isManualComboSelected()) {
         warn('Manual combination selected — reset before dragging appliances');
-        snapBack(id);
-        updateManualAutoLockState();
-        return;
+        snapBack(id); updateManualAutoLockState(); return;
       }
-
       const next = { ...placed, [id]: true };
-      
-      // Only perform validation if it's an appliance (ignore seat and sensor)
       if (APPLIANCE_IDS.includes(id)) {
         const activeAppliances = APPLIANCE_IDS.filter(k => next[k]).sort().join('-');
         if (id === 'WEF' && !(placed.SF && placed.AC)) { warn('WEF only valid with Stand Fan + Air Cooler'); snapBack(id); return; }
@@ -1473,7 +1541,6 @@
         if (id === 'SF' && placed.CF) { warn('Cannot combine Stand Fan and Ceiling Fan'); snapBack(id); return; }
         if (activeAppliances !== '' && !VALID[activeAppliances] && !PARTIAL.has(activeAppliances)) { warn('Not a valid study combination'); snapBack(id); return; }
       }
-      
       placed[id] = true; document.getElementById(id).classList.add('placed');
       if (currentPhase === 'during') updateManualAutoLockState();
     }
@@ -1482,23 +1549,13 @@
       const slot = document.getElementById('slot-' + id);
       const el = document.getElementById(id);
       if (!slot || !el) return;
-
       const sr = slot.getBoundingClientRect();
       const sidebar = document.getElementById('sidebar');
       const sidebarRect = sidebar.getBoundingClientRect();
-
-      // Keep loose/unplaced components visually tied to their sidebar slots while scrolling.
       el.style.left = sr.left + 'px';
       el.style.top = sr.top + 'px';
-
-      // Hide the component when its slot has scrolled out of the visible sidebar area.
-      const visible =
-        sr.bottom > sidebarRect.top &&
-        sr.top < sidebarRect.bottom;
-
-      if (!placed[id] && dragging !== el) {
-        el.style.visibility = visible ? 'visible' : 'hidden';
-      }
+      const visible = sr.bottom > sidebarRect.top && sr.top < sidebarRect.bottom;
+      if (!placed[id] && dragging !== el) { el.style.visibility = visible ? 'visible' : 'hidden'; }
     }
 
     function snapBack(id) {
@@ -1510,19 +1567,17 @@
     }
 
     function syncSidebarComponents() {
-      IDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (!placed[id] && dragging !== el) positionInSlot(id);
-      });
+      IDS.forEach(id => { const el = document.getElementById(id); if (!placed[id] && dragging !== el) positionInSlot(id); });
     }
+
     let warnTimer = null;
     function warn(msg) {
       const b = document.getElementById('comboDisplay');
       b.textContent = '⚠ ' + msg; b.className = 'combo-tag invalid';
       clearTimeout(warnTimer); warnTimer = setTimeout(updateStatus, 2800);
     }
+
     function updateStatus() {
-      // Status display only cares about actual appliances
       const active = APPLIANCE_IDS.filter(id => placed[id]).sort();
       const key = active.join('-');
       const b = document.getElementById('comboDisplay');
@@ -1531,22 +1586,15 @@
       else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
       if (currentPhase === 'during') updateManualAutoLockState();
     }
+
     function getCurrentCombo() {
       const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
       return VALID[active] || 'Baseline (No Appliances)';
     }
 
-    function hasPlacedAppliance() {
-      return APPLIANCE_IDS.some(id => placed[id]);
-    }
-
-    function getManualComboSelection() {
-      return getRadio('d_comboManual');
-    }
-
-    function isManualComboSelected() {
-      return !!getManualComboSelection();
-    }
+    function hasPlacedAppliance() { return APPLIANCE_IDS.some(id => placed[id]); }
+    function getManualComboSelection() { return getRadio('d_comboManual'); }
+    function isManualComboSelected() { return !!getManualComboSelection(); }
 
     function getEffectiveCombo() {
       const manual = getManualComboSelection();
@@ -1556,24 +1604,17 @@
 
     function updateManualAutoLockState() {
       if (currentPhase !== 'during') return;
-
       const manualLocked = hasPlacedAppliance();
       const autoLocked = isManualComboSelected();
-
       document.querySelectorAll('#rightInner .q-chip[data-group="d_comboManual"]').forEach(c => {
         c.classList.toggle('disabled', manualLocked);
-        c.title = manualLocked
-          ? 'Auto layout already has an appliance. Reset/remove appliances before manual selection.'
-          : '';
+        c.title = manualLocked ? 'Auto layout already has an appliance. Reset/remove appliances before manual selection.' : '';
       });
-
       APPLIANCE_IDS.forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         el.classList.toggle('auto-locked', autoLocked);
-        el.title = autoLocked
-          ? 'Manual combination selected. Reset before dragging appliances.'
-          : '';
+        el.title = autoLocked ? 'Manual combination selected. Reset before dragging appliances.' : '';
       });
     }
 
@@ -1585,40 +1626,31 @@
       setTimeout(() => {
         IDS.forEach(id => snapBack(id));
         updateStatus();
-        if (currentPhase === 'during') {
-          updateDuringConditionalVisibility();
-          updateManualAutoLockState();
-        }
+        if (currentPhase === 'during') { updateDuringConditionalVisibility(); updateManualAutoLockState(); }
       }, 20);
     }
+
     function applyRoomTypeFromUnit() {
       const unit = document.getElementById('unitNumber').value;
       const roomType = UNIT_ROOM_TYPE[unit];
       const layoutSelector = document.getElementById('layoutSelector');
       if (!roomType || !layoutSelector) return;
-
-      if (layoutSelector.value !== roomType) {
-        layoutSelector.value = roomType;
-        changeLayout();
-      } else {
+      if (layoutSelector.value !== roomType) { layoutSelector.value = roomType; changeLayout(); }
+      else {
         document.getElementById('fp-1rm').classList.toggle('active', roomType === '1 Room');
         document.getElementById('fp-2rm').classList.toggle('active', roomType === '2 Room');
         if (currentPhase === 'during') updateDuringConditionalVisibility();
       }
     }
+
     function resetAll() {
       IDS.forEach(id => snapBack(id));
       setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
-      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip, #rightInner .need-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
       document.querySelectorAll('#rightInner .q-input').forEach(inp => inp.value = '');
       document.querySelectorAll('#rightInner .other-input').forEach(inp => { inp.value = ''; inp.classList.remove('visible'); });
       document.querySelectorAll('#rightInner .temp-input').forEach(inp => inp.value = '');
-      if (currentPhase === 'during') {
-        setTimeout(() => {
-          refreshComboBanner();
-          updateManualAutoLockState();
-        }, 50);
-      }
+      if (currentPhase === 'during') { setTimeout(() => { refreshComboBanner(); updateManualAutoLockState(); }, 50); }
     }
 
     // ---- PHASE ----
@@ -1627,11 +1659,13 @@
       applyRoomTypeFromUnit();
       renderRight();
     }
+
     function setPhase(phase) {
       currentPhase = phase;
       document.querySelectorAll('.phase-btn').forEach(b => b.classList.toggle('active', b.dataset.phase === phase));
       renderRight();
     }
+
     function renderRight() {
       const unit = document.getElementById('unitNumber').value;
       const inner = document.getElementById('rightInner');
@@ -1650,7 +1684,6 @@
       inner.innerHTML = `
     <div class="q-section-header before">① Before the Experiment</div>
 
-    <!-- A. GENERAL DEMOGRAPHICS -->
     <div class="q-sub-section">A · General Demographics</div>
 
     <div class="q-block-right">
@@ -1676,7 +1709,6 @@
 
     <hr class="q-divider"/>
 
-    <!-- B. LIFESTYLE HABITS -->
     <div class="q-sub-section">B · Lifestyle Habits</div>
 
     <div class="q-block-right">
@@ -1816,7 +1848,6 @@
 
     <hr class="q-divider"/>
 
-    <!-- C. BASELINE PREFERENCE -->
     <div class="q-sub-section">C · Baseline Preference — Classification Segment</div>
 
     <div class="q-block-right">
@@ -1864,6 +1895,7 @@
       inner.innerHTML = `
     <div class="q-section-header during">② During the Experiment</div>
 
+    <!-- Combination Selection -->
     <div class="q-block-right">
       <div class="q-title">Current Combination Under Test</div>
       <div class="combo-banner" id="comboBanner">🔬 <span id="comboText">${combo}</span></div>
@@ -1880,6 +1912,7 @@
       <div class="q-hint" style="margin-top:8px;">Note: auto-drag and manual selection are locked to one mode at a time. Use Reset to switch modes.</div>
     </div>
 
+    <!-- Placement -->
     <div class="q-block-right" id="d_placement_block">
       <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
       <div class="placement-grid">
@@ -1895,6 +1928,7 @@
       <div class="q-hint" id="d_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
     </div>
 
+    <!-- Door & Window Config -->
     <div class="q-block-right">
       <div class="q-title">Interviewer to observe the Door and Window Configuration</div>
       <div class="window-config-grid">
@@ -1902,37 +1936,30 @@
           <div class="q-sub-label">Door</div>
           <div class="q-options-grid">${chip('d_door', 'Open', 'radio')} ${chip('d_door', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card" id="d_bedroomDoor_block">
           <div class="q-sub-label">Bedroom Door <span class="q-hint">(Only for 2 Rooms)</span></div>
           <div class="q-options-grid">${chip('d_bedroomDoor', 'Open', 'radio')} ${chip('d_bedroomDoor', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card">
           <div class="q-sub-label">Corridor Window (Top)</div>
           <div class="q-options-grid">${chip('d_corridorWindowTop', 'Open', 'radio')} ${chip('d_corridorWindowTop', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card">
           <div class="q-sub-label">Corridor Window (Bottom)</div>
           <div class="q-options-grid">${chip('d_corridorWindowBottom', 'Open', 'radio')} ${chip('d_corridorWindowBottom', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card">
           <div class="q-sub-label">Kitchen Window (Top)</div>
           <div class="q-options-grid">${chip('d_kitchenWindowTop', 'Open', 'radio')} ${chip('d_kitchenWindowTop', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card">
           <div class="q-sub-label">Kitchen Window (Bottom)</div>
           <div class="q-options-grid">${chip('d_kitchenWindowBottom', 'Open', 'radio')} ${chip('d_kitchenWindowBottom', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card" id="d_bedroomWindowTop_block">
           <div class="q-sub-label">Bedroom Window (Top) <span class="q-hint">(Only for 2 Rooms)</span></div>
           <div class="q-options-grid">${chip('d_bedroomWindowTop', 'Open', 'radio')} ${chip('d_bedroomWindowTop', 'Closed', 'radio')}</div>
         </div>
-
         <div class="window-config-card" id="d_bedroomWindowBottom_block">
           <div class="q-sub-label">Bedroom Window (Bottom) <span class="q-hint">(Only for 2 Rooms)</span></div>
           <div class="q-options-grid">${chip('d_bedroomWindowBottom', 'Open', 'radio')} ${chip('d_bedroomWindowBottom', 'Closed', 'radio')}</div>
@@ -1940,11 +1967,36 @@
       </div>
     </div>
 
+    <!-- Clothing -->
     <div class="q-block-right">
       <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
       <input class="q-input" type="text" id="d_clothing" placeholder="e.g. T-shirt and shorts"/>
     </div>
 
+    <!-- ── NEW: Thermal Sensation Vote (pre-ASHRAE) ── -->
+    <div class="q-block-right">
+      <div class="q-title">How do you feel at this moment?</div>
+      <div class="tcv-scale">
+        ${tcvChip2('d_tsv1', '-3', 'Cold')}
+        ${tcvChip2('d_tsv1', '-2', 'Cool')}
+        ${tcvChip2('d_tsv1', '-1', 'Slightly Cool')}
+        ${tcvChip2('d_tsv1', '0', 'Neutral')}
+        ${tcvChip2('d_tsv1', '+1', 'Slightly Warm')}
+        ${tcvChip2('d_tsv1', '+2', 'Warm')}
+        ${tcvChip2('d_tsv1', '+3', 'Hot')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Would you like the current environment to be…</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_envPref1', '-1', 'Cooler')}
+        ${scaleChip('d_envPref1', '0', 'No change')}
+        ${scaleChip('d_envPref1', '+1', 'Warmer')}
+      </div>
+    </div>
+
+    <!-- Temperature Readings -->
     <div class="q-block-right">
       <div class="q-title">Temperature Readings</div>
       <div class="temp-row">
@@ -1978,6 +2030,7 @@
       </div>
     </div>
 
+    <!-- ASHRAE Posture -->
     <div class="q-block-right">
       <div class="q-title">What are you doing right now? <span class="q-hint">(Filled in by surveyor — ASHRAE)</span></div>
       <div class="q-options-grid">
@@ -1989,20 +2042,26 @@
       </div>
     </div>
 
-    <hr class="q-divider"/>
-
-    <!-- A. TCV -->
-    <div class="q-sub-section">A · Thermal Comfort Vote (TCV)</div>
+    <!-- ── NEW: Thermal Sensation Vote (post-ASHRAE) ── -->
     <div class="q-block-right">
-      <div class="q-hint" style="margin-bottom:8px;">How comfortable are you with the thermal environment right now?</div>
+      <div class="q-title">A. How do you feel at this moment?</div>
       <div class="tcv-scale">
-        ${tcvChip('-3', 'Very Uncomfy')}
-        ${tcvChip('-2', 'Uncomfy')}
-        ${tcvChip('-1', 'Slightly Uncomfy')}
-        ${tcvChip('0', 'Neutral')}
-        ${tcvChip('+1', 'Slightly Comfy')}
-        ${tcvChip('+2', 'Comfy')}
-        ${tcvChip('+3', 'Very Comfy')}
+        ${tcvChip2('d_tsv2', '-3', 'Cold')}
+        ${tcvChip2('d_tsv2', '-2', 'Cool')}
+        ${tcvChip2('d_tsv2', '-1', 'Slightly Cool')}
+        ${tcvChip2('d_tsv2', '0', 'Neutral')}
+        ${tcvChip2('d_tsv2', '+1', 'Slightly Warm')}
+        ${tcvChip2('d_tsv2', '+2', 'Warm')}
+        ${tcvChip2('d_tsv2', '+3', 'Hot')}
+      </div>
+    </div>
+
+    <div class="q-block-right">
+      <div class="q-title">Would you like the current environment to be…</div>
+      <div class="q-options-grid">
+        ${scaleChip('d_envPref2', '-1', 'Cooler')}
+        ${scaleChip('d_envPref2', '0', 'No change')}
+        ${scaleChip('d_envPref2', '+1', 'Warmer')}
       </div>
     </div>
 
@@ -2011,38 +2070,29 @@
     <!-- B. STANDARDISED PREFERENCE SCALES -->
     <div class="q-sub-section">B · Standardised Preference Scales</div>
 
-    <!-- Temperature -->
+    <!-- Air Flow -->
     <div class="q-block-right">
-      <div class="q-title">Temperature — How comfortable is the temperature right now?</div>
+      <div class="q-title">Air Flow — How would you feel about the airflow right now?</div>
       <div class="q-options-grid">
-        ${scaleChip('d_tempComfort', '1', 'Uncomfortable — too cool')}
-        ${scaleChip('d_tempComfort', '2', 'Comfortable')}
-        ${scaleChip('d_tempComfort', '3', 'Uncomfortable — too warm')}
+        ${scaleChip('d_airflowFeeling', '-2', 'Still')}
+        ${scaleChip('d_airflowFeeling', '0', 'Just right')}
+        ${scaleChip('d_airflowFeeling', '2', 'Breezy')}
+        ${scaleChip('d_airflowFeeling', '3', 'Too breezy')}
       </div>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Temperature — Right now, would you prefer the temperature to be?</div>
+      <div class="q-title">Air Flow — Do you find it disturbing?</div>
       <div class="q-options-grid">
-        ${scaleChip('d_tempPref', '-1', 'Cooler')}
-        ${scaleChip('d_tempPref', '0', 'No change')}
-        ${scaleChip('d_tempPref', '+1', 'Warmer')}
-      </div>
-    </div>
-
-    <!-- Airflow -->
-    <div class="q-block-right">
-      <div class="q-title">Airflow — How would you describe the airflow right now?</div>
-      <div class="q-options-grid">
-        ${scaleChip('d_airflowDisturbance', '0', 'Not disturbing')}
-        ${scaleChip('d_airflowDisturbance', '1', 'Disturbing')}
-        ${scaleChip('d_airflowDisturbance', '2', 'Strongly disturbing')}
+        ${scaleChip('d_airflowDisturbance', '-1', 'Not disturbing')}
+        ${scaleChip('d_airflowDisturbance', '0', 'Disturbing')}
+        ${scaleChip('d_airflowDisturbance', '+1', 'Strongly disturbing')}
       </div>
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Airflow — Right now, would you prefer the airflow to be?</div>
-      <div class="q-hint" style="margin-bottom:6px;">If "lower" is preferred, also check the disturbance rating above.</div>
+      <div class="q-title">Air Flow — Right now, would you prefer the airflow to be?</div>
+      <div class="q-hint" style="margin-bottom:6px;">If "lower" is preferred, also record the disturbance rating above.</div>
       <div class="q-options-grid">
         ${scaleChip('d_airflowPref', '-1', 'Lower')}
         ${scaleChip('d_airflowPref', '0', 'No change')}
@@ -2050,15 +2100,15 @@
       </div>
     </div>
 
-    <!-- Humidity (AC only) -->
+    <!-- Air Humidity (AC only) -->
     <div class="q-block-right" id="d_humidity_block">
       <div class="q-title">Air Humidity <span class="q-hint">(Asked only when Air Cooler is active)</span></div>
-      <div class="q-sub-label" style="margin-bottom:6px;">How would you describe the humidity right now?</div>
+      <div class="q-sub-label" style="margin-bottom:6px;">How would you feel about the humidity right now?</div>
       <div class="q-options-grid" style="margin-bottom:12px;">
-        ${scaleChip('d_humidityRating', '-1', 'Dry')}
+        ${scaleChip('d_humidityRating', '-2', 'Dry')}
         ${scaleChip('d_humidityRating', '0', 'Just right')}
-        ${scaleChip('d_humidityRating', '1', 'Humid')}
-        ${scaleChip('d_humidityRating', '2', 'Too humid')}
+        ${scaleChip('d_humidityRating', '2', 'Humid')}
+        ${scaleChip('d_humidityRating', '3', 'Too humid')}
       </div>
       <div class="q-sub-label" style="margin-bottom:6px;">Right now, would you prefer the humidity to be?</div>
       <div class="q-options-grid">
@@ -2070,11 +2120,40 @@
 
     <hr class="q-divider"/>
 
+    <!-- C. TCV -->
+    <div class="q-sub-section">C · Thermal Comfort Vote (TCV)</div>
+    <div class="q-block-right">
+      <div class="q-hint" style="margin-bottom:8px;">How comfortable do you feel with the thermal environment right now?</div>
+      <div class="tcv-scale">
+        ${tcvChip2('d_tcv', '-3', 'Much too cool')}
+        ${tcvChip2('d_tcv', '-2', 'Too cool')}
+        ${tcvChip2('d_tcv', '-1', 'Comfortably cool')}
+        ${tcvChip2('d_tcv', '0', 'Comfortable')}
+        ${tcvChip2('d_tcv', '+1', 'Comfortably warm')}
+        ${tcvChip2('d_tcv', '+2', 'Too warm')}
+        ${tcvChip2('d_tcv', '+3', 'Much too warm')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <!-- D. NEED RATING -->
+    <div class="q-sub-section">D · Personal Need Rating</div>
+    <div class="q-block-right">
+      <div class="q-title">If this cooling combination was offered at no cost, how much does it meet your personal needs?</div>
+      <div class="q-hint" style="margin-bottom:10px;">0 = does not meet my need at all &nbsp;·&nbsp; 10 = fully meets my needs</div>
+      <div class="need-scale">
+        ${needChip('0')}${needChip('1')}${needChip('2')}${needChip('3')}${needChip('4')}
+        ${needChip('5')}${needChip('6')}${needChip('7')}${needChip('8')}${needChip('9')}${needChip('10')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
     <div class="q-block-right">
       <div class="q-title">Additional Comments</div>
       <textarea class="q-input" id="d_additionalComments" placeholder="Enter any additional comments for During phase…" style="min-height:90px;"></textarea>
     </div>
-
   `;
       updateDuringConditionalVisibility();
       updateManualAutoLockState();
@@ -2086,21 +2165,25 @@
       updateDuringConditionalVisibility();
       updateManualAutoLockState();
     }
+
     function isAirCoolerUsed() {
       const manual = getRadio('d_comboManual');
       return placed.AC || manual.includes('Air Cooler');
     }
+
     function updateDuringConditionalVisibility() {
       updateHumidityVisibility();
       updatePlacementVisibility();
       updateTwoRoomOnlyVisibility();
     }
+
     function updateHumidityVisibility() {
       const block = document.getElementById('d_humidity_block');
       if (!block) return;
       block.style.opacity = isAirCoolerUsed() ? '1' : '0.4';
       block.title = isAirCoolerUsed() ? '' : 'Enable/select an Air Cooler combination to activate this question';
     }
+
     function updatePlacementVisibility() {
       const block = document.getElementById('d_placement_block');
       if (!block) return;
@@ -2114,6 +2197,7 @@
       const hint = document.getElementById('d_placement_hint');
       if (hint) hint.style.display = enabled ? 'none' : 'block';
     }
+
     function updateTwoRoomOnlyVisibility() {
       const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
       const blocks = [
@@ -2145,19 +2229,6 @@
     </div>
 
     <div class="q-block-right">
-      <div class="q-title">Which of the top 6 combinations do you prefer to have if offered at no cost?</div>
-      <div class="q-options-grid" style="margin-bottom:8px;">
-        ${chip('a_preferredCombo', '1 · SF only', 'radio')}
-        ${chip('a_preferredCombo', '2 · CF only', 'radio')}
-        ${chip('a_preferredCombo', '3 · Air Cooler', 'radio')}
-        ${chip('a_preferredCombo', '4 · SF + Air Cooler', 'radio')}
-        ${chip('a_preferredCombo', '5 · CF + Air Cooler', 'radio')}
-        ${chip('a_preferredCombo', '6 · SF + WEF + Air Cooler', 'radio')}
-      </div>
-      <textarea class="q-input" id="a_preferredComboReason" placeholder="Optional: reason for preference…" style="min-height:70px;"></textarea>
-    </div>
-
-    <div class="q-block-right">
       <div class="q-title">Are you comfortable spending $5–$10 more per month on electricity to use the air cooler on hot days?</div>
       <div class="q-options-grid" style="margin-bottom:12px;">
         ${chip('a_willingnessPay', 'Yes', 'radio', 'a_willingnessPayReason_Yes')}
@@ -2183,24 +2254,28 @@
       const oa = otherId ? `data-other="${otherId}"` : '';
       return `<span class="q-chip" data-group="${group}" data-val="${label}" data-type="${type}" ${oa} onclick="toggleChip(this)">${label}</span>`;
     }
-    function tcvChip(num, lbl) {
-      return `<div class="tcv-chip" data-group="d_tcv" data-val="${num}" onclick="toggleTCV(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
+
+    // Generic TCV chip for any group
+    function tcvChip2(group, num, lbl) {
+      return `<div class="tcv-chip" data-group="${group}" data-val="${num}" onclick="toggleTCVGroup(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
     }
+
     function scaleChip(group, num, lbl) {
       return `<div class="scale-chip" data-group="${group}" data-val="${num}" onclick="toggleScaleChip(this)"><span class="sc-num">${num}</span><span class="sc-lbl">${lbl}</span></div>`;
     }
+
+    function needChip(num) {
+      return `<div class="need-chip" data-group="d_needRating" data-val="${num}" onclick="toggleNeedChip(this)"><span class="nc-num">${num}</span></div>`;
+    }
+
     function toggleChip(el) {
       const group = el.dataset.group, type = el.dataset.type, otherId = el.dataset.other;
       const selClass = 'sel-' + currentPhase;
-
       if (currentPhase === 'during' && group === 'd_comboManual' && hasPlacedAppliance()) {
         warn('Auto layout already has an appliance — reset/remove appliances before manual selection');
-        updateManualAutoLockState();
-        return;
+        updateManualAutoLockState(); return;
       }
-
       if (el.classList.contains('disabled')) return;
-
       if (type === 'radio') {
         document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
           c.classList.remove('sel-before', 'sel-during', 'sel-after');
@@ -2212,20 +2287,27 @@
       }
       if (otherId) { const oi = document.getElementById(otherId); if (oi) oi.classList.toggle('visible', el.classList.contains(selClass)); }
       if (currentPhase === 'during' && group === 'd_comboManual') {
-        refreshComboBanner();
-        updateDuringConditionalVisibility();
-        updateManualAutoLockState();
+        refreshComboBanner(); updateDuringConditionalVisibility(); updateManualAutoLockState();
       }
     }
-    function toggleTCV(el) {
-      document.querySelectorAll('#rightInner .tcv-chip').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+
+    function toggleTCVGroup(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .tcv-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
     }
+
     function toggleScaleChip(el) {
       const group = el.dataset.group;
       document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
     }
+
+    function toggleNeedChip(el) {
+      document.querySelectorAll('#rightInner .need-chip[data-group="d_needRating"]').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      el.classList.add('sel-during');
+    }
+
     function togglePlacement(el) {
       if (currentPhase === 'during' && el.dataset.group === 'd_q4' && !isAirCoolerUsed()) return;
       const group = el.dataset.group;
@@ -2255,12 +2337,16 @@
       const el = document.querySelector(`#rightInner .scale-chip[data-group="${group}"].sel-during`);
       return el ? el.dataset.val : '';
     }
-    function getPlacementVal(group) {
-      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
+    function getTCVGroup(group) {
+      const el = document.querySelector(`#rightInner .tcv-chip[data-group="${group}"].sel-during`);
       return el ? el.dataset.val : '';
     }
-    function getTCV() {
-      const el = document.querySelector('#rightInner .tcv-chip.sel-during');
+    function getNeedRating() {
+      const el = document.querySelector('#rightInner .need-chip[data-group="d_needRating"].sel-during');
+      return el ? el.dataset.val : '';
+    }
+    function getPlacementVal(group) {
+      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
       return el ? el.dataset.val : '';
     }
 
@@ -2291,6 +2377,7 @@
         b_additionalComments: document.getElementById('b_additionalComments')?.value || '',
       };
     }
+
     function collectDuringData() {
       return {
         d_combo: getEffectiveCombo(),
@@ -2304,6 +2391,10 @@
         d_bedroomWindowTop: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowTop') : 'N/A (1 Room)',
         d_bedroomWindowBottom: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowBottom') : 'N/A (1 Room)',
         d_clothing: document.getElementById('d_clothing')?.value || '',
+        // Pre-ASHRAE sensation
+        d_tsv1: getTCVGroup('d_tsv1'),
+        d_envPref1: getScaleVal('d_envPref1'),
+        // Temperatures
         d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
         d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
         d_spotAirTemp: document.getElementById('d_spotAirTemp')?.value || '',
@@ -2311,22 +2402,28 @@
         d_spotWindSpeed: document.getElementById('d_spotWindSpeed')?.value || '',
         d_spotMRT: document.getElementById('d_spotMRT')?.value || '',
         d_posture: getRadio('d_posture'),
-        d_tcv: getTCV(),
-        d_tempComfort: getScaleVal('d_tempComfort'),
-        d_tempPref: getScaleVal('d_tempPref'),
+        // Post-ASHRAE sensation
+        d_tsv2: getTCVGroup('d_tsv2'),
+        d_envPref2: getScaleVal('d_envPref2'),
+        // B. Airflow & Humidity
+        d_airflowFeeling: getScaleVal('d_airflowFeeling'),
         d_airflowDisturbance: getScaleVal('d_airflowDisturbance'),
         d_airflowPref: getScaleVal('d_airflowPref'),
         d_humidityRating: isAirCoolerUsed() ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
         d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
+        // C. TCV
+        d_tcv: getTCVGroup('d_tcv'),
+        // D. Need Rating
+        d_needRating: getNeedRating(),
+        // Placement
         d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
         d_additionalComments: document.getElementById('d_additionalComments')?.value || '',
       };
     }
+
     function collectAfterData() {
       return {
         a_idealDevice: document.getElementById('a_idealDevice')?.value || '',
-        a_preferredCombo: getRadio('a_preferredCombo'),
-        a_preferredComboReason: document.getElementById('a_preferredComboReason')?.value || '',
         a_willingnessPay: getRadio('a_willingnessPay'),
         a_willingnessPayReason_Yes: document.getElementById('a_willingnessPayReason_Yes')?.value || '',
         a_willingnessPayReason_No: document.getElementById('a_willingnessPayReason_No')?.value || '',
@@ -2344,7 +2441,6 @@
 
       applyRoomTypeFromUnit();
       const layout = document.getElementById('layoutSelector').value;
-      // When submitting, we only care about the appliances for the combo data
       const active = APPLIANCE_IDS.filter(id => placed[id]).sort().join('-');
       const combo = VALID[active] || 'Baseline (No Appliances)';
       const timestamp = new Date().toLocaleString();
@@ -2375,38 +2471,25 @@
         });
     }
 
-
-
     // ---- MOBILE LAYOUT TOGGLE ----
-    function isPhoneWidth() {
-      return window.matchMedia('(max-width: 768px)').matches;
-    }
+    function isPhoneWidth() { return window.matchMedia('(max-width: 768px)').matches; }
 
     function setMobileLayoutCollapsed(collapsed) {
       if (!isPhoneWidth()) {
         document.body.classList.remove('layout-collapsed');
         const btn = document.getElementById('mobileLayoutBtn');
         if (btn) btn.textContent = '☰ Show Layout';
-        syncSidebarComponents();
-        return;
+        syncSidebarComponents(); return;
       }
-
       document.body.classList.toggle('layout-collapsed', collapsed);
       const btn = document.getElementById('mobileLayoutBtn');
       if (btn) btn.textContent = collapsed ? '☰ Show Layout' : '✕ Hide Layout';
-
-      if (!collapsed) {
-        setTimeout(() => {
-          syncSidebarComponents();
-          updateStatus();
-        }, 60);
-      }
+      if (!collapsed) { setTimeout(() => { syncSidebarComponents(); updateStatus(); }, 60); }
     }
 
     function toggleMobileLayout() {
       if (!isPhoneWidth()) return;
-      const collapsed = !document.body.classList.contains('layout-collapsed');
-      setMobileLayoutCollapsed(collapsed);
+      setMobileLayoutCollapsed(!document.body.classList.contains('layout-collapsed'));
     }
 
     // ---- INIT ----
@@ -2417,15 +2500,11 @@
       setMobileLayoutCollapsed(isPhoneWidth());
 
       const sidebar = document.getElementById('sidebar');
-      if (sidebar) {
-        sidebar.addEventListener('scroll', syncSidebarComponents, { passive: true });
-      }
+      if (sidebar) { sidebar.addEventListener('scroll', syncSidebarComponents, { passive: true }); }
 
       window.addEventListener('resize', () => {
         setMobileLayoutCollapsed(isPhoneWidth() ? document.body.classList.contains('layout-collapsed') : false);
-        IDS.forEach(id => {
-          if (!placed[id]) positionInSlot(id);
-        });
+        IDS.forEach(id => { if (!placed[id]) positionInSlot(id); });
         setTimeout(updateStatus, 30);
       });
     });
