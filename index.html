@@ -12,12 +12,13 @@
       --bg: #eceae5;
       --panel: #f8f6f2;
       --navy: #1c2b4a;
-      --accent: ;
+      --accent: #c94a1e;
       --grid: #dedad2;
       --text: #1a1a1a;
       --muted: #8a8580;
       --before: #2a7de8;
       --during: #c94a1e;
+      --baseline: #8b5cf6;
       --after: #22a060;
     }
 
@@ -118,6 +119,13 @@
     .phase-btn[data-phase="before"].active {
       background: var(--before);
       border-color: var(--before);
+      color: white;
+    }
+
+    .phase-btn[data-phase="baseline"]:hover,
+    .phase-btn[data-phase="baseline"].active {
+      background: var(--baseline);
+      border-color: var(--baseline);
       color: white;
     }
 
@@ -436,6 +444,10 @@
       background: var(--before);
     }
 
+    .q-section-header.baseline {
+      background: var(--baseline);
+    }
+
     .q-section-header.during {
       background: var(--during);
     }
@@ -556,6 +568,12 @@
     .q-chip.sel-before {
       background: var(--before);
       border-color: var(--before);
+      color: white;
+    }
+
+    .q-chip.sel-baseline {
+      background: var(--baseline);
+      border-color: var(--baseline);
       color: white;
     }
 
@@ -726,6 +744,16 @@
       color: rgba(255, 255, 255, .7);
     }
 
+    .tcv-chip.sel-baseline {
+      background: var(--baseline);
+      border-color: var(--baseline);
+      color: white;
+    }
+
+    .tcv-chip.sel-baseline .tcv-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
     /* Scale chips for numbered ratings */
     .scale-chip {
       font-family: 'IBM Plex Mono', monospace;
@@ -767,6 +795,16 @@
       color: rgba(255, 255, 255, .7);
     }
 
+    .scale-chip.sel-baseline {
+      background: var(--baseline);
+      border-color: var(--baseline);
+      color: white;
+    }
+
+    .scale-chip.sel-baseline .sc-lbl {
+      color: rgba(255, 255, 255, .7);
+    }
+
     /* Placement image chips */
     .placement-grid {
       display: flex;
@@ -800,6 +838,11 @@
     .placement-chip.sel-during {
       border-color: var(--during);
       background: #fff1e8;
+    }
+
+    .placement-chip.sel-baseline {
+      border-color: var(--baseline);
+      background: #f3e8ff;
     }
 
     .placement-chip.disabled {
@@ -1374,7 +1417,8 @@
     <span class="phase-label">Phase:</span>
     <div class="phase-btns">
       <button class="phase-btn" data-phase="before" onclick="setPhase('before')">① Before Experiment</button>
-      <button class="phase-btn" data-phase="during" onclick="setPhase('during')">② During Experiment</button>
+      <button class="phase-btn" data-phase="baseline" onclick="setPhase('baseline')">② Baseline</button>
+      <button class="phase-btn" data-phase="during" onclick="setPhase('during')">② Intervention</button>
       <button class="phase-btn" data-phase="after" onclick="setPhase('after')">③ After All Experiments</button>
     </div>
     <select class="unit-select" id="unitNumber" onchange="onUnitChange()">
@@ -1481,6 +1525,8 @@
     const CONTEXT_IDS = ['SEAT', 'SENSOR'];
     const IDS = [...APPLIANCE_IDS, ...CONTEXT_IDS];
 
+    const MANUAL_COMBO_GROUP_BY_PHASE = { during: 'd_comboManual', baseline: 'e_comboManual' };
+
     const placed = { SF: false, CF: false, AC: false, WEF: false, SEAT: false, SENSOR: false };
     let dragging = null, dragOffX = 0, dragOffY = 0;
     let currentPhase = null;
@@ -1496,7 +1542,7 @@
     IDS.forEach(id => {
       const el = document.getElementById(id);
       el.addEventListener('pointerdown', e => {
-        if (currentPhase === 'during' && APPLIANCE_IDS.includes(id) && isManualComboSelected()) {
+        if (isManualLockPhase() && APPLIANCE_IDS.includes(id) && isManualComboSelected()) {
           e.preventDefault();
           warn('Manual combination selected — reset before dragging appliances');
           updateManualAutoLockState();
@@ -1524,12 +1570,12 @@
         const cx = er.left + er.width / 2, cy = er.top + er.height / 2;
         if (cx > wr.left && cx < wr.right && cy > wr.top && cy < wr.bottom) tryPlace(id); else snapBack(id);
         dragging = null; updateStatus();
-        if (currentPhase === 'during') { refreshComboBanner(); updateManualAutoLockState(); }
+        syncPhaseComboUI();
       });
     });
 
     function tryPlace(id) {
-      if (currentPhase === 'during' && APPLIANCE_IDS.includes(id) && isManualComboSelected()) {
+      if (isManualLockPhase() && APPLIANCE_IDS.includes(id) && isManualComboSelected()) {
         warn('Manual combination selected — reset before dragging appliances');
         snapBack(id); updateManualAutoLockState(); return;
       }
@@ -1542,7 +1588,7 @@
         if (activeAppliances !== '' && !VALID[activeAppliances] && !PARTIAL.has(activeAppliances)) { warn('Not a valid study combination'); snapBack(id); return; }
       }
       placed[id] = true; document.getElementById(id).classList.add('placed');
-      if (currentPhase === 'during') updateManualAutoLockState();
+      syncPhaseComboUI();
     }
 
     function positionInSlot(id) {
@@ -1584,7 +1630,6 @@
       if (!key) { b.textContent = 'Baseline — No Appliances Active'; b.className = 'combo-tag'; }
       else if (VALID[key]) { b.textContent = VALID[key]; b.className = 'combo-tag active'; }
       else { b.textContent = 'Building combination…'; b.className = 'combo-tag'; }
-      if (currentPhase === 'during') updateManualAutoLockState();
     }
 
     function getCurrentCombo() {
@@ -1593,7 +1638,13 @@
     }
 
     function hasPlacedAppliance() { return APPLIANCE_IDS.some(id => placed[id]); }
-    function getManualComboSelection() { return getRadio('d_comboManual'); }
+
+    function isManualLockPhase() { return !!MANUAL_COMBO_GROUP_BY_PHASE[currentPhase]; }
+    function getManualComboGroup() { return MANUAL_COMBO_GROUP_BY_PHASE[currentPhase] || null; }
+    function getManualComboSelection() {
+      const group = getManualComboGroup();
+      return group ? getRadio(group) : '';
+    }
     function isManualComboSelected() { return !!getManualComboSelection(); }
 
     function getEffectiveCombo() {
@@ -1602,11 +1653,18 @@
       return getCurrentCombo();
     }
 
+    function syncPhaseComboUI() {
+      if (currentPhase === 'during') { refreshComboBanner(); }
+      else if (currentPhase === 'baseline') { refreshBaselineComboBanner(); }
+      if (isManualLockPhase()) updateManualAutoLockState();
+    }
+
     function updateManualAutoLockState() {
-      if (currentPhase !== 'during') return;
+      const group = getManualComboGroup();
+      if (!group) return;
       const manualLocked = hasPlacedAppliance();
       const autoLocked = isManualComboSelected();
-      document.querySelectorAll('#rightInner .q-chip[data-group="d_comboManual"]').forEach(c => {
+      document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
         c.classList.toggle('disabled', manualLocked);
         c.title = manualLocked ? 'Auto layout already has an appliance. Reset/remove appliances before manual selection.' : '';
       });
@@ -1627,6 +1685,7 @@
         IDS.forEach(id => snapBack(id));
         updateStatus();
         if (currentPhase === 'during') { updateDuringConditionalVisibility(); updateManualAutoLockState(); }
+        if (currentPhase === 'baseline') { updateBaselineConditionalVisibility(); updateManualAutoLockState(); }
       }, 20);
     }
 
@@ -1640,17 +1699,19 @@
         document.getElementById('fp-1rm').classList.toggle('active', roomType === '1 Room');
         document.getElementById('fp-2rm').classList.toggle('active', roomType === '2 Room');
         if (currentPhase === 'during') updateDuringConditionalVisibility();
+        if (currentPhase === 'baseline') updateBaselineConditionalVisibility();
       }
     }
 
     function resetAll() {
       IDS.forEach(id => snapBack(id));
       setTimeout(() => { IDS.forEach(id => snapBack(id)); updateStatus(); }, 20);
-      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip, #rightInner .need-chip').forEach(b => b.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .q-chip, #rightInner .tcv-chip, #rightInner .scale-chip, #rightInner .placement-chip, #rightInner .need-chip').forEach(b => b.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
       document.querySelectorAll('#rightInner .q-input').forEach(inp => inp.value = '');
       document.querySelectorAll('#rightInner .other-input').forEach(inp => { inp.value = ''; inp.classList.remove('visible'); });
       document.querySelectorAll('#rightInner .temp-input').forEach(inp => inp.value = '');
       if (currentPhase === 'during') { setTimeout(() => { refreshComboBanner(); updateManualAutoLockState(); }, 50); }
+      if (currentPhase === 'baseline') { setTimeout(() => { refreshBaselineComboBanner(); updateBaselineConditionalVisibility(); updateManualAutoLockState(); }, 50); }
     }
 
     // ---- PHASE ----
@@ -1670,8 +1731,9 @@
       const unit = document.getElementById('unitNumber').value;
       const inner = document.getElementById('rightInner');
       if (!unit) { inner.innerHTML = `<div class="gate-msg"><div class="gate-icon">🏠</div><p>Please <strong>select a Unit Number</strong> above before answering questions.</p></div>`; return; }
-      if (!currentPhase) { inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · During · After</strong></p></div>`; return; }
+      if (!currentPhase) { inner.innerHTML = `<div class="phase-prompt"><div class="gate-icon">📋</div><p>Select a phase above:<br><strong>Before · Baseline · During · After</strong></p></div>`; return; }
       if (currentPhase === 'before') renderBefore();
+      if (currentPhase === 'baseline') renderBaseline();
       if (currentPhase === 'during') renderDuring();
       if (currentPhase === 'after') renderAfter();
     }
@@ -1887,13 +1949,184 @@
     }
 
     // ============================================================
+    // 2A · BASELINE
+    // ============================================================
+    function renderBaseline() {
+      const inner = document.getElementById('rightInner');
+      const combo = getEffectiveCombo();
+      inner.innerHTML = `
+    <div class="q-section-header baseline">② Baseline</div>
+
+    <!-- Combination Selection -->
+    <div class="q-block-right">
+      <div class="q-title">Current Combination Under Test</div>
+      <div class="combo-banner" id="baselineComboBanner">🔬 <span id="baselineComboText">${combo}</span></div>
+      <div class="q-hint" style="margin-top:-8px;margin-bottom:12px;">Auto-detected from layout. Drag appliances on the left to update.</div>
+      <div class="q-hint" style="margin-bottom:6px;font-weight:600;color:var(--navy);">Or select manually:</div>
+      <div class="q-options-grid">
+        ${chip('e_comboManual', '1 · CF only', 'radio')}
+        ${chip('e_comboManual', '2 · SF only', 'radio')}
+        ${chip('e_comboManual', '3 · CF + Air Cooler', 'radio')}
+        ${chip('e_comboManual', '4 · SF + Air Cooler', 'radio')}
+        ${chip('e_comboManual', '5 · Air Cooler', 'radio')}
+        ${chip('e_comboManual', '6 · SF + WEF + Air Cooler', 'radio')}
+      </div>
+      <div class="q-hint" style="margin-top:8px;">Note: auto-drag and manual selection are locked to one mode at a time. Use Reset to switch modes.</div>
+    </div>
+
+    <!-- PATCH 1: Placement block added to Baseline -->
+    <div class="q-block-right" id="e_placement_block">
+      <div class="q-title">Preferred placement of Air Cooler &amp; Stand Fan <span class="q-hint">(Only when Air Cooler is used)</span></div>
+      <div class="placement-grid">
+        <div class="placement-chip" data-group="e_q4" data-val="SF in front of AC" onclick="togglePlacement(this)">
+          <span class="pl-emoji">🌬️➡️❄️</span>
+          <span class="pl-label">Stand Fan in front of Air Cooler</span>
+        </div>
+        <div class="placement-chip" data-group="e_q4" data-val="AC in front of SF" onclick="togglePlacement(this)">
+          <span class="pl-emoji">❄️➡️🌬️</span>
+          <span class="pl-label">Air Cooler in front of Stand Fan</span>
+        </div>
+      </div>
+      <div class="q-hint" id="e_placement_hint" style="margin-top:8px;">Activate/select an Air Cooler combination first to answer this.</div>
+    </div>
+
+    <!-- Door & Window Config -->
+    <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Door and Window Configuration</div>
+      <div class="window-config-grid">
+        <div class="window-config-card">
+          <div class="q-sub-label">Door</div>
+          <div class="q-options-grid">${chip('e_door', 'Open', 'radio')} ${chip('e_door', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card" id="e_bedroomDoor_block">
+          <div class="q-sub-label">Bedroom Door <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('e_bedroomDoor', 'Open', 'radio')} ${chip('e_bedroomDoor', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Bathroom Door</div>
+          <div class="q-options-grid">${chip('e_bathroomDoor', 'Open', 'radio')} ${chip('e_bathroomDoor', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Top)</div>
+          <div class="q-options-grid">${chip('e_corridorWindowTop', 'Open', 'radio')} ${chip('e_corridorWindowTop', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Corridor Window (Bottom)</div>
+          <div class="q-options-grid">${chip('e_corridorWindowBottom', 'Open', 'radio')} ${chip('e_corridorWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Top)</div>
+          <div class="q-options-grid">${chip('e_kitchenWindowTop', 'Open', 'radio')} ${chip('e_kitchenWindowTop', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Kitchen Window (Bottom)</div>
+          <div class="q-options-grid">${chip('e_kitchenWindowBottom', 'Open', 'radio')} ${chip('e_kitchenWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Bathroom Window</div>
+          <div class="q-options-grid">${chip('e_bathroomWindow', 'Open', 'radio')} ${chip('e_bathroomWindow', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card" id="e_bedroomWindowTop_block">
+          <div class="q-sub-label">Bedroom Window (Top) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('e_bedroomWindowTop', 'Open', 'radio')} ${chip('e_bedroomWindowTop', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card" id="e_bedroomWindowBottom_block">
+          <div class="q-sub-label">Bedroom Window (Bottom) <span class="q-hint">(Only for 2 Rooms)</span></div>
+          <div class="q-options-grid">${chip('e_bedroomWindowBottom', 'Open', 'radio')} ${chip('e_bedroomWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clothing -->
+    <div class="q-block-right">
+      <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
+      <input class="q-input" type="text" id="e_clothing" placeholder="e.g. T-shirt and shorts"/>
+    </div>
+
+    <!-- TSV -->
+    <div class="q-block-right">
+      <div class="q-title">How do you feel at this moment? [TO BE DONE BEFORE EXPERIMENT]</div>
+      <div class="tcv-scale">
+        ${tcvChipBaseline('e_tsv', '-3', 'Cold')}
+        ${tcvChipBaseline('e_tsv', '-2', 'Cool')}
+        ${tcvChipBaseline('e_tsv', '-1', 'Slightly Cool')}
+        ${tcvChipBaseline('e_tsv', '0', 'Neutral')}
+        ${tcvChipBaseline('e_tsv', '+1', 'Slightly Warm')}
+        ${tcvChipBaseline('e_tsv', '+2', 'Warm')}
+        ${tcvChipBaseline('e_tsv', '+3', 'Hot')}
+      </div>
+    </div>
+
+    <!-- Env Preference -->
+    <div class="q-block-right">
+      <div class="q-title">Would you like the current environment to be…</div>
+      <div class="q-options-grid">
+        ${scaleChipBaseline('e_envPref', '-1', 'Cooler')}
+        ${scaleChipBaseline('e_envPref', '0', 'No change')}
+        ${scaleChipBaseline('e_envPref', '+1', 'Warmer')}
+      </div>
+    </div>
+
+    <hr class="q-divider"/>
+
+    <div class="q-block-right">
+      <div class="q-title">Additional Comments</div>
+      <textarea class="q-input" id="e_additionalComments" placeholder="Enter any additional comments for Baseline phase…" style="min-height:90px;"></textarea>
+    </div>
+  `;
+      updateBaselineConditionalVisibility();
+      updateManualAutoLockState();
+    }
+
+    function refreshBaselineComboBanner() {
+      const el = document.getElementById('baselineComboText');
+      if (el) el.textContent = getEffectiveCombo();
+    }
+
+    function isBaselineAirCoolerUsed() {
+      const manual = getRadio('e_comboManual');
+      return placed.AC || (manual && (manual.includes('Air Cooler') || manual === '5 · Air Cooler' || manual === '3 · CF + Air Cooler' || manual === '4 · SF + Air Cooler' || manual === '6 · SF + WEF + Air Cooler'));
+    }
+
+    function updateBaselineConditionalVisibility() {
+      if (currentPhase !== 'baseline') return;
+      const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
+      const blocks = [
+        { id: 'e_bedroomDoor_block', group: 'e_bedroomDoor' },
+        { id: 'e_bedroomWindowTop_block', group: 'e_bedroomWindowTop' },
+        { id: 'e_bedroomWindowBottom_block', group: 'e_bedroomWindowBottom' },
+      ];
+      blocks.forEach(item => {
+        const block = document.getElementById(item.id);
+        if (!block) return;
+        block.style.display = isTwoRoom ? 'block' : 'none';
+        if (!isTwoRoom) {
+          document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
+        }
+      });
+      // Placement block visibility
+      const placementBlock = document.getElementById('e_placement_block');
+      if (placementBlock) {
+        const acUsed = isBaselineAirCoolerUsed();
+        placementBlock.style.opacity = acUsed ? '1' : '0.55';
+        placementBlock.title = acUsed ? '' : 'Enable/select an Air Cooler combination to answer this question';
+        document.querySelectorAll('#rightInner .placement-chip[data-group="e_q4"]').forEach(c => {
+          c.classList.toggle('disabled', !acUsed);
+          if (!acUsed) c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after');
+        });
+        const hint = document.getElementById('e_placement_hint');
+        if (hint) hint.style.display = acUsed ? 'none' : 'block';
+      }
+    }
+
+    // ============================================================
     // DURING
     // ============================================================
     function renderDuring() {
       const inner = document.getElementById('rightInner');
       const combo = getEffectiveCombo();
       inner.innerHTML = `
-    <div class="q-section-header during">② During the Experiment</div>
+    <div class="q-section-header during">② Intervention</div>
 
     <!-- Combination Selection -->
     <div class="q-block-right">
@@ -1941,6 +2174,10 @@
           <div class="q-options-grid">${chip('d_bedroomDoor', 'Open', 'radio')} ${chip('d_bedroomDoor', 'Closed', 'radio')}</div>
         </div>
         <div class="window-config-card">
+          <div class="q-sub-label">Bathroom Door</div>
+          <div class="q-options-grid">${chip('d_bathroomDoor', 'Open', 'radio')} ${chip('d_bathroomDoor', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
           <div class="q-sub-label">Corridor Window (Top)</div>
           <div class="q-options-grid">${chip('d_corridorWindowTop', 'Open', 'radio')} ${chip('d_corridorWindowTop', 'Closed', 'radio')}</div>
         </div>
@@ -1955,6 +2192,10 @@
         <div class="window-config-card">
           <div class="q-sub-label">Kitchen Window (Bottom)</div>
           <div class="q-options-grid">${chip('d_kitchenWindowBottom', 'Open', 'radio')} ${chip('d_kitchenWindowBottom', 'Closed', 'radio')}</div>
+        </div>
+        <div class="window-config-card">
+          <div class="q-sub-label">Bathroom Window</div>
+          <div class="q-options-grid">${chip('d_bathroomWindow', 'Open', 'radio')} ${chip('d_bathroomWindow', 'Closed', 'radio')}</div>
         </div>
         <div class="window-config-card" id="d_bedroomWindowTop_block">
           <div class="q-sub-label">Bedroom Window (Top) <span class="q-hint">(Only for 2 Rooms)</span></div>
@@ -1971,29 +2212,6 @@
     <div class="q-block-right">
       <div class="q-title">Interviewer to observe the Clothing <span class="q-hint">(What they are wearing)</span></div>
       <input class="q-input" type="text" id="d_clothing" placeholder="e.g. T-shirt and shorts"/>
-    </div>
-
-    <!-- ── NEW: Thermal Sensation Vote (pre-ASHRAE) ── -->
-    <div class="q-block-right">
-      <div class="q-title">How do you feel at this moment? [TO BE DONE BEFORE EXPERIMENT]</div>
-      <div class="tcv-scale">
-        ${tcvChip2('d_tsv1', '-3', 'Cold')}
-        ${tcvChip2('d_tsv1', '-2', 'Cool')}
-        ${tcvChip2('d_tsv1', '-1', 'Slightly Cool')}
-        ${tcvChip2('d_tsv1', '0', 'Neutral')}
-        ${tcvChip2('d_tsv1', '+1', 'Slightly Warm')}
-        ${tcvChip2('d_tsv1', '+2', 'Warm')}
-        ${tcvChip2('d_tsv1', '+3', 'Hot')}
-      </div>
-    </div>
-
-    <div class="q-block-right">
-      <div class="q-title">Would you like the current environment to be…</div>
-      <div class="q-options-grid">
-        ${scaleChip('d_envPref1', '-1', 'Cooler')}
-        ${scaleChip('d_envPref1', '0', 'No change')}
-        ${scaleChip('d_envPref1', '+1', 'Warmer')}
-      </div>
     </div>
 
     <!-- Temperature Readings -->
@@ -2032,9 +2250,9 @@
       </div>
     </div>
 
-    <!-- ── NEW: Thermal Sensation Vote (post-ASHRAE) ── -->
+    <!-- ── Thermal Sensation Vote (post-ASHRAE) ── -->
     <div class="q-block-right">
-      <div class="q-title">A. How do you feel at this moment? [TO BE DONE AFTER EXPERIMENT]</div>
+      <div class="q-title">A. How do you feel at this moment?</div>
       <div class="tcv-scale">
         ${tcvChip2('d_tsv2', '-3', 'Cold')}
         ${tcvChip2('d_tsv2', '-2', 'Cool')}
@@ -2182,7 +2400,7 @@
       block.title = enabled ? '' : 'Enable/select an Air Cooler combination to answer this question';
       document.querySelectorAll('#rightInner .placement-chip[data-group="d_q4"]').forEach(c => {
         c.classList.toggle('disabled', !enabled);
-        if (!enabled) c.classList.remove('sel-before', 'sel-during', 'sel-after');
+        if (!enabled) c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after');
       });
       const hint = document.getElementById('d_placement_hint');
       if (hint) hint.style.display = enabled ? 'none' : 'block';
@@ -2200,7 +2418,7 @@
         if (!block) return;
         block.style.display = isTwoRoom ? 'block' : 'none';
         if (!isTwoRoom) {
-          document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+          document.querySelectorAll(`#rightInner .q-chip[data-group="${item.group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
         }
       });
     }
@@ -2245,13 +2463,20 @@
       return `<span class="q-chip" data-group="${group}" data-val="${label}" data-type="${type}" ${oa} onclick="toggleChip(this)">${label}</span>`;
     }
 
-    // Generic TCV chip for any group
     function tcvChip2(group, num, lbl) {
       return `<div class="tcv-chip" data-group="${group}" data-val="${num}" onclick="toggleTCVGroup(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
     }
 
     function scaleChip(group, num, lbl) {
       return `<div class="scale-chip" data-group="${group}" data-val="${num}" onclick="toggleScaleChip(this)"><span class="sc-num">${num}</span><span class="sc-lbl">${lbl}</span></div>`;
+    }
+
+    function tcvChipBaseline(group, num, lbl) {
+      return `<div class="tcv-chip" data-group="${group}" data-val="${num}" onclick="toggleTCVGroupBaseline(this)"><span class="tcv-num">${num}</span><span class="tcv-lbl">${lbl}</span></div>`;
+    }
+
+    function scaleChipBaseline(group, num, lbl) {
+      return `<div class="scale-chip" data-group="${group}" data-val="${num}" onclick="toggleScaleChipBaseline(this)"><span class="sc-num">${num}</span><span class="sc-lbl">${lbl}</span></div>`;
     }
 
     function needChip(num) {
@@ -2261,14 +2486,14 @@
     function toggleChip(el) {
       const group = el.dataset.group, type = el.dataset.type, otherId = el.dataset.other;
       const selClass = 'sel-' + currentPhase;
-      if (currentPhase === 'during' && group === 'd_comboManual' && hasPlacedAppliance()) {
+      if (isManualLockPhase() && group === getManualComboGroup() && hasPlacedAppliance()) {
         warn('Auto layout already has an appliance — reset/remove appliances before manual selection');
         updateManualAutoLockState(); return;
       }
       if (el.classList.contains('disabled')) return;
       if (type === 'radio') {
         document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"]`).forEach(c => {
-          c.classList.remove('sel-before', 'sel-during', 'sel-after');
+          c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after');
           const oid = c.dataset.other; if (oid) { const oi = document.getElementById(oid); if (oi) oi.classList.remove('visible'); }
         });
         el.classList.add(selClass);
@@ -2279,30 +2504,46 @@
       if (currentPhase === 'during' && group === 'd_comboManual') {
         refreshComboBanner(); updateDuringConditionalVisibility(); updateManualAutoLockState();
       }
+      if (currentPhase === 'baseline' && group === 'e_comboManual') {
+        refreshBaselineComboBanner(); updateBaselineConditionalVisibility(); updateManualAutoLockState();
+      }
     }
 
     function toggleTCVGroup(el) {
       const group = el.dataset.group;
-      document.querySelectorAll(`#rightInner .tcv-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll(`#rightInner .tcv-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
     }
 
     function toggleScaleChip(el) {
       const group = el.dataset.group;
-      document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
     }
 
+    function toggleTCVGroupBaseline(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .tcv-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
+      el.classList.add('sel-baseline');
+    }
+
+    function toggleScaleChipBaseline(el) {
+      const group = el.dataset.group;
+      document.querySelectorAll(`#rightInner .scale-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
+      el.classList.add('sel-baseline');
+    }
+
     function toggleNeedChip(el) {
-      document.querySelectorAll('#rightInner .need-chip[data-group="d_needRating"]').forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll('#rightInner .need-chip[data-group="d_needRating"]').forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
       el.classList.add('sel-during');
     }
 
     function togglePlacement(el) {
       if (currentPhase === 'during' && el.dataset.group === 'd_q4' && !isAirCoolerUsed()) return;
+      if (currentPhase === 'baseline' && el.dataset.group === 'e_q4' && !isBaselineAirCoolerUsed()) return;
       const group = el.dataset.group;
       const selClass = 'sel-' + currentPhase;
-      document.querySelectorAll(`#rightInner .placement-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-during', 'sel-after'));
+      document.querySelectorAll(`#rightInner .placement-chip[data-group="${group}"]`).forEach(c => c.classList.remove('sel-before', 'sel-baseline', 'sel-during', 'sel-after'));
       el.classList.add(selClass);
     }
 
@@ -2310,7 +2551,7 @@
     // DATA COLLECTION
     // ============================================================
     function getRadio(group) {
-      const el = document.querySelector(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`);
+      const el = document.querySelector(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-baseline, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`);
       return el ? el.dataset.val : '';
     }
     function getRadioWithOther(group, otherId) {
@@ -2319,16 +2560,16 @@
       return val;
     }
     function getCheckboxes(group, otherId) {
-      const selected = [...document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`)].map(e => e.dataset.val);
+      const selected = [...document.querySelectorAll(`#rightInner .q-chip[data-group="${group}"].sel-before, #rightInner .q-chip[data-group="${group}"].sel-baseline, #rightInner .q-chip[data-group="${group}"].sel-during, #rightInner .q-chip[data-group="${group}"].sel-after`)].map(e => e.dataset.val);
       if (selected.includes('Others') && otherId) { const other = document.getElementById(otherId)?.value?.trim(); if (other) { const i = selected.indexOf('Others'); selected[i] = `Others: ${other}`; } }
       return selected.join('; ');
     }
     function getScaleVal(group) {
-      const el = document.querySelector(`#rightInner .scale-chip[data-group="${group}"].sel-during`);
+      const el = document.querySelector(`#rightInner .scale-chip[data-group="${group}"].sel-during, #rightInner .scale-chip[data-group="${group}"].sel-baseline`);
       return el ? el.dataset.val : '';
     }
     function getTCVGroup(group) {
-      const el = document.querySelector(`#rightInner .tcv-chip[data-group="${group}"].sel-during`);
+      const el = document.querySelector(`#rightInner .tcv-chip[data-group="${group}"].sel-during, #rightInner .tcv-chip[data-group="${group}"].sel-baseline`);
       return el ? el.dataset.val : '';
     }
     function getNeedRating() {
@@ -2336,7 +2577,7 @@
       return el ? el.dataset.val : '';
     }
     function getPlacementVal(group) {
-      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
+      const el = document.querySelector(`#rightInner .placement-chip[data-group="${group}"].sel-before, #rightInner .placement-chip[data-group="${group}"].sel-baseline, #rightInner .placement-chip[data-group="${group}"].sel-during, #rightInner .placement-chip[data-group="${group}"].sel-after`);
       return el ? el.dataset.val : '';
     }
 
@@ -2368,44 +2609,58 @@
       };
     }
 
+    function collectBaselineData() {
+      const isTwoRoom = document.getElementById('layoutSelector').value === '2 Room';
+      return {
+        e_combo: getEffectiveCombo(),
+        e_comboManual: getRadio('e_comboManual'),
+        e_placement: isBaselineAirCoolerUsed() ? getPlacementVal('e_q4') : 'N/A (AC not active)',
+        e_door: getRadio('e_door'),
+        e_bedroomDoor: isTwoRoom ? getRadio('e_bedroomDoor') : 'N/A (1 Room)',
+        e_bathroomDoor: getRadio('e_bathroomDoor'),
+        e_corridorWindowTop: getRadio('e_corridorWindowTop'),
+        e_corridorWindowBottom: getRadio('e_corridorWindowBottom'),
+        e_kitchenWindowTop: getRadio('e_kitchenWindowTop'),
+        e_kitchenWindowBottom: getRadio('e_kitchenWindowBottom'),
+        e_bathroomWindow: getRadio('e_bathroomWindow'),
+        e_bedroomWindowTop: isTwoRoom ? getRadio('e_bedroomWindowTop') : 'N/A (1 Room)',
+        e_bedroomWindowBottom: isTwoRoom ? getRadio('e_bedroomWindowBottom') : 'N/A (1 Room)',
+        e_clothing: document.getElementById('e_clothing')?.value || '',
+        e_tsv: getTCVGroup('e_tsv'),
+        e_envPref: getScaleVal('e_envPref'),
+        e_additionalComments: document.getElementById('e_additionalComments')?.value || '',
+      };
+    }
+
     function collectDuringData() {
       return {
         d_combo: getEffectiveCombo(),
         d_comboManual: getRadio('d_comboManual'),
         d_door: getRadio('d_door'),
         d_bedroomDoor: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomDoor') : 'N/A (1 Room)',
+        d_bathroomDoor: getRadio('d_bathroomDoor'),
         d_corridorWindowTop: getRadio('d_corridorWindowTop'),
         d_corridorWindowBottom: getRadio('d_corridorWindowBottom'),
         d_kitchenWindowTop: getRadio('d_kitchenWindowTop'),
         d_kitchenWindowBottom: getRadio('d_kitchenWindowBottom'),
+        d_bathroomWindow: getRadio('d_bathroomWindow'),
         d_bedroomWindowTop: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowTop') : 'N/A (1 Room)',
         d_bedroomWindowBottom: document.getElementById('layoutSelector').value === '2 Room' ? getRadio('d_bedroomWindowBottom') : 'N/A (1 Room)',
         d_clothing: document.getElementById('d_clothing')?.value || '',
-        // Pre-ASHRAE sensation
-        d_tsv1: getTCVGroup('d_tsv1'),
-        d_envPref1: getScaleVal('d_envPref1'),
-        // Temperatures
-        d_tempIndoor: document.getElementById('d_tempIndoor')?.value || '',
-        d_tempBaseline: document.getElementById('d_tempBaseline')?.value || '',
         d_spotAirTemp: document.getElementById('d_spotAirTemp')?.value || '',
         d_spotHumidity: document.getElementById('d_spotHumidity')?.value || '',
         d_spotWindSpeed: document.getElementById('d_spotWindSpeed')?.value || '',
         d_spotMRT: document.getElementById('d_spotMRT')?.value || '',
         d_posture: getRadio('d_posture'),
-        // Post-ASHRAE sensation
         d_tsv2: getTCVGroup('d_tsv2'),
         d_envPref2: getScaleVal('d_envPref2'),
-        // B. Airflow & Humidity
         d_airflowFeeling: getScaleVal('d_airflowFeeling'),
         d_airflowDisturbance: getScaleVal('d_airflowDisturbance'),
         d_airflowPref: getScaleVal('d_airflowPref'),
         d_humidityRating: isAirCoolerUsed() ? getScaleVal('d_humidityRating') : 'N/A (AC not active)',
         d_humidityPref: isAirCoolerUsed() ? getScaleVal('d_humidityPref') : 'N/A (AC not active)',
-        // C. TCV
         d_tcv: getTCVGroup('d_tcv'),
-        // D. Need Rating
         d_needRating: getNeedRating(),
-        // Placement
         d_q4_placement: isAirCoolerUsed() ? getPlacementVal('d_q4') : 'N/A (AC not active)',
         d_additionalComments: document.getElementById('d_additionalComments')?.value || '',
       };
@@ -2427,7 +2682,7 @@
     function handleSubmit() {
       const unit = document.getElementById('unitNumber').value;
       if (!unit) { document.getElementById('unitNumber').classList.add('required'); alert('Please select a Unit Number first.'); return; }
-      if (!currentPhase) { alert('Please select a phase (Before / During / After).'); return; }
+      if (!currentPhase) { alert('Please select a phase (Before / Baseline / During / After).'); return; }
 
       applyRoomTypeFromUnit();
       const layout = document.getElementById('layoutSelector').value;
@@ -2437,6 +2692,7 @@
 
       let phaseData = {};
       if (currentPhase === 'before') phaseData = collectBeforeData();
+      if (currentPhase === 'baseline') phaseData = collectBaselineData();
       if (currentPhase === 'during') phaseData = collectDuringData();
       if (currentPhase === 'after') phaseData = collectAfterData();
 
